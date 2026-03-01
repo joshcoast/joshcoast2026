@@ -10,11 +10,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Deploy wp-content to Nexcess
-        uses: burnett01/rsync-deployments@7.0.1
-        with:
-          switches: -avz --delete -e "ssh -o IdentitiesOnly=yes"
-          path: wp-content/
-          remote_path: /home/a2b69fd7_1/public_html/wp-content/
-          remote_host: cf9a19eaca.nxcli.io
-          remote_user: a2b69fd7_1
-          remote_key: ${{ secrets.NEXCESS_SSH_KEY }}
+        run: |
+          sudo apt-get install -y -qq sshpass
+          sshpass -p "${{ secrets.NEXCESS_SSH_PASS }}" rsync -avz --delete \
+            -e "ssh -o StrictHostKeyChecking=no" \
+            wp-content/ \
+            a2b69fd7_1@cf9a19eaca.nxcli.io:/home/a2b69fd7/cf9a19eaca.nxcli.io/html/wp-content/
