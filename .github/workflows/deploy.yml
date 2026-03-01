@@ -12,7 +12,7 @@ jobs:
       - name: Deploy wp-content to Nexcess
         uses: burnett01/rsync-deployments@7.0.1
         with:
-          switches: -avz --delete
+          switches: -avz --delete -e "ssh -o IdentitiesOnly=yes"
           path: wp-content/
           remote_path: /home/a2b69fd7_1/public_html/wp-content/
           remote_host: cf9a19eaca.nxcli.io
