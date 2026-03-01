@@ -20,4 +20,3 @@ jobs:
           eval $RSYNC_CMD wp-content/plugins/jc-taxonomy-filter/ $DEST/wp-content/plugins/jc-taxonomy-filter/
           eval $RSYNC_CMD wp-content/plugins/word-count/ $DEST/wp-content/plugins/word-count/
           eval $RSYNC_CMD wp-content/plugins/wp-blog-category-filter/ $DEST/wp-content/plugins/wp-blog-category-filter/
-          sshpass -p '${{ secrets.NEXCESS_SSH_PASS }}' rsync -avz -e 'ssh -o StrictHostKeyChecking=no' wp-content/uploads/2025/03/pattern.svg $DEST/wp-content/uploads/2025/03/pattern.svg
