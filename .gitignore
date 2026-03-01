@@ -9,7 +9,6 @@
 /wp-content/index.php
 /wp-content/languages
 /wp-content/plugins/index.php
-/wp-content/plugins/all-in-one-wp-migration/
 /wp-content/themes/index.php
 /wp-includes/
 /index.php
@@ -24,9 +23,6 @@ wp-config.php
 # Example themes
 /wp-content/themes/twenty*/
 
-# Example plugin
-/wp-content/plugins/hello.php
-
 # Uploads
 /wp-content/uploads/
 
@@ -40,7 +36,12 @@ wp-config.php
 #
 # Note: If you wish to whitelist plugins,
 # uncomment the next line
-#/wp-content/plugins
+/wp-content/plugins
+!/wp-content/plugins/jc-taxonomy-filter
+!/wp-content/plugins/word-count
+!/wp-content/plugins/wp-blog-category-filter
+!/wp-content/plugins/are-you-paying-attention
+
 
 # All themes
 #
@@ -51,6 +52,7 @@ wp-config.php
 *.DS_Store
 /wp-content/wpvividbackups/
 /wp-content/ai1wm-backups/
+
 # Backup plugin files
 /wp-content/ai1wm-backups/
 /wp-content/wpvividbackups/
