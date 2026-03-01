@@ -1,0 +1,393 @@
+<?php
+
+namespace IvyForms\Services\Template;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
+
+use IvyForms\Services\Translations\BackendStrings;
+
+/**
+ * Garden Wedding RSVP Form Template
+ */
+class GardenWeddingRSVPFormTemplate
+{
+    /**
+     * Get the template configuration
+     *
+     * @return array<string, mixed>
+     */
+    public static function getTemplate(): array
+    {
+        return [
+            'id' => 'garden_wedding_rsvp_form',
+            'name' => BackendStrings::getTemplateStrings()['garden_wedding_rsvp_form'],
+            'description' => BackendStrings::getTemplateStrings()[
+                'garden_wedding_rsvp_form_description'
+            ],
+            'category' => 'event-registration-forms',
+            'subcategory' => 'wedding-forms',
+            'is_pro' => false,
+            'screenshot' => IVYFORMS_TEMPLATES_IMAGES_URL . 'garden-wedding-rsvp-form.svg',
+            'form_data' => [
+                'name' => BackendStrings::getTemplateStrings()['garden_wedding_rsvp_form'],
+                'published' => 1,
+                'showTitle' => 1,
+                'storeEntries' => 1,
+                'integrationSettings' => TemplateDefaults::getDefaultIntegrationSettings(),
+                'fields' => array_merge(
+                    self::getPersonalInformationFields(),
+                    self::getAttendanceFields(),
+                    self::getMealPreferencesFields(),
+                    self::getAdditionalInformationFields()
+                ),
+                'settings' => []
+            ]
+        ];
+    }
+
+    /**
+     * Personal information fields (name, email, phone, relationship)
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private static function getPersonalInformationFields(): array
+    {
+        return [
+            // Full Name
+            [
+                'id' => 0,
+                'fieldIndex' => 1,
+                'type' => 'name',
+                'label' => BackendStrings::getTemplateStrings()['full_name'],
+                'parentId' => null,
+                'defaultValue' => '',
+                'placeholder' => '',
+                'required' => true,
+                'readonly' => false,
+                'position' => 1,
+            ],
+            // First Name - Child of Name Field
+            [
+                'id' => 0,
+                'type' => 'text',
+                'label' => BackendStrings::getTemplateStrings()['first_name'],
+                'placeholder' => BackendStrings::getTemplateStrings()['enter_your_first_name'],
+                'required' => true,
+                'parentId' => 0,
+                'fieldIndex' => 1,
+                'defaultValue' => '',
+                'position' => 1,
+                'optionHide' => false,
+                'description' => '',
+                'settings' => json_encode(['nameFieldType' => 'nameField1']),
+            ],
+            // Last Name - Child of Name Field
+            [
+                'id' => 0,
+                'type' => 'text',
+                'label' => BackendStrings::getTemplateStrings()['last_name'],
+                'placeholder' => BackendStrings::getTemplateStrings()['enter_your_last_name'],
+                'required' => true,
+                'parentId' => 0,
+                'fieldIndex' => 1,
+                'defaultValue' => '',
+                'position' => 2,
+                'optionHide' => false,
+                'description' => '',
+                'settings' => json_encode(['nameFieldType' => 'nameField2']),
+            ],
+            // Email Address
+            [
+                'id' => 0,
+                'fieldIndex' => 2,
+                'type' => 'email',
+                'label' => BackendStrings::getTemplateStrings()['email_address'],
+                'placeholder' => BackendStrings::getTemplateStrings()['email_placeholder'],
+                'required' => true,
+                'parentId' => null,
+                'defaultValue' => '',
+                'position' => 3,
+            ],
+            // Phone Number
+            [
+                'id' => 0,
+                'fieldIndex' => 3,
+                'type' => 'phone',
+                'label' => BackendStrings::getTemplateStrings()['phone_number'],
+                'placeholder' => BackendStrings::getTemplateStrings()['phone_placeholder'],
+                'required' => false,
+                'parentId' => null,
+                'defaultValue' => '',
+                'position' => 4,
+            ],
+            // Relationship to Couple
+            [
+                'id' => 0,
+                'fieldIndex' => 4,
+                'type' => 'select',
+                'label' => BackendStrings::getTemplateStrings()['relationship_to_couple'],
+                'placeholder' => BackendStrings::getTemplateStrings()['select_relationship_to_couple'],
+                'required' => true,
+                'parentId' => null,
+                'defaultValue' => '',
+                'position' => 5,
+                'fieldOptions' => [
+                    [
+                        'id' => 0,
+                        'label' => BackendStrings::getTemplateStrings()['family'],
+                        'value' => 'family',
+                        'isDefault' => false,
+                        'position' => 1
+                    ],
+                    [
+                        'id' => 0,
+                        'label' => BackendStrings::getTemplateStrings()['friend'],
+                        'value' => 'friend',
+                        'isDefault' => false,
+                        'position' => 2
+                    ],
+                    [
+                        'id' => 0,
+                        'label' => BackendStrings::getTemplateStrings()['colleague'],
+                        'value' => 'colleague',
+                        'isDefault' => false,
+                        'position' => 3
+                    ],
+                    [
+                        'id' => 0,
+                        'label' => BackendStrings::getTemplateStrings()['other'],
+                        'value' => 'other',
+                        'isDefault' => false,
+                        'position' => 4
+                    ],
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * Attendance fields (will you attend, number of guests, event date)
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private static function getAttendanceFields(): array
+    {
+        return [
+            // Will you attend?
+            [
+                'id' => 0,
+                'fieldIndex' => 5,
+                'type' => 'radio',
+                'label' => BackendStrings::getTemplateStrings()['will_you_attend'],
+                'placeholder' => '',
+                'required' => true,
+                'parentId' => null,
+                'defaultValue' => '',
+                'position' => 6,
+                'fieldOptions' => [
+                    [
+                        'id' => 0,
+                        'label' => BackendStrings::getTemplateStrings()['yes'],
+                        'value' => 'yes',
+                        'isDefault' => false,
+                        'position' => 1
+                    ],
+                    [
+                        'id' => 0,
+                        'label' => BackendStrings::getTemplateStrings()['no'],
+                        'value' => 'no',
+                        'isDefault' => false,
+                        'position' => 2
+                    ],
+                ]
+            ],
+            // Number of Guests
+            [
+                'id' => 0,
+                'fieldIndex' => 6,
+                'type' => 'number',
+                'label' => BackendStrings::getTemplateStrings()['number_of_guests'],
+                'placeholder' => BackendStrings::getTemplateStrings()['enter_number_of_attendees'],
+                'required' => true,
+                'parentId' => null,
+                'defaultValue' => '',
+                'position' => 7,
+            ],
+            // Event Date
+            [
+                'id' => 0,
+                'fieldIndex' => 7,
+                'type' => 'date',
+                'label' => BackendStrings::getTemplateStrings()['event_date'],
+                'placeholder' => BackendStrings::getTemplateStrings()['enter_event_date'],
+                'required' => true,
+                'parentId' => null,
+                'defaultValue' => '',
+                'position' => 8,
+                'dateFieldType' => 'picker',
+                'dateFormat' => 'MM/DD/YYYY',
+            ],
+        ];
+    }
+
+    /**
+     * Meal preferences fields (meal preference, dietary restrictions)
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private static function getMealPreferencesFields(): array
+    {
+        return [
+            // Meal Preference
+            [
+                'id' => 0,
+                'fieldIndex' => 8,
+                'type' => 'select',
+                'label' => BackendStrings::getTemplateStrings()['meal_preference'],
+                'placeholder' => BackendStrings::getTemplateStrings()['select_meal_preference'],
+                'required' => true,
+                'parentId' => null,
+                'defaultValue' => '',
+                'position' => 9,
+                'fieldOptions' => [
+                    [
+                        'id' => 0,
+                        'label' => BackendStrings::getTemplateStrings()['beef'],
+                        'value' => 'beef',
+                        'isDefault' => false,
+                        'position' => 1
+                    ],
+                    [
+                        'id' => 0,
+                        'label' => BackendStrings::getTemplateStrings()['chicken'],
+                        'value' => 'chicken',
+                        'isDefault' => false,
+                        'position' => 2
+                    ],
+                    [
+                        'id' => 0,
+                        'label' => BackendStrings::getTemplateStrings()['fish'],
+                        'value' => 'fish',
+                        'isDefault' => false,
+                        'position' => 3
+                    ],
+                    [
+                        'id' => 0,
+                        'label' => BackendStrings::getTemplateStrings()['vegetarian'],
+                        'value' => 'vegetarian',
+                        'isDefault' => false,
+                        'position' => 4
+                    ],
+                    [
+                        'id' => 0,
+                        'label' => BackendStrings::getTemplateStrings()['vegan'],
+                        'value' => 'vegan',
+                        'isDefault' => false,
+                        'position' => 5
+                    ],
+                    [
+                        'id' => 0,
+                        'label' => BackendStrings::getTemplateStrings()['other'],
+                        'value' => 'other',
+                        'isDefault' => false,
+                        'position' => 6
+                    ],
+                ]
+            ],
+            // Dietary Restrictions or Notes
+            [
+                'id' => 0,
+                'fieldIndex' => 9,
+                'type' => 'textarea',
+                'label' => BackendStrings::getTemplateStrings()['dietary_restrictions_or_notes'],
+                'placeholder' => BackendStrings::getTemplateStrings()['specify_allergies_or_special_requests'],
+                'required' => false,
+                'parentId' => null,
+                'defaultValue' => '',
+                'position' => 10,
+            ],
+        ];
+    }
+
+    /**
+     * Additional information fields (garden tour, bring guests, special messages)
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private static function getAdditionalInformationFields(): array
+    {
+        return [
+            // Join Garden Tour?
+            [
+                'id' => 0,
+                'fieldIndex' => 10,
+                'type' => 'radio',
+                'label' => BackendStrings::getTemplateStrings()['join_garden_tour'],
+                'placeholder' => '',
+                'required' => false,
+                'parentId' => null,
+                'defaultValue' => '',
+                'position' => 11,
+                'fieldOptions' => [
+                    [
+                        'id' => 0,
+                        'label' => BackendStrings::getTemplateStrings()['yes'],
+                        'value' => 'yes',
+                        'isDefault' => false,
+                        'position' => 1
+                    ],
+                    [
+                        'id' => 0,
+                        'label' => BackendStrings::getTemplateStrings()['no'],
+                        'value' => 'no',
+                        'isDefault' => false,
+                        'position' => 2
+                    ],
+                ]
+            ],
+            // Bring Guests?
+            [
+                'id' => 0,
+                'fieldIndex' => 11,
+                'type' => 'radio',
+                'label' => BackendStrings::getTemplateStrings()['bring_guests'],
+                'placeholder' => '',
+                'required' => false,
+                'parentId' => null,
+                'defaultValue' => '',
+                'position' => 12,
+                'fieldOptions' => [
+                    [
+                        'id' => 0,
+                        'label' => BackendStrings::getTemplateStrings()['yes'],
+                        'value' => 'yes',
+                        'isDefault' => false,
+                        'position' => 1
+                    ],
+                    [
+                        'id' => 0,
+                        'label' => BackendStrings::getTemplateStrings()['no'],
+                        'value' => 'no',
+                        'isDefault' => false,
+                        'position' => 2
+                    ],
+                ]
+            ],
+            // Special Messages or Wishes
+            [
+                'id' => 0,
+                'fieldIndex' => 12,
+                'type' => 'textarea',
+                'label' => BackendStrings::getTemplateStrings()['special_messages_or_wishes'],
+                'placeholder' => BackendStrings::getTemplateStrings()['enter_any_additional_notes'],
+                'required' => false,
+                'parentId' => null,
+                'defaultValue' => '',
+                'position' => 13,
+            ],
+        ];
+    }
+}

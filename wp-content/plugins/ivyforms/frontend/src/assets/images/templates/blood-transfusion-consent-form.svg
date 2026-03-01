@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 1150" width="400" height="1150">
+  <!-- Background -->
+  <rect width="400" height="1150" fill="#ffffff" stroke="#e5e7eb" stroke-width="1" rx="8"/>
+
+  <!-- Title -->
+  <text x="30" y="35" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="#374151">Blood Transfusion Consent Form</text>
+
+  <!-- Patient Information Section -->
+  <text x="30" y="75" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#374151">Patient Information</text>
+
+  <!-- First Name and Last Name -->
+  <text x="30" y="103" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">First Name<tspan dx="4" fill="#dc2626">*</tspan></text>
+  <rect x="30" y="113" width="160" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+  <text x="40" y="136" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter first name</text>
+
+  <text x="210" y="103" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Last Name<tspan dx="4" fill="#dc2626">*</tspan></text>
+  <rect x="210" y="113" width="160" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+  <text x="220" y="136" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter last name</text>
+
+  <!-- Age -->
+  <text x="30" y="183" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Age<tspan dx="4" fill="#dc2626">*</tspan></text>
+  <rect x="30" y="193" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+  <text x="200" y="216" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af" text-anchor="middle">Enter age</text>
+  <!-- Minus button -->
+  <line x1="40" y1="213" x2="52" y2="213" stroke="#9ca3af" stroke-width="2"/>
+  <!-- Plus button -->
+  <line x1="348" y1="213" x2="360" y2="213" stroke="#9ca3af" stroke-width="2"/>
+  <line x1="354" y1="207" x2="354" y2="219" stroke="#9ca3af" stroke-width="2"/>
+
+  <!-- Patient ID -->
+  <text x="30" y="263" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Patient ID/Medical Record Number<tspan dx="4" fill="#dc2626">*</tspan></text>
+  <rect x="30" y="273" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+  <text x="40" y="296" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter patient ID</text>
+
+  <!-- Blood Type -->
+  <text x="30" y="343" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Blood Type<tspan dx="4" fill="#dc2626">*</tspan></text>
+  <rect x="30" y="353" width="160" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+  <text x="40" y="376" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Select blood type</text>
+  <polygon points="170,373 182,373 176,380" fill="#9ca3af"/>
+
+  <!-- Contact Number -->
+  <text x="210" y="343" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Contact Number<tspan dx="4" fill="#dc2626">*</tspan></text>
+  <rect x="210" y="353" width="160" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+  <text x="220" y="376" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">+1 (_) _-_</text>
+
+  <!-- Transfusion Details Section -->
+  <text x="30" y="423" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#374151">Transfusion Details</text>
+
+  <!-- Reason for Transfusion -->
+  <text x="30" y="453" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Reason for Transfusion<tspan dx="4" fill="#dc2626">*</tspan></text>
+  <rect x="30" y="463" width="340" height="60" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+  <text x="40" y="486" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Describe medical reason</text>
+
+  <!-- Blood Product Type -->
+  <text x="30" y="553" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Blood Product Type<tspan dx="4" fill="#dc2626">*</tspan></text>
+  <rect x="30" y="563" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+  <text x="40" y="586" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Select product type</text>
+  <polygon points="350,583 362,583 356,590" fill="#9ca3af"/>
+
+  <!-- Ordering Physician -->
+  <text x="30" y="633" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Ordering Physician Name<tspan dx="4" fill="#dc2626">*</tspan></text>
+  <rect x="30" y="643" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+  <text x="40" y="666" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter physician name</text>
+
+  <!-- Scheduled Transfusion Date -->
+  <text x="30" y="713" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Scheduled Transfusion Date<tspan dx="4" fill="#dc2626">*</tspan></text>
+  <rect x="30" y="723" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+  <text x="40" y="746" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Select date</text>
+  <!-- Calendar icon -->
+  <rect x="336" y="733" width="20" height="20" rx="2" fill="none" stroke="#9ca3af" stroke-width="1.5"/>
+  <line x1="341" y1="731" x2="341" y2="736" stroke="#9ca3af" stroke-width="1.5"/>
+  <line x1="351" y1="731" x2="351" y2="736" stroke="#9ca3af" stroke-width="1.5"/>
+
+  <!-- Medical History Section -->
+  <text x="30" y="793" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#374151">Medical History</text>
+
+  <!-- Previous Transfusions -->
+  <text x="30" y="823" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Previous Transfusions</text>
+  <rect x="30" y="838" width="18" height="18" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5" rx="3"/>
+  <text x="53" y="851" font-family="Arial, sans-serif" font-size="13" fill="#374151">Yes, I have received blood transfusions before</text>
+
+  <!-- Transfusion Reactions -->
+  <text x="30" y="883" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Previous Transfusion Reactions</text>
+  <rect x="30" y="893" width="340" height="60" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+  <text x="40" y="916" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Describe any past reactions</text>
+
+  <!-- Known Allergies -->
+  <text x="30" y="983" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Known Allergies<tspan dx="4" fill="#dc2626">*</tspan></text>
+  <rect x="30" y="993" width="340" height="60" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+  <text x="40" y="1016" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">List any known allergies</text>
+
+  <!-- Consent Section -->
+  <text x="30" y="1083" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Consent<tspan dx="4" fill="#dc2626">*</tspan></text>
+  <rect x="30" y="1098" width="18" height="18" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5" rx="3"/>
+  <text x="53" y="1111" font-family="Arial, sans-serif" font-size="12" fill="#374151">I consent to receive blood transfusion and acknowledge risks</text>
+
+  <!-- Submit Button -->
+  <rect x="30" y="1125" width="120" height="20" fill="#3b82f6" rx="4"/>
+  <text x="90" y="1140" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#ffffff" text-anchor="middle">Submit</text>
+</svg>

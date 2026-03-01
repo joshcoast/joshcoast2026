@@ -9,6 +9,7 @@
 /wp-content/index.php
 /wp-content/languages
 /wp-content/plugins/index.php
+/wp-content/plugins/all-in-one-wp-migration/
 /wp-content/themes/index.php
 /wp-includes/
 /index.php
@@ -46,3 +47,11 @@ wp-config.php
 # Note: If you wish to whitelist themes,
 # uncomment the next line
 #/wp-content/themes
+
+*.DS_Store
+/wp-content/wpvividbackups/
+/wp-content/ai1wm-backups/
+# Backup plugin files
+/wp-content/ai1wm-backups/
+/wp-content/wpvividbackups/
+/wp-content/plugins/all-in-one-wp-migration/storage/

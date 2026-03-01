@@ -1,0 +1,15 @@
+/*
+Theme Name: GeneratePress Child
+Description: GeneratePress Child Theme for WP Blog Category Filter
+Author: Josh Coast
+Template: generatepress
+Version: 1.0.0
+*/
+/* Import parent theme styles */
+@import url("../generatepress/style.css");
+/* Child theme customizations can go here */
+:root {
+	--global-color-7: #17e8e8;
+}
+/* Blog filter styling is handled by the plugin's CSS file */
+/* Editor-only overrides (e.g. Lottie vs CodePro) are in editor-overrides.css */

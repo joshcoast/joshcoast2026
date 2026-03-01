@@ -1,0 +1,140 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 2200" width="400" height="2200">
+    <!-- Background -->
+    <rect width="400" height="2200" fill="#ffffff" stroke="#e5e7eb" stroke-width="1" rx="8"/>
+
+    <!-- Title -->
+    <text x="30" y="35" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#374151">Construction Change Order Form</text>
+    <text x="30" y="55" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#374151">(Universal)</text>
+
+    <!-- 14. Requestor Name -->
+    <text x="30" y="90" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Requestor Name<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="100" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="123" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter your full name</text>
+
+    <!-- 15. Email Address -->
+    <text x="30" y="165" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Email Address<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="175" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="198" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">name@example.com</text>
+
+    <!-- 16. Phone Number -->
+    <text x="30" y="240" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Phone Number</text>
+    <rect x="30" y="250" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="273" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">+1 (_) _-_</text>
+
+    <!-- 17. Project Address -->
+    <text x="30" y="315" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Project Address</text>
+    <rect x="30" y="325" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="348" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Street, City, ZIP</text>
+
+    <!-- 18. Project Name -->
+    <text x="30" y="390" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Project Name<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="400" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="423" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter project name</text>
+
+    <!-- 19. Project Type Dropdown -->
+    <text x="30" y="465" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Project Type<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="475" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="498" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Select project type</text>
+    <path d="M 355 490 L 360 495 L 365 490" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round"/>
+
+    <!-- 20. Change Requested Date -->
+    <text x="30" y="540" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Change Requested Date<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="550" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="573" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Select date</text>
+    <rect x="345" y="560" width="20" height="20" fill="none" stroke="#9ca3af" stroke-width="1.5" rx="2"/>
+    <line x1="348" y1="560" x2="348" y2="565" stroke="#9ca3af" stroke-width="1.5"/>
+    <line x1="362" y1="560" x2="362" y2="565" stroke="#9ca3af" stroke-width="1.5"/>
+    <line x1="345" y1="567" x2="365" y2="567" stroke="#9ca3af" stroke-width="1.5"/>
+
+    <!-- 21. Description of Change -->
+    <text x="30" y="615" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Description of Change</text>
+    <rect x="30" y="625" width="340" height="80" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="648" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Describe the change in detail</text>
+
+    <!-- 22. Estimated Cost Impact -->
+    <text x="30" y="730" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Estimated Cost Impact</text>
+    <rect x="30" y="740" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="763" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter amount in USD</text>
+
+    <!-- 23. Approval Required from Supervisor -->
+    <text x="30" y="805" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Approval Required from Supervisor?</text>
+    <rect x="30" y="815" width="20" height="20" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="4"/>
+    <text x="60" y="830" font-family="Arial, sans-serif" font-size="14" fill="#374151">Yes</text>
+
+    <!-- 24. Requestor Signature -->
+    <text x="30" y="865" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Requestor Signature<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="875" width="340" height="100" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="898" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Sign here</text>
+    <line x1="40" y1="950" x2="360" y2="950" stroke="#d1d5db" stroke-width="1" stroke-dasharray="5,5"/>
+    <text x="40" y="968" font-family="Arial, sans-serif" font-size="12" fill="#9ca3af">Draw your signature above</text>
+
+    <!-- 25. Supervisor Signature -->
+    <text x="30" y="1005" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Supervisor Signature</text>
+    <rect x="30" y="1015" width="340" height="100" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="1038" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Sign here</text>
+    <line x1="40" y1="1090" x2="360" y2="1090" stroke="#d1d5db" stroke-width="1" stroke-dasharray="5,5"/>
+    <text x="40" y="1108" font-family="Arial, sans-serif" font-size="12" fill="#9ca3af">Draw your signature above</text>
+
+    <!-- Additional Fields Section (to match screenshot count of 25) -->
+    <!-- Field 1: Company Name -->
+    <text x="30" y="1150" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Company Name</text>
+    <rect x="30" y="1160" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="1183" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter company name</text>
+
+    <!-- Field 2: Contract Number -->
+    <text x="30" y="1225" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Contract Number</text>
+    <rect x="30" y="1235" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="1258" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter contract number</text>
+
+    <!-- Field 3: Original Contract Amount -->
+    <text x="30" y="1300" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Original Contract Amount</text>
+    <rect x="30" y="1310" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="1333" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter amount in USD</text>
+
+    <!-- Field 4: Change Order Number -->
+    <text x="30" y="1375" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Change Order Number</text>
+    <rect x="30" y="1385" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="1408" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter change order #</text>
+
+    <!-- Field 5: Reason for Change -->
+    <text x="30" y="1450" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Reason for Change</text>
+    <rect x="30" y="1460" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="1483" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Select reason</text>
+    <path d="M 355 1475 L 360 1480 L 365 1475" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round"/>
+
+    <!-- Field 6: Impact on Schedule -->
+    <text x="30" y="1525" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Impact on Schedule</text>
+    <rect x="30" y="1535" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="1558" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter days delayed/advanced</text>
+
+    <!-- Field 7: Materials Required -->
+    <text x="30" y="1600" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Materials Required</text>
+    <rect x="30" y="1610" width="340" height="60" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="1633" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">List materials needed</text>
+
+    <!-- Field 8: Labor Hours Estimate -->
+    <text x="30" y="1695" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Labor Hours Estimate</text>
+    <rect x="30" y="1705" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="1728" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter estimated hours</text>
+
+    <!-- Field 9: Priority Level -->
+    <text x="30" y="1770" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Priority Level</text>
+    <rect x="30" y="1780" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="1803" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Select priority</text>
+    <path d="M 355 1795 L 360 1800 L 365 1795" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round"/>
+
+    <!-- Field 10: Attachments/Documents -->
+    <text x="30" y="1845" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Attachments/Documents</text>
+    <rect x="30" y="1855" width="340" height="50" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <rect x="145" y="1870" width="110" height="20" fill="#6366f1" rx="4"/>
+    <text x="200" y="1885" font-family="Arial, sans-serif" font-size="12" font-weight="600" fill="#ffffff" text-anchor="middle">Choose Files</text>
+
+    <!-- Field 11: Notes/Comments -->
+    <text x="30" y="1930" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Notes/Comments</text>
+    <rect x="30" y="1940" width="340" height="80" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="1963" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Additional notes or comments</text>
+
+    <!-- Submit Button -->
+    <rect x="30" y="2050" width="340" height="45" fill="#6366f1" rx="6"/>
+    <text x="200" y="2077" font-family="Arial, sans-serif" font-size="16" font-weight="600" fill="#ffffff" text-anchor="middle">Submit Change Order</text>
+</svg>

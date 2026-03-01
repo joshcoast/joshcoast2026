@@ -1,0 +1,112 @@
+<template>
+  <div
+    :class="[
+      'ivyforms-field ivyforms-field__textarea',
+      'ivyforms-field__textarea_' + field.id,
+      field.cssClasses,
+    ]"
+  >
+    <IvyFormItem
+      :label="field.hideLabel ? '' : field.label"
+      :required="field.required"
+      :error="error"
+      :prop="field.type + '_' + field.fieldIndex"
+      :show-info="!!field.description"
+      :info-text="field.description || ''"
+      :label-position="field.labelPosition"
+      :show-info-icon="false"
+    >
+      <IvyTextInput
+        :id="fieldID"
+        v-model="localModelValue"
+        class="ivyforms-field__textarea-input"
+        type="textarea"
+        aria-label="field.label"
+        :placeholder="field.placeholder"
+        :disabled="disabled"
+        :readonly="field.readOnly"
+        :required="field.required"
+        :rows="field.rows || 3"
+        :maxlength="field.limitMaxLength ? field.maxLength : undefined"
+      />
+    </IvyFormItem>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { computed, inject } from 'vue'
+
+interface Field {
+  id: number
+  formId: number
+  fieldIndex: number
+  type: string
+  label: string
+  placeholder?: string
+  required?: boolean
+  hideLabel?: boolean
+  readOnly?: boolean
+  description?: string
+  cssClasses?: string
+  rows?: number
+  limitMaxLength?: boolean
+  maxLength?: number
+  labelPosition?: string
+  noDuplicates?: boolean
+  // Any other field properties from your data
+}
+interface FieldProps {
+  modelValue: string | number | null | undefined
+  field: Field
+  disabled?: boolean
+  error?: string
+}
+
+const props = withDefaults(defineProps<FieldProps>(), {
+  modelValue: '',
+  disabled: false,
+  error: '',
+})
+
+const emit = defineEmits(['update:modelValue'])
+
+// Inject clearFieldError function from parent
+const clearFieldError = inject<(fieldKey: string) => void>('clearFieldError', () => {})
+
+// Generate field key for clearing errors
+const fieldKey = computed(() => {
+  return props.field.type + '_' + props.field.fieldIndex
+})
+
+// Handle input event to clear errors when user starts typing
+const handleInput = (value: string | number | null | undefined) => {
+  emit('update:modelValue', value)
+  clearFieldError(fieldKey.value)
+}
+
+const localModelValue = computed({
+  get() {
+    return props.modelValue
+  },
+  set(value) {
+    handleInput(value)
+  },
+})
+// Generate unique field ID as a string
+const fieldID = computed(() => {
+  return `ivyforms-field__paragraph-input_${props.field.formId || ''}_${props.field.fieldIndex || ''}`
+})
+</script>
+
+<style scoped lang="scss">
+.ivyforms-field__textarea {
+  &.is-readonly {
+    :deep(.el-textarea__inner),
+    :deep(.el-textarea__inner:hover),
+    :deep(.el-textarea__inner.is-focus) {
+      border-color: var(--map-base-dusk-stroke--2) !important;
+      box-shadow: none !important;
+    }
+  }
+}
+</style>
