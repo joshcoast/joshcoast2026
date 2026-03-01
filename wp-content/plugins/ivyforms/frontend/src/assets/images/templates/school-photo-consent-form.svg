@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 1200" width="400" height="1200">
+    <!-- Background -->
+    <rect width="400" height="1200" fill="#ffffff" stroke="#e5e7eb" stroke-width="1" rx="8"/>
+
+    <!-- Title -->
+    <text x="30" y="35" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#374151">School Photo Consent</text>
+    <text x="30" y="60" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#374151">Form</text>
+
+    <!-- Student Information header -->
+    <text x="30" y="95" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#374151">Student Information</text>
+
+    <!-- Student Full Name label -->
+    <text x="30" y="113" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Full Name<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="123" width="160" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="146" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">First name</text>
+
+    <!-- Last Name -->
+    <text x="210" y="113" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Last Name<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="210" y="123" width="160" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="220" y="146" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Last name</text>
+
+    <!-- Date of Birth -->
+    <text x="30" y="193" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Date of Birth<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="203" width="160" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="226" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">MM/DD/YYYY</text>
+    <!-- Calendar icon -->
+    <rect x="155" y="213" width="15" height="15" fill="none" stroke="#9ca3af" stroke-width="1" rx="2"/>
+    <line x1="157" y1="213" x2="157" y2="217" stroke="#9ca3af" stroke-width="1"/>
+    <line x1="168" y1="213" x2="168" y2="217" stroke="#9ca3af" stroke-width="1"/>
+
+    <!-- Grade / Class -->
+    <text x="210" y="193" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Grade / Class<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="210" y="203" width="160" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="220" y="226" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter grade</text>
+
+    <!-- Phone Number -->
+    <text x="30" y="273" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Phone Number<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="283" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="306" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">+1 (___) ___-____</text>
+
+    <!-- Parent/Guardian Information header -->
+    <text x="30" y="353" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#374151">Parent/Guardian Information</text>
+
+    <!-- Parent/Guardian Name -->
+    <text x="30" y="371" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Parent/Guardian Name<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="381" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="404" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter full name</text>
+
+    <!-- Parent/Guardian Email -->
+    <text x="30" y="451" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Parent/Guardian Email<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="461" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="484" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter email address</text>
+
+    <!-- School & Event Details header -->
+    <text x="30" y="531" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#374151">School and Event Details</text>
+
+    <!-- School Name -->
+    <text x="30" y="549" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">School Name<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="559" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="582" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter school name</text>
+
+    <!-- Event or Class Name -->
+    <text x="30" y="629" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Event or Class Name</text>
+    <rect x="30" y="639" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="662" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter event or class name (optional)</text>
+
+    <!-- Event / Class Date -->
+    <text x="30" y="709" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Event / Class Date</text>
+    <rect x="30" y="719" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="742" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Select date (optional)</text>
+    <!-- Calendar icon -->
+    <rect x="345" y="729" width="20" height="20" fill="none" stroke="#9ca3af" stroke-width="1.5" rx="2"/>
+    <line x1="348" y1="729" x2="348" y2="734" stroke="#9ca3af" stroke-width="1.5"/>
+    <line x1="362" y1="729" x2="362" y2="734" stroke="#9ca3af" stroke-width="1.5"/>
+
+    <!-- Consent & Permissions header -->
+    <text x="30" y="789" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#374151">Consent and Permissions</text>
+
+    <!-- Photo & Video Consent -->
+    <rect x="30" y="809" width="20" height="20" fill="#f9fafb" stroke="#d1d5db" stroke-width="1.5" rx="4"/>
+    <text x="60" y="824" font-family="Arial, sans-serif" font-size="13" font-weight="500" fill="#374151">Photo/Video Consent<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <text x="60" y="843" font-family="Arial, sans-serif" font-size="12" fill="#6b7280">Grant permission for photos/videos</text>
+
+    <!-- Usage Rights -->
+    <rect x="30" y="864" width="20" height="20" fill="#f9fafb" stroke="#d1d5db" stroke-width="1.5" rx="4"/>
+    <text x="60" y="879" font-family="Arial, sans-serif" font-size="13" font-weight="500" fill="#374151">Usage Rights<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <text x="60" y="898" font-family="Arial, sans-serif" font-size="12" fill="#6b7280">Approve use in educational/promotional</text>
+
+    <!-- Waiver & Release -->
+    <text x="30" y="939" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#374151">Signatures</text>
+
+    <!-- Parent/Guardian Signature -->
+    <text x="30" y="957" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Parent/Guardian Signature<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="967" width="340" height="80" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="990" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Draw your signature here</text>
+    <!-- Signature icon/line -->
+    <path d="M 50 1025 Q 100 1015, 150 1025 T 250 1015 Q 290 1010, 330 1020" stroke="#d1d5db" fill="none" stroke-width="2" stroke-linecap="round"/>
+
+    <!-- Date of Agreement -->
+    <text x="30" y="1077" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Date of Agreement<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="1087" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="1110" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">MM/DD/YYYY</text>
+    <!-- Calendar icon -->
+    <rect x="345" y="1097" width="20" height="20" fill="none" stroke="#9ca3af" stroke-width="1.5" rx="2"/>
+    <line x1="348" y1="1097" x2="348" y2="1102" stroke="#9ca3af" stroke-width="1.5"/>
+    <line x1="362" y1="1097" x2="362" y2="1102" stroke="#9ca3af" stroke-width="1.5"/>
+    <line x1="345" y1="1108" x2="365" y2="1108" stroke="#9ca3af" stroke-width="1.5"/>
+
+</svg>
+

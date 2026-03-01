@@ -1,0 +1,11 @@
+/*
+ * Block editor only – fixes conflicts (e.g. LottieFiles vs CodePro).
+ * This file is enqueued only in the backend via enqueue_block_editor_assets.
+ */
+
+/* Restore CodePro / editor appearance overridden by Lottie plugin */
+.block-editor-block-list__block textarea {
+	background-color: transparent !important;
+}
+
+/* Add your Lottie override rules below so they only apply in the editor. */

@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 1350" width="400" height="1350">
+    <!-- Background -->
+    <rect width="400" height="1350" fill="#ffffff" stroke="#e5e7eb" stroke-width="1" rx="8"/>
+
+    <!-- Title -->
+    <text x="30" y="35" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#374151">Photo and Video</text>
+    <text x="30" y="60" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#374151">Consent Form</text>
+
+    <!-- Personal Information header -->
+    <text x="30" y="95" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#374151">Personal Information</text>
+
+    <!-- Full Name label -->
+    <text x="30" y="113" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Full Name<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="123" width="160" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="146" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">First name</text>
+
+    <!-- Last Name -->
+    <text x="210" y="113" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Last Name<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="210" y="123" width="160" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="220" y="146" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Last name</text>
+
+    <!-- Phone Number -->
+    <text x="30" y="193" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Phone Number<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="203" width="160" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="226" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">+1 (___) ___-____</text>
+
+    <!-- Email Address -->
+    <text x="210" y="193" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Email Address<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="210" y="203" width="160" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="220" y="226" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">email@example.com</text>
+
+    <!-- Address (optional) -->
+    <text x="30" y="273" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Address (Optional)</text>
+    <rect x="30" y="283" width="340" height="80" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="306" font-family="Arial, sans-serif" font-size="13" fill="#9ca3af">Street, City, State,</text>
+    <text x="40" y="326" font-family="Arial, sans-serif" font-size="13" fill="#9ca3af">Postal Code, Country</text>
+    <text x="40" y="346" font-family="Arial, sans-serif" font-size="13" fill="#9ca3af">(optional)</text>
+
+    <!-- Consent & Authorization header -->
+    <text x="30" y="393" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#374151">Consent and Authorization</text>
+
+    <!-- Photo & Video Consent -->
+    <rect x="30" y="413" width="20" height="20" fill="#f9fafb" stroke="#d1d5db" stroke-width="1.5" rx="4"/>
+    <text x="60" y="428" font-family="Arial, sans-serif" font-size="13" font-weight="500" fill="#374151">Photo/Video Consent<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <text x="60" y="447" font-family="Arial, sans-serif" font-size="12" fill="#6b7280">Grant permission for photos/videos</text>
+
+    <!-- Age & Competency -->
+    <rect x="30" y="468" width="20" height="20" fill="#f9fafb" stroke="#d1d5db" stroke-width="1.5" rx="4"/>
+    <text x="60" y="483" font-family="Arial, sans-serif" font-size="13" font-weight="500" fill="#374151">Age and Competency<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <text x="60" y="502" font-family="Arial, sans-serif" font-size="12" fill="#6b7280">18+ years old and competent</text>
+
+    <!-- Usage Rights -->
+    <rect x="30" y="523" width="20" height="20" fill="#f9fafb" stroke="#d1d5db" stroke-width="1.5" rx="4"/>
+    <text x="60" y="538" font-family="Arial, sans-serif" font-size="13" font-weight="500" fill="#374151">Usage Rights<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <text x="60" y="557" font-family="Arial, sans-serif" font-size="12" fill="#6b7280">Right to use and distribute photos</text>
+
+    <!-- Modification Rights -->
+    <rect x="30" y="578" width="20" height="20" fill="#f9fafb" stroke="#d1d5db" stroke-width="1.5" rx="4"/>
+    <text x="60" y="593" font-family="Arial, sans-serif" font-size="13" font-weight="500" fill="#374151">Modification Rights</text>
+    <text x="60" y="612" font-family="Arial, sans-serif" font-size="12" fill="#6b7280">Allow necessary modifications</text>
+
+    <!-- Waiver & Release -->
+    <rect x="30" y="633" width="20" height="20" fill="#f9fafb" stroke="#d1d5db" stroke-width="1.5" rx="4"/>
+    <text x="60" y="648" font-family="Arial, sans-serif" font-size="13" font-weight="500" fill="#374151">Waiver Statement<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <text x="60" y="667" font-family="Arial, sans-serif" font-size="12" fill="#6b7280">Release all rights and claims</text>
+
+    <!-- Duration of Consent -->
+    <text x="30" y="708" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Duration of Consent</text>
+    <rect x="30" y="718" width="340" height="50" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="741" font-family="Arial, sans-serif" font-size="13" fill="#9ca3af">Specify consent duration (optional)</text>
+
+    <!-- Consent Withdrawal -->
+    <text x="30" y="798" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Withdrawal Instructions</text>
+    <rect x="30" y="808" width="340" height="50" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="831" font-family="Arial, sans-serif" font-size="13" fill="#9ca3af">Contact info for withdrawal (optional)</text>
+
+    <!-- Signatures header -->
+    <text x="30" y="888" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#374151">Signatures</text>
+
+    <!-- Participant / Model Signature -->
+    <text x="30" y="906" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Participant Signature<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="916" width="340" height="70" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="939" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Draw your signature here</text>
+    <!-- Signature icon/line -->
+    <path d="M 50 972 Q 100 962, 150 972 T 250 962 Q 290 957, 330 967" stroke="#d1d5db" fill="none" stroke-width="2" stroke-linecap="round"/>
+
+    <!-- Date of Agreement -->
+    <text x="30" y="1016" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Date of Agreement<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="1026" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="1049" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">MM/DD/YYYY</text>
+    <!-- Calendar icon -->
+    <rect x="345" y="1036" width="20" height="20" fill="none" stroke="#9ca3af" stroke-width="1.5" rx="2"/>
+    <line x1="348" y1="1036" x2="348" y2="1041" stroke="#9ca3af" stroke-width="1.5"/>
+    <line x1="362" y1="1036" x2="362" y2="1041" stroke="#9ca3af" stroke-width="1.5"/>
+    <line x1="345" y1="1047" x2="365" y2="1047" stroke="#9ca3af" stroke-width="1.5"/>
+
+    <!-- Special Instructions / Notes -->
+    <text x="30" y="1096" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Special Instructions / Notes</text>
+    <rect x="30" y="1106" width="340" height="60" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="1129" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter any special instructions</text>
+    <text x="40" y="1149" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">(optional)</text>
+
+    <!-- Acknowledgment -->
+    <rect x="30" y="1186" width="20" height="20" fill="#f9fafb" stroke="#d1d5db" stroke-width="1.5" rx="4"/>
+    <text x="60" y="1201" font-family="Arial, sans-serif" font-size="13" font-weight="500" fill="#374151">Questions Answered</text>
+    <text x="60" y="1220" font-family="Arial, sans-serif" font-size="12" fill="#6b7280">All questions answered to my satisfaction</text>
+
+</svg>
+

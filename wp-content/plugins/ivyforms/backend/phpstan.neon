@@ -1,0 +1,13 @@
+includes:
+    - vendor/szepeviktor/phpstan-wordpress/extension.neon
+
+parameters:
+    level: 6
+    paths:
+        - src
+    bootstrapFiles:
+        - ../ivyforms.php
+    reportUnmatchedIgnoredErrors: false
+    ignoreErrors:
+        - '#Method .*_invoke\(\) has parameter \$data with generic class WP_REST_Request but does not specify its types: T#'
+        - '#Method .*::handle\(\) has parameter \$data with generic class WP_REST_Request but does not specify its types: T#'

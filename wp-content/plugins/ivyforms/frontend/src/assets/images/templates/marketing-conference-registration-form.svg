@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 1100" width="400" height="1100">
+    <!-- Background -->
+    <rect width="400" height="1100" fill="#ffffff" stroke="#e5e7eb" stroke-width="1" rx="8"/>
+
+    <!-- Title -->
+    <text x="30" y="35" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#374151">Marketing Conference</text>
+    <text x="30" y="60" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#374151">Registration</text>
+
+    <!-- Full Name -->
+    <text x="30" y="95" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Full Name<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="105" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="128" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter your full name</text>
+
+    <!-- Email Address -->
+    <text x="30" y="175" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Email Address<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="185" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="208" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">name@example.com</text>
+
+    <!-- Role/Position Dropdown -->
+    <text x="30" y="255" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Role/Position<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="265" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="288" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Select your role or position</text>
+    <path d="M 350 283 L 355 288 L 360 283" stroke="#9ca3af" fill="none" stroke-width="2"/>
+
+    <!-- Workshops to Attend -->
+    <text x="30" y="335" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Workshops to Attend</text>
+    <rect x="30" y="345" width="340" height="100" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <rect x="40" y="358" width="14" height="14" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="2"/>
+    <text x="60" y="368" font-family="Arial, sans-serif" font-size="13" fill="#6b7280">Workshop 1</text>
+    <rect x="40" y="382" width="14" height="14" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="2"/>
+    <text x="60" y="392" font-family="Arial, sans-serif" font-size="13" fill="#6b7280">Workshop 2</text>
+    <rect x="40" y="406" width="14" height="14" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="2"/>
+    <text x="60" y="416" font-family="Arial, sans-serif" font-size="13" fill="#6b7280">Workshop 3</text>
+
+    <!-- Attendance Type (Radio) -->
+    <text x="30" y="485" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Attendance Type<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="495" width="340" height="80" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <circle cx="40" cy="517" r="6" fill="none" stroke="#d1d5db" stroke-width="1.5"/>
+    <text x="53" y="522" font-family="Arial, sans-serif" font-size="13" fill="#374151">In-person</text>
+    <circle cx="40" cy="547" r="6" fill="none" stroke="#d1d5db" stroke-width="1.5"/>
+    <text x="53" y="552" font-family="Arial, sans-serif" font-size="13" fill="#374151">Virtual</text>
+
+    <!-- Questions or Comments -->
+    <text x="30" y="605" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Questions or Comments</text>
+    <rect x="30" y="615" width="340" height="80" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="638" font-family="Arial, sans-serif" font-size="13" fill="#9ca3af">Write any questions or comments</text>
+    <text x="40" y="658" font-family="Arial, sans-serif" font-size="13" fill="#9ca3af">for the organizers</text>
+    <text x="40" y="678" font-family="Arial, sans-serif" font-size="12" fill="#9ca3af">(optional)</text>
+
+    <!-- Submit Button representation -->
+    <rect x="30" y="720" width="340" height="50" fill="#3b82f6" stroke="#1d4ed8" stroke-width="2" rx="6"/>
+    <text x="200" y="752" font-family="Arial, sans-serif" font-size="16" font-weight="600" fill="#ffffff" text-anchor="middle">Submit Registration</text>
+
+</svg>
+
