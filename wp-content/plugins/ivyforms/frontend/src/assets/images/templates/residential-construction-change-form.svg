@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 1650" width="400" height="1650">
+    <!-- Background -->
+    <rect width="400" height="1650" fill="#ffffff" stroke="#e5e7eb" stroke-width="1" rx="8"/>
+
+    <!-- Title -->
+    <text x="30" y="35" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#374151">Residential Construction</text>
+    <text x="30" y="58" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#374151">Change Form</text>
+
+    <!-- 1. Change Order Information Section -->
+    <text x="30" y="90" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#374151">Change Order Information</text>
+
+    <!-- Change Order Number -->
+    <text x="30" y="110" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Change Order Number<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="120" width="160" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="143" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">CO-2024-001</text>
+
+    <!-- Date of Request -->
+    <text x="210" y="110" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Date of Request<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="210" y="120" width="160" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="220" y="143" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Select date</text>
+
+    <!-- Project Name -->
+    <text x="30" y="185" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Project Name<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="195" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="218" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter project name</text>
+
+    <!-- Project Address -->
+    <text x="30" y="260" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Project Address<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="270" width="340" height="60" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="293" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter complete project address</text>
+
+    <!-- Requester Name -->
+    <text x="30" y="355" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#374151">Requester Name</text>
+    <text x="30" y="373" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">First Name<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="383" width="160" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="406" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter first name</text>
+
+    <text x="210" y="373" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Last Name<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="210" y="383" width="160" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="220" y="406" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter last name</text>
+
+    <!-- Requester Email -->
+    <text x="30" y="448" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Requester Email<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="458" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="481" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">requester@email.com</text>
+
+    <!-- 2. Change Details Section -->
+    <text x="30" y="528" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#374151">Change Details</text>
+
+    <!-- Description of Change -->
+    <text x="30" y="548" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Description of Change<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="558" width="340" height="70" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="581" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Describe the requested changes in detail...</text>
+
+    <!-- Reason for Change -->
+    <text x="30" y="653" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Reason for Change<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="663" width="340" height="60" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="686" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Explain why this change is necessary...</text>
+
+    <!-- Priority Level -->
+    <text x="30" y="748" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Priority Level<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="758" width="160" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="781" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Low, Medium, High, Urgent</text>
+    <path d="M 170 778 L 175 783 L 180 778" stroke="#9ca3af" fill="none" stroke-width="2"/>
+
+    <!-- Type of Change -->
+    <text x="210" y="748" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Type of Change<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="210" y="758" width="160" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="220" y="781" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Design, Material, Schedule...</text>
+    <path d="M 350 778 L 355 783 L 360 778" stroke="#9ca3af" fill="none" stroke-width="2"/>
+
+    <!-- Estimated Cost of Change -->
+    <text x="30" y="823" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Estimated Cost of Change<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="833" width="160" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="856" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">$ 0.00</text>
+
+    <!-- Impact on Cost -->
+    <text x="210" y="823" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Impact on Cost</text>
+    <rect x="210" y="833" width="160" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="220" y="856" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">$ 0.00</text>
+
+    <!-- Proposed Start Date -->
+    <text x="30" y="898" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Proposed Start Date<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="908" width="160" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="931" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Select start date</text>
+
+    <!-- Proposed Completion Date -->
+    <text x="210" y="898" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Proposed Completion Date<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="210" y="908" width="160" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="220" y="931" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Select end date</text>
+
+    <!-- Impact on Schedule -->
+    <text x="30" y="973" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Impact on Schedule</text>
+    <rect x="30" y="983" width="340" height="60" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="1006" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Describe schedule impact (optional)</text>
+
+    <!-- 3. Materials / Resources Section -->
+    <text x="30" y="1073" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#374151">Materials / Resources</text>
+
+    <!-- Materials Affected -->
+    <text x="30" y="1093" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Materials Affected</text>
+    <rect x="30" y="1103" width="340" height="60" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="1126" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">List materials (optional)</text>
+
+    <!-- Suppliers / Vendors -->
+    <text x="30" y="1188" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Suppliers / Vendors</text>
+    <rect x="30" y="1198" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="1221" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter supplier names (optional)</text>
+
+    <!-- 4. Approvals Section -->
+    <text x="30" y="1268" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#374151">Approvals</text>
+
+    <!-- Project Manager Approval -->
+    <text x="30" y="1288" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Project Manager Approval<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <!-- Radio buttons -->
+    <circle cx="40" cy="1308" r="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+    <text x="55" y="1313" font-family="Arial, sans-serif" font-size="13" fill="#374151">Approve</text>
+    <circle cx="130" cy="1308" r="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+    <text x="145" y="1313" font-family="Arial, sans-serif" font-size="13" fill="#374151">Deny</text>
+
+    <!-- Signature of Project Manager -->
+    <text x="30" y="1348" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Signature of Project Manager<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="1358" width="340" height="80" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="1381" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Draw signature here</text>
+    <path d="M 50 1408 Q 100 1398, 150 1408 T 250 1398 Q 290 1393, 330 1403" stroke="#d1d5db" fill="none" stroke-width="2" stroke-linecap="round"/>
+
+    <!-- Date of Approval -->
+    <text x="30" y="1463" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Date of Approval<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="1473" width="160" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="1496" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Select approval date</text>
+    <!-- Calendar icon -->
+    <rect x="165" y="1483" width="20" height="20" fill="none" stroke="#9ca3af" stroke-width="1.5" rx="2"/>
+    <line x1="168" y1="1483" x2="168" y2="1488" stroke="#9ca3af" stroke-width="1.5"/>
+    <line x1="182" y1="1483" x2="182" y2="1488" stroke="#9ca3af" stroke-width="1.5"/>
+    <line x1="165" y1="1490" x2="185" y2="1490" stroke="#9ca3af" stroke-width="1.5"/>
+
+    <!-- 5. Final Submission Section -->
+    <text x="30" y="1543" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#374151">Final Submission</text>
+
+    <!-- Form Submitted By -->
+    <text x="30" y="1563" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#374151">Form Submitted By</text>
+    <text x="30" y="1581" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">First Name<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="1591" width="160" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="1614" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter first name</text>
+
+    <text x="210" y="1581" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Last Name<tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="210" y="1591" width="160" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="220" y="1614" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter last name</text>
+
+</svg>

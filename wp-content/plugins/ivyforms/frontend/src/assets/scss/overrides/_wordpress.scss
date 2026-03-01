@@ -1,0 +1,28 @@
+@use '../abstracts/mixins' as *;
+// Wrapper
+#wpwrap {
+  background-color: var(--map-ground-level-1-background);
+
+  // Content
+  #wpcontent {
+    padding: 0 !important;
+
+    // Admin Bar
+    #wpadminbar {
+      // Mobile Only
+      @include mobile-only {
+        z-index: 2000;
+      }
+    }
+
+    // Body Content
+    #wpbody-content {
+      padding: 0 !important;
+    }
+  }
+
+  // Footer
+  #wpfooter {
+    display: none;
+  }
+}

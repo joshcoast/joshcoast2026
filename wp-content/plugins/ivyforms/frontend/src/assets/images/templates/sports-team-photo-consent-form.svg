@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 1700" width="400" height="1700">
+    <!-- Background -->
+    <rect width="400" height="1700" fill="#ffffff" stroke="#e5e7eb" stroke-width="1" rx="8"/>
+
+    <!-- Title -->
+    <text x="30" y="35" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="#374151">Sports Team Photo Consent Form</text>
+
+    <!-- Personal Information Section -->
+    <text x="30" y="75" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#374151">Personal Information</text>
+
+    <!-- First Name label -->
+    <text x="30" y="93" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">First Name <tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="103" width="160" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="126" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter first name</text>
+
+    <!-- Last Name label -->
+    <text x="210" y="93" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Last Name <tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="210" y="103" width="160" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="220" y="126" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter last name</text>
+
+    <!-- Age -->
+    <text x="30" y="173" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Age <tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="183" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="206" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter age</text>
+
+    <!-- Team / Club Name -->
+    <text x="30" y="253" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Team / Club Name <tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="263" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="286" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter team or club name</text>
+
+    <!-- Sport / Activity -->
+    <text x="30" y="333" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Sport / Activity <tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="343" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="366" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Select activity</text>
+
+    <!-- Email Address -->
+    <text x="30" y="493" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Email Address</text>
+    <rect x="30" y="503" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="526" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter your email address</text>
+
+    <!-- Phone Number -->
+    <text x="30" y="573" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Phone Number</text>
+    <rect x="30" y="583" width="160" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="606" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">+1 (_) _-_</text>
+
+    <!-- Guardian / Parent Information Section -->
+    <text x="30" y="653" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#374151">Parent / Guardian Information</text>
+
+    <!-- Parent / Guardian Name -->
+    <text x="30" y="673" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Parent / Guardian Name <tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="683" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="706" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter parent or guardian name</text>
+
+    <!-- Relationship to Participant -->
+    <text x="30" y="753" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Relationship to Participant <tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="763" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="786" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Select relationship</text>
+    <text x="40" y="812" font-family="Arial, sans-serif" font-size="14" fill="#374151">• Mother</text>
+    <text x="40" y="828" font-family="Arial, sans-serif" font-size="14" fill="#374151">• Father</text>
+    <text x="40" y="844" font-family="Arial, sans-serif" font-size="14" fill="#374151">• Guardian</text>
+    <text x="40" y="860" font-family="Arial, sans-serif" font-size="14" fill="#374151">• Other</text>
+
+    <!-- Parent / Guardian Contact Number -->
+    <text x="30" y="900" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Parent / Guardian Contact Number <tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="910" width="160" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="933" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">+1 (_) _-_</text>
+
+    <!-- Parent / Guardian Email -->
+    <text x="30" y="973" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Parent / Guardian Email</text>
+    <rect x="30" y="983" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="1006" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter parent or guardian email</text>
+
+    <!-- Event Details Section (shifted) -->
+    <text x="30" y="1043" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#374151">Event / Team Details</text>
+
+    <!-- Season / Year -->
+    <text x="30" y="1061" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Season / Year <tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="1071" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="1094" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter season / year</text>
+
+    <!-- League / Tournament Name -->
+    <text x="30" y="1141" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">League / Tournament Name</text>
+    <rect x="30" y="1151" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="1174" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter league or tournament name</text>
+
+    <!-- Coach / Team Manager Name -->
+    <text x="30" y="1211" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Coach / Team Manager Name</text>
+    <rect x="30" y="1221" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="1244" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter coach or team manager name</text>
+
+    <!-- Consent Section (shifted) -->
+    <text x="30" y="1291" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#374151">Consent</text>
+
+    <!-- Consent Statement -->
+    <rect x="30" y="1305" width="18" height="18" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="3"/>
+    <text x="55" y="1318" font-family="Arial, sans-serif" font-size="14" fill="#374151">I hereby grant permission for my photo and video to be taken during team events, practices, or matches</text>
+
+    <!-- Usage Rights -->
+    <rect x="30" y="1340" width="18" height="18" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="3"/>
+    <text x="55" y="1353" font-family="Arial, sans-serif" font-size="14" fill="#374151">I grant the organization the right to use, reproduce, and distribute photos/videos for team communications and promotions</text>
+
+    <!-- Modification Rights -->
+    <rect x="30" y="1373" width="18" height="18" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="3"/>
+    <text x="55" y="1386" font-family="Arial, sans-serif" font-size="14" fill="#374151">I grant permission to edit, crop, or modify images or videos as necessary</text>
+
+    <!-- Waiver / Release -->
+    <rect x="30" y="1406" width="18" height="18" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="3"/>
+    <text x="55" y="1419" font-family="Arial, sans-serif" font-size="14" fill="#374151">I release the organization from any claims related to the use of these photos or videos</text>
+
+    <!-- Duration of Consent -->
+    <text x="30" y="1449" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Duration of Consent <tspan dx="4" fill="#dc2626">*</tspan></text>
+    <rect x="30" y="1459" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="1482" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">This consent is valid for [specify duration or indefinitely]</text>
+
+    <!-- Consent Withdrawal Instructions -->
+    <text x="30" y="1512" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Consent Withdrawal Instructions</text>
+    <rect x="30" y="1522" width="340" height="60" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="1546" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Consent can be withdrawn at any time by contacting [email address / team contact]</text>
+
+    <!-- Special Instructions / Notes -->
+    <text x="30" y="1596" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#374151">Special Instructions / Notes</text>
+    <rect x="30" y="1606" width="340" height="40" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="6"/>
+    <text x="40" y="1629" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">Enter comments</text>
+
+    <!-- Acknowledgment of Questions Answered / Signatures -->
+    <rect x="30" y="1660" width="18" height="18" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="3"/>
+    <text x="55" y="1673" font-family="Arial, sans-serif" font-size="14" fill="#374151">I have had the opportunity to ask questions and they have been answered</text>
+    <text x="30" y="1693" font-family="Arial, sans-serif" font-size="14" fill="#374151">Participant Signature ____________________  Date ________</text>
+
+    <!-- Submit Button (visual hint) -->
+    <rect x="30" y="1700" width="340" height="44" fill="#4f46e5" rx="6"/>
+    <text x="200" y="1727" font-family="Arial, sans-serif" font-size="16" font-weight="600" fill="#ffffff" text-anchor="middle">Submit Consent</text>
+</svg>

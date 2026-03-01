@@ -1,0 +1,12 @@
+export type IconCategory =
+  | 'global'
+  | 'arrows'
+  | 'builder'
+  | 'promotion'
+  | 'security'
+  | 'templates'
+  | 'flags'
+  | 'text-formatting'
+  | 'table'
+  | 'integrations'
+  | 'loaders'

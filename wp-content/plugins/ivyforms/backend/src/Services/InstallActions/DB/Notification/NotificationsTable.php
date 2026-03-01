@@ -1,0 +1,50 @@
+<?php
+
+/**
+ * @copyright © Melograno Venture Studio. All rights reserved.
+ * @licence   See LICENCE.md for license details.
+ */
+
+namespace IvyForms\Services\InstallActions\DB\Notification;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
+
+use IvyForms\Services\InstallActions\DB\AbstractDatabaseTable;
+use IvyForms\Common\Exceptions\InvalidArgumentException;
+
+/**
+ * Class NotificationsTable
+ *
+ * @package IvyForms\Services\InstallActions\DB\Notification
+ */
+class NotificationsTable extends AbstractDatabaseTable
+{
+    public const TABLE = 'notifications';
+
+    /**
+     * @return string
+     * @throws InvalidArgumentException
+     *
+     */
+    public static function buildTable(): string
+    {
+        $table = self::getTableName();
+
+        return "CREATE TABLE $table (
+                   `id` INT(11) NOT NULL AUTO_INCREMENT,
+                   `formId` INT(11) NULL,
+                   `name` VARCHAR(255) NULL,
+                   `sender` VARCHAR(255) NULL,
+                   `replyTo` VARCHAR(255) NULL,
+                   `receiver` VARCHAR(255) NULL,
+                   `enabled` INT(1) NULL,
+                   `subject` VARCHAR(255) NULL,
+                   `message` TEXT NOT NULL,
+                   `smartLogic` INT(1) NULL,
+                    PRIMARY KEY (`id`)
+                ) DEFAULT CHARSET=utf8 COLLATE utf8_general_ci";
+    }
+}
