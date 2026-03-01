@@ -55,3 +55,26 @@ wp-config.php
 /wp-content/ai1wm-backups/
 /wp-content/wpvividbackups/
 /wp-content/plugins/all-in-one-wp-migration/storage/
+/wp-content/mu-plugins/
+/wp-content/cache/
+/wp-content/upgrade/
+/wp-content/wflogs/
+*.DS_Store
+
+# Local dev files
+local-xdebuginfo.php
+
+# Stray files in wp-content
+/wp-content/*.png
+/wp-content/*.xz
+/wp-content/*.zip
+/wp-content/debug.log*
+/wp-content/fatal-error-handler.php
+/wp-content/temp-write-test-*
+/wp-content/README.md
+
+# Plugin-generated directories
+/wp-content/jetpack-waf/
+/wp-content/settings/
+/wp-content/smush-webp/
+/wp-content/wpvivid_staging/
