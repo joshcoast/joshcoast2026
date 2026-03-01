@@ -12,19 +12,12 @@ jobs:
       - name: Deploy wp-content to Nexcess
         run: |
           sudo apt-get install -y -qq sshpass
-          sshpass -p "${{ secrets.NEXCESS_SSH_PASS }}" rsync -avz --delete \
-            --exclude='mu-plugins/' \
-            --exclude='uploads/' \
-            --exclude='upgrade/' \
-            --exclude='cache/' \
-            --exclude='wflogs/' \
-            --exclude='ai1wm-backups/' \
-            --exclude='wpvividbackups/' \
-            --exclude='wpvivid_staging/' \
-            --exclude='jetpack-waf/' \
-            --exclude='smush-webp/' \
-            --exclude='settings/' \
-            --exclude='debug.log*' \
-            -e "ssh -o StrictHostKeyChecking=no" \
-            wp-content/ \
-            a2b69fd7_1@cf9a19eaca.nxcli.io:/home/a2b69fd7/cf9a19eaca.nxcli.io/html/wp-content/
+          RSYNC_CMD="sshpass -p '${{ secrets.NEXCESS_SSH_PASS }}' rsync -avz --delete -e 'ssh -o StrictHostKeyChecking=no'"
+          DEST="a2b69fd7_1@cf9a19eaca.nxcli.io:/home/a2b69fd7/cf9a19eaca.nxcli.io/html"
+          eval $RSYNC_CMD wp-content/themes/generatepress-child/ $DEST/wp-content/themes/generatepress-child/
+          eval $RSYNC_CMD wp-content/themes/joshcoast/ $DEST/wp-content/themes/joshcoast/
+          eval $RSYNC_CMD wp-content/plugins/are-you-paying-attention/ $DEST/wp-content/plugins/are-you-paying-attention/
+          eval $RSYNC_CMD wp-content/plugins/jc-taxonomy-filter/ $DEST/wp-content/plugins/jc-taxonomy-filter/
+          eval $RSYNC_CMD wp-content/plugins/word-count/ $DEST/wp-content/plugins/word-count/
+          eval $RSYNC_CMD wp-content/plugins/wp-blog-category-filter/ $DEST/wp-content/plugins/wp-blog-category-filter/
+          sshpass -p '${{ secrets.NEXCESS_SSH_PASS }}' rsync -avz -e 'ssh -o StrictHostKeyChecking=no' wp-content/uploads/2025/03/pattern.svg $DEST/wp-content/uploads/2025/03/pattern.svg
