@@ -20,3 +20,4 @@ jobs:
           eval $RSYNC_CMD wp-content/plugins/jc-taxonomy-filter/ $DEST/wp-content/plugins/jc-taxonomy-filter/
           eval $RSYNC_CMD wp-content/plugins/word-count/ $DEST/wp-content/plugins/word-count/
           eval $RSYNC_CMD wp-content/plugins/wp-blog-category-filter/ $DEST/wp-content/plugins/wp-blog-category-filter/
+          eval $RSYNC_CMD wp-content/plugins/joshcoast-blocks/ $DEST/wp-content/plugins/joshcoast-blocks/
