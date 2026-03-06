@@ -9,6 +9,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install and build coast-blocks
+        run: |
+          cd wp-content/plugins/coast-blocks
+          npm install
+          npm run build
+
       - name: Deploy wp-content to Nexcess
         run: |
           sudo apt-get install -y -qq sshpass
