@@ -32,17 +32,16 @@ wp-config.php
 # htaccess
 /.htaccess
 
-# All plugins
+# All plugins (ignore contents so whitelisted plugins can be un-ignored)
 #
-# Note: If you wish to whitelist plugins,
-# uncomment the next line
-/wp-content/plugins
+# Note: Use /plugins/* not /plugins so Git traverses into the dir and negations work.
+/wp-content/plugins/*
 !/wp-content/plugins/jc-taxonomy-filter
 !/wp-content/plugins/word-count
 !/wp-content/plugins/wp-blog-category-filter
 !/wp-content/plugins/are-you-paying-attention
 !/wp-content/plugins/coast-blocks
-
+/wp-content/plugins/coast-blocks/node_modules/
 
 # All themes
 #

@@ -1,0 +1,57 @@
+/* Coast Blocks – editor spacing panel */
+.cb-spacing-controls .cb-spacing-label {
+	margin: 0 0 8px 0;
+	font-weight: 600;
+}
+
+.cb-responsive-tabs {
+	display: flex;
+	gap: 0;
+	margin-bottom: 12px;
+	border: 1px solid #1e1e1e;
+	border-radius: 2px;
+	overflow: hidden;
+}
+
+.cb-responsive-tab {
+	flex: 1;
+	padding: 6px 8px;
+	border: none;
+	background: #2c3338;
+	color: #a7aaad;
+	font-size: 12px;
+	cursor: pointer;
+}
+
+.cb-responsive-tab:hover {
+	color: #fff;
+}
+
+.cb-responsive-tab.is-active {
+	background: #1e1e1e;
+	color: #fff;
+}
+
+.cb-spacing-sublabel {
+	margin: 12px 0 6px 0;
+	font-size: 11px;
+	color: #757575;
+}
+
+.cb-spacing-sublabel:first-child {
+	margin-top: 0;
+}
+
+.cb-spacing-inputs {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 8px 12px;
+}
+
+.cb-spacing-inputs .components-base-control {
+	margin-bottom: 0;
+}
+
+.cb-container-editor {
+	min-height: 48px;
+}
