@@ -1,11 +1,10 @@
 /**
- * Shared Spacing controls: Margin and Padding with responsive tabs (All screens, Medium, Small).
- * Blocks opt in by passing attributes.spacing and setAttributes; attribute keys use suffix
- * '' for desktop, 'Tablet' for medium, 'Mobile' for small.
+ * Shared: device switcher (above block title) + spacing controls.
+ * Screen size affects all block settings and the editor canvas width (like GenerateBlocks).
  */
 
-import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import { useSelect, useDispatch } from '@wordpress/data';
 import { PanelBody, TextControl, __experimentalUnitControl as UnitControl } from '@wordpress/components';
 
 const SIDES = [
@@ -16,10 +15,57 @@ const SIDES = [
 ];
 
 const BREAKPOINTS = [
-	{ id: '', label: __('All screens'), icon: 'desktop' },
-	{ id: 'Tablet', label: __('Medium'), icon: 'tablet' },
-	{ id: 'Mobile', label: __('Small'), icon: 'smartphone' },
+	{ id: '', label: __('Desktop'), icon: 'desktop' },
+	{ id: 'Tablet', label: __('Tablet'), icon: 'tablet' },
+	{ id: 'Mobile', label: __('Mobile'), icon: 'smartphone' },
 ];
+
+function breakpointIdToDeviceType(id) {
+	if (id === 'Tablet') return 'Tablet';
+	if (id === 'Mobile') return 'Mobile';
+	return 'Desktop';
+}
+
+function deviceTypeToBreakpointId(deviceType) {
+	if (deviceType === 'Tablet') return 'Tablet';
+	if (deviceType === 'Mobile') return 'Mobile';
+	return '';
+}
+
+/**
+ * Device switcher: icon-only row above block settings. Changes editor preview width and which breakpoint all settings apply to.
+ */
+export function DeviceSwitcher() {
+	const editorDeviceType = useSelect((select) => {
+		const editor = select('core/editor');
+		if (editor?.getDeviceType) return editor.getDeviceType();
+		const editPost = select('core/edit-post');
+		if (editPost?.__experimentalGetPreviewDeviceType) return editPost.__experimentalGetPreviewDeviceType();
+		return 'Desktop';
+	}, []);
+	const editorDispatch = useDispatch('core/editor');
+	const editPostDispatch = useDispatch('core/edit-post');
+	const setEditorDeviceType = editorDispatch?.setDeviceType ?? editPostDispatch?.__experimentalSetPreviewDeviceType;
+	const activeBreakpoint = deviceTypeToBreakpointId(editorDeviceType);
+
+	return (
+		<div className="cb-device-switcher" role="tablist" aria-label={__('Screen size')}>
+			{BREAKPOINTS.map((bp) => (
+				<button
+					key={bp.id || 'desktop'}
+					type="button"
+					role="tab"
+					aria-selected={activeBreakpoint === bp.id}
+					className={'cb-device-switcher__button' + (activeBreakpoint === bp.id ? ' is-active' : '')}
+					onClick={() => setEditorDeviceType && setEditorDeviceType(breakpointIdToDeviceType(bp.id))}
+					title={bp.label}
+				>
+					<span className={'dashicons dashicons-' + bp.icon} aria-hidden />
+				</button>
+			))}
+		</div>
+	);
+}
 
 function getSpacingValue(spacing, type, side, suffix) {
 	const key = type + side + suffix;
@@ -75,47 +121,28 @@ function SpacingInputs({ spacing, setAttributes, type, suffix }) {
 	);
 }
 
+/**
+ * Spacing panel for the current device only. Device is set by DeviceSwitcher above.
+ */
 export function SpacingControls({ attributes, setAttributes }) {
 	const spacing = attributes.spacing || {};
-	const [activeBreakpoint, setActiveBreakpoint] = useState('');
+	const editorDeviceType = useSelect((select) => {
+		const editor = select('core/editor');
+		if (editor?.getDeviceType) return editor.getDeviceType();
+		const editPost = select('core/edit-post');
+		if (editPost?.__experimentalGetPreviewDeviceType) return editPost.__experimentalGetPreviewDeviceType();
+		return 'Desktop';
+	}, []);
+	const activeBreakpoint = deviceTypeToBreakpointId(editorDeviceType);
+	const suffix = activeBreakpoint; // '' | 'Tablet' | 'Mobile'
 
 	return (
 		<PanelBody title={__('Layout')} initialOpen={true}>
 			<div className="cb-spacing-controls">
-				<p className="cb-spacing-label">{__('Spacing')}</p>
-				<div className="cb-responsive-tabs" role="tablist" aria-label={__('Screen size')}>
-					{BREAKPOINTS.map((bp) => (
-						<button
-							key={bp.id}
-							role="tab"
-							aria-selected={activeBreakpoint === bp.id}
-							className={'cb-responsive-tab' + (activeBreakpoint === bp.id ? ' is-active' : '')}
-							onClick={() => setActiveBreakpoint(bp.id)}
-						>
-							{bp.label}
-						</button>
-					))}
-				</div>
-				<div className="cb-spacing-panels">
-					<div className="cb-spacing-panel" role="tabpanel" hidden={activeBreakpoint !== ''}>
-						<p className="cb-spacing-sublabel">{__('Padding')}</p>
-						<SpacingInputs spacing={spacing} setAttributes={setAttributes} type="padding" suffix="" />
-						<p className="cb-spacing-sublabel">{__('Margin')}</p>
-						<SpacingInputs spacing={spacing} setAttributes={setAttributes} type="margin" suffix="" />
-					</div>
-					<div className="cb-spacing-panel" role="tabpanel" hidden={activeBreakpoint !== 'Tablet'}>
-						<p className="cb-spacing-sublabel">{__('Padding (Medium)')}</p>
-						<SpacingInputs spacing={spacing} setAttributes={setAttributes} type="padding" suffix="Tablet" />
-						<p className="cb-spacing-sublabel">{__('Margin (Medium)')}</p>
-						<SpacingInputs spacing={spacing} setAttributes={setAttributes} type="margin" suffix="Tablet" />
-					</div>
-					<div className="cb-spacing-panel" role="tabpanel" hidden={activeBreakpoint !== 'Mobile'}>
-						<p className="cb-spacing-sublabel">{__('Padding (Small)')}</p>
-						<SpacingInputs spacing={spacing} setAttributes={setAttributes} type="padding" suffix="Mobile" />
-						<p className="cb-spacing-sublabel">{__('Margin (Small)')}</p>
-						<SpacingInputs spacing={spacing} setAttributes={setAttributes} type="margin" suffix="Mobile" />
-					</div>
-				</div>
+				<p className="cb-spacing-sublabel">{__('Padding')}</p>
+				<SpacingInputs spacing={spacing} setAttributes={setAttributes} type="padding" suffix={suffix} />
+				<p className="cb-spacing-sublabel">{__('Margin')}</p>
+				<SpacingInputs spacing={spacing} setAttributes={setAttributes} type="margin" suffix={suffix} />
 			</div>
 		</PanelBody>
 	);
