@@ -41,6 +41,7 @@ wp-config.php
 !/wp-content/plugins/word-count
 !/wp-content/plugins/wp-blog-category-filter
 !/wp-content/plugins/are-you-paying-attention
+!/wp-content/plugins/coast-blocks
 
 
 # All themes
