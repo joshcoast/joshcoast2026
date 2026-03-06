@@ -69,8 +69,8 @@ class Coast_Blocks_Borders {
 		$rules = array();
 
 		foreach ( self::BORDER_WIDTH_KEYS as $key ) {
-			$k = $key . $suffix;
-			$v = self::get_value( $borders, $k );
+			$k       = $key . $suffix;
+			$v       = self::get_value( $borders, $k );
 			$css_val = self::format_length( $v );
 			if ( $css_val !== '' ) {
 				$rules[] = self::camel_to_kebab( $key ) . ':' . $css_val . ';';
@@ -80,6 +80,11 @@ class Coast_Blocks_Borders {
 		foreach ( self::BORDER_STYLE_KEYS as $key ) {
 			$k = $key . $suffix;
 			$v = self::get_value( $borders, $k );
+			// Default to 'solid' if a border width exists but style is not explicitly set
+			$width_key = str_replace( 'Style', 'Width', $key );
+			if ( $v === '' && self::get_value( $borders, $width_key . $suffix ) !== '' ) {
+				$v = 'solid';
+			}
 			if ( $v !== '' && $v !== 'none' ) {
 				$rules[] = self::camel_to_kebab( $key ) . ':' . $v . ';';
 			}
@@ -94,8 +99,8 @@ class Coast_Blocks_Borders {
 		}
 
 		foreach ( self::BORDER_RADIUS_KEYS as $key ) {
-			$k = $key . $suffix;
-			$v = self::get_value( $borders, $k );
+			$k       = $key . $suffix;
+			$v       = self::get_value( $borders, $k );
 			$css_val = self::format_length( $v );
 			if ( $css_val !== '' ) {
 				$rules[] = self::camel_to_kebab( $key ) . ':' . $css_val . ';';

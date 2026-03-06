@@ -3,33 +3,38 @@
  * Screen size affects all block settings and the editor canvas width (like GenerateBlocks).
  */
 
-import { __ } from '@wordpress/i18n';
-import { useSelect, useDispatch } from '@wordpress/data';
-import { PanelBody, TextControl, __experimentalUnitControl as UnitControl } from '@wordpress/components';
+import { __ } from "@wordpress/i18n";
+import { useSelect, useDispatch } from "@wordpress/data";
+import {
+	PanelBody,
+	TextControl,
+	Button,
+	__experimentalUnitControl as UnitControl,
+} from "@wordpress/components";
 
 const SIDES = [
-	{ key: 'Top', label: __('Top') },
-	{ key: 'Right', label: __('Right') },
-	{ key: 'Bottom', label: __('Bottom') },
-	{ key: 'Left', label: __('Left') },
+	{ key: "Top", label: __("Top") },
+	{ key: "Right", label: __("Right") },
+	{ key: "Bottom", label: __("Bottom") },
+	{ key: "Left", label: __("Left") },
 ];
 
 const BREAKPOINTS = [
-	{ id: '', label: __('Desktop'), icon: 'desktop' },
-	{ id: 'Tablet', label: __('Tablet'), icon: 'tablet' },
-	{ id: 'Mobile', label: __('Mobile'), icon: 'smartphone' },
+	{ id: "", label: __("Desktop"), icon: "desktop" },
+	{ id: "Tablet", label: __("Tablet"), icon: "tablet" },
+	{ id: "Mobile", label: __("Mobile"), icon: "smartphone" },
 ];
 
 function breakpointIdToDeviceType(id) {
-	if (id === 'Tablet') return 'Tablet';
-	if (id === 'Mobile') return 'Mobile';
-	return 'Desktop';
+	if (id === "Tablet") return "Tablet";
+	if (id === "Mobile") return "Mobile";
+	return "Desktop";
 }
 
 function deviceTypeToBreakpointId(deviceType) {
-	if (deviceType === 'Tablet') return 'Tablet';
-	if (deviceType === 'Mobile') return 'Mobile';
-	return '';
+	if (deviceType === "Tablet") return "Tablet";
+	if (deviceType === "Mobile") return "Mobile";
+	return "";
 }
 
 /**
@@ -37,30 +42,46 @@ function deviceTypeToBreakpointId(deviceType) {
  */
 export function DeviceSwitcher() {
 	const editorDeviceType = useSelect((select) => {
-		const editor = select('core/editor');
+		const editor = select("core/editor");
 		if (editor?.getDeviceType) return editor.getDeviceType();
-		const editPost = select('core/edit-post');
-		if (editPost?.__experimentalGetPreviewDeviceType) return editPost.__experimentalGetPreviewDeviceType();
-		return 'Desktop';
+		const editPost = select("core/edit-post");
+		if (editPost?.__experimentalGetPreviewDeviceType)
+			return editPost.__experimentalGetPreviewDeviceType();
+		return "Desktop";
 	}, []);
-	const editorDispatch = useDispatch('core/editor');
-	const editPostDispatch = useDispatch('core/edit-post');
-	const setEditorDeviceType = editorDispatch?.setDeviceType ?? editPostDispatch?.__experimentalSetPreviewDeviceType;
+	const editorDispatch = useDispatch("core/editor");
+	const editPostDispatch = useDispatch("core/edit-post");
+	const setEditorDeviceType =
+		editorDispatch?.setDeviceType ??
+		editPostDispatch?.__experimentalSetPreviewDeviceType;
 	const activeBreakpoint = deviceTypeToBreakpointId(editorDeviceType);
 
 	return (
-		<div className="cb-device-switcher" role="tablist" aria-label={__('Screen size')}>
+		<div
+			className="cb-device-switcher"
+			role="tablist"
+			aria-label={__("Screen size")}
+		>
 			{BREAKPOINTS.map((bp) => (
 				<button
-					key={bp.id || 'desktop'}
+					key={bp.id || "desktop"}
 					type="button"
 					role="tab"
 					aria-selected={activeBreakpoint === bp.id}
-					className={'cb-device-switcher__button' + (activeBreakpoint === bp.id ? ' is-active' : '')}
-					onClick={() => setEditorDeviceType && setEditorDeviceType(breakpointIdToDeviceType(bp.id))}
+					className={
+						"cb-device-switcher__button" +
+						(activeBreakpoint === bp.id ? " is-active" : "")
+					}
+					onClick={() =>
+						setEditorDeviceType &&
+						setEditorDeviceType(breakpointIdToDeviceType(bp.id))
+					}
 					title={bp.label}
 				>
-					<span className={'dashicons dashicons-' + bp.icon} aria-hidden />
+					<span
+						className={"dashicons dashicons-" + bp.icon}
+						aria-hidden
+					/>
 				</button>
 			))}
 		</div>
@@ -69,7 +90,7 @@ export function DeviceSwitcher() {
 
 function getSpacingValue(spacing, type, side, suffix) {
 	const key = type + side + suffix;
-	return spacing?.[key] ?? '';
+	return spacing?.[key] ?? "";
 }
 
 function setSpacingValue(setAttributes, spacing, type, side, suffix, value) {
@@ -77,24 +98,80 @@ function setSpacingValue(setAttributes, spacing, type, side, suffix, value) {
 	setAttributes({
 		spacing: {
 			...spacing,
-			[key]: value ?? '',
+			[key]: value ?? "",
+		},
+	});
+}
+
+function setSpacingValueAll(setAttributes, spacing, type, suffix, value) {
+	const updates = {};
+	SIDES.forEach(({ key }) => {
+		updates[type + key + suffix] = value ?? "";
+	});
+	setAttributes({
+		spacing: {
+			...spacing,
+			...updates,
 		},
 	});
 }
 
 const UNITS = [
-	{ value: 'px', label: 'px' },
-	{ value: 'em', label: 'em' },
-	{ value: 'rem', label: 'rem' },
-	{ value: '%', label: '%' },
+	{ value: "px", label: "px" },
+	{ value: "em", label: "em" },
+	{ value: "rem", label: "rem" },
+	{ value: "%", label: "%" },
 ];
 
-function SpacingInputs({ spacing, setAttributes, type, suffix }) {
+function SpacingInputs({
+	spacing,
+	setAttributes,
+	type,
+	suffix,
+	linked,
+	onToggleLinked,
+}) {
 	return (
 		<div className="cb-spacing-inputs">
+			<div className="cb-spacing-header">
+				<button
+					type="button"
+					onClick={onToggleLinked}
+					className={`cb-spacing-link-toggle ${
+						linked ? "is-linked" : ""
+					}`}
+					title={linked ? __("Click to unlink") : __("Click to link")}
+					aria-label={linked ? __("Linked") : __("Unlinked")}
+				>
+					<span
+						className={`dashicons dashicons-admin-${
+							linked ? "links" : "link"
+						}`}
+					/>
+				</button>
+			</div>
 			{SIDES.map(({ key, label }) => {
 				const value = getSpacingValue(spacing, type, key, suffix);
-				const onChange = (v) => setSpacingValue(setAttributes, spacing, type, key, suffix, v);
+				const onChange = (v) => {
+					if (linked) {
+						setSpacingValueAll(
+							setAttributes,
+							spacing,
+							type,
+							suffix,
+							v,
+						);
+					} else {
+						setSpacingValue(
+							setAttributes,
+							spacing,
+							type,
+							key,
+							suffix,
+							v,
+						);
+					}
+				};
 				return (
 					<div key={key}>
 						{UnitControl ? (
@@ -108,7 +185,7 @@ function SpacingInputs({ spacing, setAttributes, type, suffix }) {
 						) : (
 							<TextControl
 								label={label}
-								value={value || ''}
+								value={value || ""}
 								onChange={onChange}
 								type="text"
 								placeholder="0px"
@@ -126,23 +203,45 @@ function SpacingInputs({ spacing, setAttributes, type, suffix }) {
  */
 export function SpacingControls({ attributes, setAttributes }) {
 	const spacing = attributes.spacing || {};
+	const paddingLinked = attributes.paddingLinked !== false; // Default to true
+	const marginLinked = attributes.marginLinked !== false; // Default to true
+
 	const editorDeviceType = useSelect((select) => {
-		const editor = select('core/editor');
+		const editor = select("core/editor");
 		if (editor?.getDeviceType) return editor.getDeviceType();
-		const editPost = select('core/edit-post');
-		if (editPost?.__experimentalGetPreviewDeviceType) return editPost.__experimentalGetPreviewDeviceType();
-		return 'Desktop';
+		const editPost = select("core/edit-post");
+		if (editPost?.__experimentalGetPreviewDeviceType)
+			return editPost.__experimentalGetPreviewDeviceType();
+		return "Desktop";
 	}, []);
 	const activeBreakpoint = deviceTypeToBreakpointId(editorDeviceType);
 	const suffix = activeBreakpoint; // '' | 'Tablet' | 'Mobile'
 
 	return (
-		<PanelBody title={__('Layout')} initialOpen={true}>
+		<PanelBody title={__("Layout")} initialOpen={true}>
 			<div className="cb-spacing-controls">
-				<p className="cb-spacing-sublabel">{__('Padding')}</p>
-				<SpacingInputs spacing={spacing} setAttributes={setAttributes} type="padding" suffix={suffix} />
-				<p className="cb-spacing-sublabel">{__('Margin')}</p>
-				<SpacingInputs spacing={spacing} setAttributes={setAttributes} type="margin" suffix={suffix} />
+				<p className="cb-spacing-sublabel">{__("Padding")}</p>
+				<SpacingInputs
+					spacing={spacing}
+					setAttributes={setAttributes}
+					type="padding"
+					suffix={suffix}
+					linked={paddingLinked}
+					onToggleLinked={() =>
+						setAttributes({ paddingLinked: !paddingLinked })
+					}
+				/>
+				<p className="cb-spacing-sublabel">{__("Margin")}</p>
+				<SpacingInputs
+					spacing={spacing}
+					setAttributes={setAttributes}
+					type="margin"
+					suffix={suffix}
+					linked={marginLinked}
+					onToggleLinked={() =>
+						setAttributes({ marginLinked: !marginLinked })
+					}
+				/>
 			</div>
 		</PanelBody>
 	);
