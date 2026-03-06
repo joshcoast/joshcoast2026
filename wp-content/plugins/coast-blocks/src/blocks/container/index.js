@@ -31,6 +31,19 @@ const spacingDefaults = {
 	marginLeftMobile: '',
 };
 
+const borderKeys = [
+	'borderTopWidth', 'borderRightWidth', 'borderBottomWidth', 'borderLeftWidth',
+	'borderTopStyle', 'borderRightStyle', 'borderBottomStyle', 'borderLeftStyle',
+	'borderTopColor', 'borderRightColor', 'borderBottomColor', 'borderLeftColor',
+	'borderTopLeftRadius', 'borderTopRightRadius', 'borderBottomRightRadius', 'borderBottomLeftRadius',
+];
+const bordersDefaults = {};
+borderKeys.forEach((k) => {
+	bordersDefaults[k] = '';
+	bordersDefaults[k + 'Tablet'] = '';
+	bordersDefaults[k + 'Mobile'] = '';
+});
+
 registerBlockType('coast-blocks/container', {
 	apiVersion: 2,
 	title: __('Container'),
@@ -49,6 +62,10 @@ registerBlockType('coast-blocks/container', {
 		spacing: {
 			type: 'object',
 			default: spacingDefaults,
+		},
+		borders: {
+			type: 'object',
+			default: bordersDefaults,
 		},
 	},
 	edit: ContainerEdit,

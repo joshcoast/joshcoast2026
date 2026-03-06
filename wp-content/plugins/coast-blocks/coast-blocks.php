@@ -18,6 +18,7 @@ define( 'COAST_BLOCKS_DIR', plugin_dir_path( __FILE__ ) );
 define( 'COAST_BLOCKS_URL', plugin_dir_url( __FILE__ ) );
 
 require_once COAST_BLOCKS_DIR . 'includes/class-coast-blocks-spacing.php';
+require_once COAST_BLOCKS_DIR . 'includes/class-coast-blocks-borders.php';
 
 add_action( 'init', 'coast_blocks_register_blocks' );
 
@@ -88,6 +89,10 @@ function coast_blocks_collect_container_css( $block_content, $block, $block_inst
 		$spacing_css = Coast_Blocks_Spacing::get_css( $attrs, $selector );
 		if ( $spacing_css !== '' ) {
 			$GLOBALS['coast_blocks_collected_css'] .= $spacing_css;
+		}
+		$border_css = Coast_Blocks_Borders::get_css( $attrs, $selector );
+		if ( $border_css !== '' ) {
+			$GLOBALS['coast_blocks_collected_css'] .= $border_css;
 		}
 	}
 
