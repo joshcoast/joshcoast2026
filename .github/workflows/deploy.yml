@@ -20,6 +20,12 @@ jobs:
           npm install
           npm run build
 
+      - name: Install and build toolbox-blocks
+        run: |
+          cd wp-content/plugins/toolbox-blocks
+          npm install
+          npm run build
+
       - name: Deploy wp-content to Nexcess
         run: |
           sudo apt-get install -y -qq sshpass
