@@ -1,0 +1,304 @@
+/* ============================================================
+   Toolbox Blocks – Editor Styles
+   ============================================================ */
+
+/* ── Inspector Tabs (Settings | Styles) ────────────────────── */
+
+.tb-inspector-tabs__tablist {
+	display: flex;
+	border-bottom: 1px solid #ddd;
+	background: #fff;
+	position: sticky;
+	top: 0;
+	z-index: 10;
+}
+
+.tb-inspector-tabs__tab {
+	flex: 1;
+	padding: 10px 4px;
+	font-size: 13px;
+	font-weight: 500;
+	border: none;
+	background: transparent;
+	cursor: pointer;
+	color: #757575;
+	border-bottom: 2px solid transparent;
+	margin-bottom: -1px;
+	transition: color 0.15s, border-color 0.15s;
+}
+
+.tb-inspector-tabs__tab.is-active {
+	color: #1e1e1e;
+	border-bottom-color: #007cba;
+}
+
+/* ── Device Switcher ────────────────────────────────────────── */
+
+.tb-device-switcher {
+	display: flex;
+	justify-content: flex-end;
+	gap: 2px;
+	padding: 8px 16px 4px;
+	background: #f6f7f7;
+	border-bottom: 1px solid #ddd;
+}
+
+.tb-device-switcher__btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	background: transparent;
+	cursor: pointer;
+	color: #757575;
+	transition: color 0.15s, background 0.15s;
+}
+
+.tb-device-switcher__btn:hover { color: #1e1e1e; background: #e0e0e0; }
+
+.tb-device-switcher__btn.is-active {
+	color: #007cba;
+	border-color: #007cba;
+	background: #e8f4fb;
+}
+
+/* ── Main | Hover Tabs ──────────────────────────────────────── */
+
+.tb-main-hover-tabs {
+	display: flex;
+	gap: 4px;
+	padding: 8px 16px;
+	border-bottom: 1px solid #ddd;
+}
+
+.tb-main-hover-tabs__tab {
+	padding: 4px 12px;
+	font-size: 12px;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	background: transparent;
+	cursor: pointer;
+	color: #757575;
+}
+
+.tb-main-hover-tabs__tab.is-active {
+	background: #007cba;
+	border-color: #007cba;
+	color: #fff;
+}
+
+/* ── Dimension Control ──────────────────────────────────────── */
+
+.tb-dimension-control { margin-bottom: 16px; }
+
+.tb-dimension-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 6px;
+}
+
+.tb-dimension-label {
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	color: #757575;
+}
+
+.tb-dimension-inputs {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	gap: 4px;
+}
+
+.tb-dimension-inputs .components-base-control { margin-bottom: 0; }
+
+/* ── Link Toggle ────────────────────────────────────────────── */
+
+.tb-link-toggle {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	background: transparent;
+	cursor: pointer;
+	color: #757575;
+	padding: 0;
+}
+
+.tb-link-toggle.is-linked {
+	color: #007cba;
+	border-color: #007cba;
+	background: #e8f4fb;
+}
+
+/* ── Inline Color Picker ────────────────────────────────────── */
+
+.tb-inline-color {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 12px;
+}
+
+.tb-inline-color__label {
+	font-size: 11px;
+	color: #757575;
+	flex: 1;
+}
+
+.tb-color-btn {
+	width: 28px;
+	height: 28px;
+	border-radius: 50%;
+	border: 2px solid #ddd;
+	cursor: pointer;
+	padding: 0;
+	flex-shrink: 0;
+}
+
+.tb-color-popover { padding: 12px; min-width: 220px; }
+
+/* ── Border Controls ────────────────────────────────────────── */
+
+.tb-border-section { margin-bottom: 16px; }
+
+.tb-border-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 8px;
+}
+
+.tb-border-label {
+	font-size: 10px;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: #757575;
+	margin: 0;
+}
+
+.tb-border-row {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	margin-bottom: 6px;
+}
+
+.tb-border-row-inputs {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	flex: 1;
+}
+
+.tb-border-side-icon {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	border: 2px solid #ccc;
+	border-radius: 2px;
+	flex-shrink: 0;
+}
+
+.tb-border-side-icon--top    { border-top-width: 3px; border-top-color: #1e1e1e; }
+.tb-border-side-icon--right  { border-right-width: 3px; border-right-color: #1e1e1e; }
+.tb-border-side-icon--bottom { border-bottom-width: 3px; border-bottom-color: #1e1e1e; }
+.tb-border-side-icon--left   { border-left-width: 3px; border-left-color: #1e1e1e; }
+
+.tb-border-radius-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 6px;
+}
+
+.tb-border-style-btn {
+	width: 40px;
+	height: 28px;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	background: #fff;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 2px 4px;
+	flex-shrink: 0;
+}
+
+.tb-style-popover {
+	display: flex;
+	flex-direction: column;
+	padding: 6px;
+	min-width: 120px;
+}
+
+.tb-style-option {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 6px 8px;
+	border: none;
+	background: transparent;
+	cursor: pointer;
+	border-radius: 3px;
+	font-size: 12px;
+	color: #1e1e1e;
+}
+
+.tb-style-option:hover,
+.tb-style-option.is-active { background: #e8f4fb; }
+
+/* ── Heading Level Picker ───────────────────────────────────── */
+
+.tb-heading-level-picker {
+	display: flex;
+	gap: 4px;
+	flex-wrap: wrap;
+	margin-bottom: 8px;
+}
+
+.tb-heading-level-btn {
+	padding: 4px 10px;
+	font-size: 12px;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	background: transparent;
+	cursor: pointer;
+	color: #1e1e1e;
+}
+
+.tb-heading-level-btn.is-active {
+	background: #007cba;
+	border-color: #007cba;
+	color: #fff;
+}
+
+/* ── Background Image Control ───────────────────────────────── */
+
+.tb-bg-image-control { margin-bottom: 16px; }
+
+/* ── Query Block Editor Label ───────────────────────────────── */
+
+.tb-query__label {
+	padding: 8px 12px;
+	background: #f0f0f0;
+	border: 1px dashed #bbb;
+	border-radius: 4px;
+	font-size: 12px;
+	color: #757575;
+	margin-bottom: 8px;
+}
+
+/* ── Block min-height in editor ─────────────────────────────── */
+
+.wp-block-toolbox-blocks-container,
+.wp-block-toolbox-blocks-grid { min-height: 40px; }
