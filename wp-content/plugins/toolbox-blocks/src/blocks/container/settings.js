@@ -3,11 +3,7 @@
  */
 
 import { __ } from '@wordpress/i18n';
-import {
-	PanelBody,
-	SelectControl,
-	TextControl,
-} from '@wordpress/components';
+import { PanelBody, SelectControl } from '@wordpress/components';
 import { MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
 
 const TAG_OPTIONS = [
@@ -23,7 +19,7 @@ const TAG_OPTIONS = [
 ];
 
 export default function ContainerSettings( { attributes, setAttributes } ) {
-	const { tagName, bgImageUrl, bgImageId, htmlAnchor, extraClasses } = attributes;
+	const { tagName, bgImageUrl, bgImageId } = attributes;
 
 	return (
 		<>
@@ -70,21 +66,6 @@ export default function ContainerSettings( { attributes, setAttributes } ) {
 						</div>
 					</div>
 				</MediaUploadCheck>
-			</PanelBody>
-			<PanelBody title={ __( 'Advanced' ) } initialOpen={ false }>
-				<TextControl
-					label={ __( 'HTML Anchor' ) }
-					help={ __( 'Assigns an id attribute to the element. Use to link directly to this block.' ) }
-					value={ htmlAnchor || '' }
-					onChange={ ( v ) => setAttributes( { htmlAnchor: v } ) }
-					placeholder="my-section"
-				/>
-				<TextControl
-					label={ __( 'Additional CSS Class(es)' ) }
-					help={ __( 'Separate multiple classes with spaces.' ) }
-					value={ extraClasses || '' }
-					onChange={ ( v ) => setAttributes( { extraClasses: v } ) }
-				/>
 			</PanelBody>
 		</>
 	);

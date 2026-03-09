@@ -14,7 +14,7 @@ import { generateBlockCss } from '../../utils/generate-css';
 export default function QueryEdit( { attributes, setAttributes, clientId } ) {
 	const {
 		uniqueId, styles, postType, postsPerPage, order, orderBy, offset,
-		noResultsText, extraClasses,
+		noResultsText, className,
 	} = attributes;
 
 	useEffect( () => {
@@ -33,7 +33,7 @@ export default function QueryEdit( { attributes, setAttributes, clientId } ) {
 	}, [] );
 
 	const css = uniqueId ? generateBlockCss( uniqueId, styles ) : '';
-	const cls = [ 'tb-block', 'tb-query', uniqueId && `tb-${ uniqueId }`, extraClasses ]
+	const cls = [ 'tb-block', 'tb-query', uniqueId && `tb-${ uniqueId }`, className ]
 		.filter( Boolean ).join( ' ' );
 	const blockProps = useBlockProps( { className: cls } );
 
@@ -88,10 +88,6 @@ export default function QueryEdit( { attributes, setAttributes, clientId } ) {
 					placeholder={ __( 'No posts found.' ) }
 				/>
 			</PanelBody>
-			<PanelBody title={ __( 'Advanced' ) } initialOpen={ false }>
-				<TextControl label={ __( 'HTML Anchor' ) } value={ attributes.htmlAnchor || '' } onChange={ ( v ) => setAttributes( { htmlAnchor: v } ) } />
-				<TextControl label={ __( 'Additional CSS Class(es)' ) } value={ extraClasses || '' } onChange={ ( v ) => setAttributes( { extraClasses: v } ) } />
-			</PanelBody>
 		</>
 	);
 
@@ -100,6 +96,7 @@ export default function QueryEdit( { attributes, setAttributes, clientId } ) {
 			{ css && <style>{ css }</style> }
 			<InspectorControls>
 				<InspectorTabs
+					clientId={ clientId }
 					settings={ settings }
 					styles={ <StylesPanel attributes={ attributes } setAttributes={ setAttributes } /> }
 				/>
