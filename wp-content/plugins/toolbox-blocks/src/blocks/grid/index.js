@@ -13,17 +13,18 @@ registerBlockType( 'toolbox-blocks/grid', {
 	description: __( 'A grid or flex layout container.' ),
 	icon: 'grid-view',
 	category: 'toolbox-blocks',
+	supports: { anchor: true, customClassName: true },
 	attributes: {
-		uniqueId:     { type: 'string', default: '' },
-		styles:       { type: 'object', default: {} },
-		tagName:      { type: 'string', default: 'div' },
-		htmlAnchor:   { type: 'string', default: '' },
-		extraClasses: { type: 'string', default: '' },
+		uniqueId:  { type: 'string', default: '' },
+		styles:    { type: 'object', default: {} },
+		tagName:   { type: 'string', default: 'div' },
+		anchor:    { type: 'string', default: '' },
+		className: { type: 'string', default: '' },
 	},
 	edit: GridEdit,
 	save: ( { attributes } ) => {
-		const { uniqueId, tagName: Tag = 'div', extraClasses } = attributes;
-		const cls = [ 'tb-block', 'tb-grid', uniqueId && `tb-${ uniqueId }`, extraClasses ]
+		const { uniqueId, tagName: Tag = 'div', className } = attributes;
+		const cls = [ 'tb-block', 'tb-grid', uniqueId && `tb-${ uniqueId }`, className ]
 			.filter( Boolean ).join( ' ' );
 		return (
 			<Tag className={ cls }>

@@ -43,19 +43,25 @@ abstract class Toolbox_Block_Base {
 	/**
 	 * Helper: build the CSS class string and inline style tag.
 	 *
-	 * @param array  $attributes Block attributes.
-	 * @param string $extra_class Additional class(es).
-	 * @return array { 'class' => string, 'style_tag' => string }
+	 * Sanitizes uniqueId, extraClasses, and htmlAnchor per AGENTS.md security standards.
+	 *
+	 * @param array  $attributes        Block attributes.
+	 * @param string $extra_class       Additional class(es).
+	 * @param bool   $layout_has_inner  When true, omit tb-{uniqueId} from outer (styles apply to inner wrapper).
+	 * @return array { 'class' => string, 'style_tag' => string, 'anchor' => string }
 	 */
-	protected static function block_meta( $attributes, $extra_class = '' ) {
-		$unique_id   = $attributes['uniqueId'] ?? '';
-		$extra_class = trim( ( $extra_class ? $extra_class . ' ' : '' ) . ( $attributes['extraClasses'] ?? '' ) );
-		$anchor      = $attributes['htmlAnchor'] ?? '';
+	protected static function block_meta( $attributes, $extra_class = '', $layout_has_inner = false ) {
+		$unique_id   = sanitize_html_class( $attributes['uniqueId'] ?? '' );
+		$extra_raw   = trim( (string) ( $attributes['className'] ?? '' ) );
+		$extra_parts = array_filter( array_map( 'trim', explode( ' ', $extra_raw ) ) );
+		$extra_safe  = implode( ' ', array_map( 'sanitize_html_class', $extra_parts ) );
+		$base_class  = trim( ( $extra_class ? $extra_class . ' ' : '' ) . $extra_safe );
+		$anchor      = sanitize_html_class( $attributes['anchor'] ?? '' );
 
 		$class_parts = array_filter( array(
 			'tb-block',
-			$extra_class,
-			$unique_id ? 'tb-' . $unique_id : '',
+			$base_class,
+			( ! $layout_has_inner && $unique_id ) ? 'tb-' . $unique_id : '',
 		) );
 		$classes = implode( ' ', $class_parts );
 

@@ -13,6 +13,7 @@ registerBlockType( 'toolbox-blocks/query', {
 	description: __( 'Loop posts with a custom query and template.' ),
 	icon: 'list-view',
 	category: 'toolbox-blocks',
+	supports: { anchor: true, customClassName: true },
 	attributes: {
 		uniqueId:      { type: 'string', default: '' },
 		styles:        { type: 'object', default: {} },
@@ -22,13 +23,13 @@ registerBlockType( 'toolbox-blocks/query', {
 		orderBy:       { type: 'string', default: 'date' },
 		offset:        { type: 'number', default: 0 },
 		noResultsText: { type: 'string', default: '' },
-		htmlAnchor:    { type: 'string', default: '' },
-		extraClasses:  { type: 'string', default: '' },
+		anchor:        { type: 'string', default: '' },
+		className:     { type: 'string', default: '' },
 	},
 	edit: QueryEdit,
 	save: ( { attributes } ) => {
-		const { uniqueId, extraClasses } = attributes;
-		const cls = [ 'tb-block', 'tb-query', uniqueId && `tb-${ uniqueId }`, extraClasses ]
+		const { uniqueId, className } = attributes;
+		const cls = [ 'tb-block', 'tb-query', uniqueId && `tb-${ uniqueId }`, className ]
 			.filter( Boolean ).join( ' ' );
 		return (
 			<div className={ cls }>

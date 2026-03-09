@@ -17,12 +17,14 @@ class Toolbox_Block_Button extends Toolbox_Block_Base {
 		$meta   = self::block_meta( $attributes, 'tb-button' );
 		$url    = esc_url( $attributes['url'] ?? '#' );
 		$text   = wp_kses_post( $attributes['text'] ?? '' );
-		$target = $attributes['target'] ?? '_self';
-		$rel    = esc_attr( $attributes['rel'] ?? '' );
+		$target = in_array( $attributes['target'] ?? '_self', array( '_self', '_blank' ), true )
+			? $attributes['target']
+			: '_self';
+		$rel = $attributes['rel'] ?? '';
 
 		$target_attr = ( $target === '_blank' ) ? ' target="_blank" rel="noopener noreferrer"' : '';
 		if ( $rel && $target !== '_blank' ) {
-			$target_attr = ' rel="' . $rel . '"';
+			$target_attr = ' rel="' . esc_attr( $rel ) . '"';
 		}
 
 		return sprintf(
