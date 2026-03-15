@@ -5,7 +5,7 @@
 import { useEffect } from '@wordpress/element';
 import { useBlockProps, RichText, InspectorControls } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
-import { PanelBody, SelectControl, TextControl } from '@wordpress/components';
+import { PanelBody } from '@wordpress/components';
 import InspectorTabs from '../../shared/InspectorTabs';
 import StylesPanel from '../../shared/StylesPanel';
 import { generateBlockCss } from '../../utils/generate-css';
@@ -20,7 +20,7 @@ const TAG_OPTIONS = [
 ];
 
 export default function HeadlineEdit( { attributes, setAttributes, clientId } ) {
-	const { uniqueId, styles, content, tagName: Tag = 'h2', extraClasses } = attributes;
+	const { uniqueId, styles, content, tagName: Tag = 'h2', className } = attributes;
 
 	useEffect( () => {
 		if ( ! uniqueId && clientId ) {
@@ -29,31 +29,25 @@ export default function HeadlineEdit( { attributes, setAttributes, clientId } ) 
 	}, [ clientId ] );
 
 	const css = uniqueId ? generateBlockCss( uniqueId, styles ) : '';
-	const cls = [ 'tb-block', 'tb-headline', uniqueId && `tb-${ uniqueId }`, extraClasses ]
+	const cls = [ 'tb-block', 'tb-headline', uniqueId && `tb-${ uniqueId }`, className ]
 		.filter( Boolean ).join( ' ' );
 	const blockProps = useBlockProps( { className: cls } );
 
 	const settings = (
-		<>
-			<PanelBody title={ __( 'Settings' ) } initialOpen={ true }>
-				<div className="tb-heading-level-picker">
-					{ TAG_OPTIONS.map( ( { value, label } ) => (
-						<button
-							key={ value }
-							type="button"
-							className={ 'tb-heading-level-btn' + ( Tag === value ? ' is-active' : '' ) }
-							onClick={ () => setAttributes( { tagName: value } ) }
-						>
-							{ label }
-						</button>
-					) ) }
-				</div>
-			</PanelBody>
-			<PanelBody title={ __( 'Advanced' ) } initialOpen={ false }>
-				<TextControl label={ __( 'HTML Anchor' ) } value={ attributes.htmlAnchor || '' } onChange={ ( v ) => setAttributes( { htmlAnchor: v } ) } />
-				<TextControl label={ __( 'Additional CSS Class(es)' ) } value={ extraClasses || '' } onChange={ ( v ) => setAttributes( { extraClasses: v } ) } />
-			</PanelBody>
-		</>
+		<PanelBody title={ __( 'Settings' ) } initialOpen={ true }>
+			<div className="tb-heading-level-picker">
+				{ TAG_OPTIONS.map( ( { value, label } ) => (
+					<button
+						key={ value }
+						type="button"
+						className={ 'tb-heading-level-btn' + ( Tag === value ? ' is-active' : '' ) }
+						onClick={ () => setAttributes( { tagName: value } ) }
+					>
+						{ label }
+					</button>
+				) ) }
+			</div>
+		</PanelBody>
 	);
 
 	return (
@@ -61,6 +55,7 @@ export default function HeadlineEdit( { attributes, setAttributes, clientId } ) 
 			{ css && <style>{ css }</style> }
 			<InspectorControls>
 				<InspectorTabs
+					clientId={ clientId }
 					settings={ settings }
 					styles={ <StylesPanel attributes={ attributes } setAttributes={ setAttributes } sections={ [ 'sizing', 'spacing', 'typography', 'backgrounds', 'borders', 'position', 'effects', 'pointerEvents', 'cursor' ] } /> }
 				/>

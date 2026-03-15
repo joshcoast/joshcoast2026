@@ -5,7 +5,7 @@
 import { useEffect } from '@wordpress/element';
 import { useBlockProps, RichText, InspectorControls } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
-import { PanelBody, SelectControl, TextControl } from '@wordpress/components';
+import { PanelBody, SelectControl } from '@wordpress/components';
 import InspectorTabs from '../../shared/InspectorTabs';
 import StylesPanel from '../../shared/StylesPanel';
 import { generateBlockCss } from '../../utils/generate-css';
@@ -18,7 +18,7 @@ const TAG_OPTIONS = [
 ];
 
 export default function TextEdit( { attributes, setAttributes, clientId } ) {
-	const { uniqueId, styles, content, tagName: Tag = 'p', extraClasses } = attributes;
+	const { uniqueId, styles, content, tagName: Tag = 'p', className } = attributes;
 
 	useEffect( () => {
 		if ( ! uniqueId && clientId ) {
@@ -27,25 +27,19 @@ export default function TextEdit( { attributes, setAttributes, clientId } ) {
 	}, [ clientId ] );
 
 	const css = uniqueId ? generateBlockCss( uniqueId, styles ) : '';
-	const cls = [ 'tb-block', 'tb-text', uniqueId && `tb-${ uniqueId }`, extraClasses ]
+	const cls = [ 'tb-block', 'tb-text', uniqueId && `tb-${ uniqueId }`, className ]
 		.filter( Boolean ).join( ' ' );
 	const blockProps = useBlockProps( { className: cls } );
 
 	const settings = (
-		<>
-			<PanelBody title={ __( 'Settings' ) } initialOpen={ true }>
-				<SelectControl
-					label={ __( 'Tag Name' ) }
-					value={ Tag }
-					options={ TAG_OPTIONS }
-					onChange={ ( v ) => setAttributes( { tagName: v } ) }
-				/>
-			</PanelBody>
-			<PanelBody title={ __( 'Advanced' ) } initialOpen={ false }>
-				<TextControl label={ __( 'HTML Anchor' ) } value={ attributes.htmlAnchor || '' } onChange={ ( v ) => setAttributes( { htmlAnchor: v } ) } />
-				<TextControl label={ __( 'Additional CSS Class(es)' ) } value={ extraClasses || '' } onChange={ ( v ) => setAttributes( { extraClasses: v } ) } />
-			</PanelBody>
-		</>
+		<PanelBody title={ __( 'Settings' ) } initialOpen={ true }>
+			<SelectControl
+				label={ __( 'Tag Name' ) }
+				value={ Tag }
+				options={ TAG_OPTIONS }
+				onChange={ ( v ) => setAttributes( { tagName: v } ) }
+			/>
+		</PanelBody>
 	);
 
 	return (
@@ -53,6 +47,7 @@ export default function TextEdit( { attributes, setAttributes, clientId } ) {
 			{ css && <style>{ css }</style> }
 			<InspectorControls>
 				<InspectorTabs
+					clientId={ clientId }
 					settings={ settings }
 					styles={ <StylesPanel attributes={ attributes } setAttributes={ setAttributes } sections={ [ 'sizing', 'spacing', 'typography', 'backgrounds', 'borders', 'position', 'effects', 'lists', 'pointerEvents', 'cursor' ] } /> }
 				/>

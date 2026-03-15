@@ -5,10 +5,11 @@
 import { useEffect } from '@wordpress/element';
 import { useBlockProps, InnerBlocks, InspectorControls } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
-import { PanelBody, SelectControl, TextControl } from '@wordpress/components';
+import { PanelBody, SelectControl } from '@wordpress/components';
 import InspectorTabs from '../../shared/InspectorTabs';
 import StylesPanel from '../../shared/StylesPanel';
-import { generateBlockCss } from '../../utils/generate-css';
+import useEditorDevice from '../../hooks/useEditorDevice';
+import { generateBlockCss, getStyleValue } from '../../utils/generate-css';
 
 const TAG_OPTIONS = [
 	{ value: 'div',     label: 'div' },
@@ -18,7 +19,7 @@ const TAG_OPTIONS = [
 ];
 
 export default function GridEdit( { attributes, setAttributes, clientId } ) {
-	const { uniqueId, styles, tagName: Tag = 'div', extraClasses } = attributes;
+	const { uniqueId, styles, tagName: Tag = 'div', className } = attributes;
 
 	useEffect( () => {
 		if ( ! uniqueId && clientId ) {
@@ -27,25 +28,34 @@ export default function GridEdit( { attributes, setAttributes, clientId } ) {
 	}, [ clientId ] );
 
 	const css = uniqueId ? generateBlockCss( uniqueId, styles ) : '';
-	const cls = [ 'tb-block', 'tb-grid', uniqueId && `tb-${ uniqueId }`, extraClasses ]
+
+	const [ device ] = useEditorDevice();
+	const display = getStyleValue( styles, 'display', device, 'main' );
+	const needsLayoutPassthrough = [ 'flex', 'inline-flex', 'grid' ].includes( display );
+
+	const cls = [
+		'tb-block',
+		'tb-grid',
+		needsLayoutPassthrough && 'tb-grid--layout-passthrough',
+		className,
+	]
 		.filter( Boolean ).join( ' ' );
 	const blockProps = useBlockProps( { className: cls } );
 
+	const innerClass = [
+		'tb-grid__inner',
+		uniqueId && `tb-${ uniqueId }`,
+	].filter( Boolean ).join( ' ' );
+
 	const settings = (
-		<>
-			<PanelBody title={ __( 'Settings' ) } initialOpen={ true }>
-				<SelectControl
-					label={ __( 'Tag Name' ) }
-					value={ Tag }
-					options={ TAG_OPTIONS }
-					onChange={ ( v ) => setAttributes( { tagName: v } ) }
-				/>
-			</PanelBody>
-			<PanelBody title={ __( 'Advanced' ) } initialOpen={ false }>
-				<TextControl label={ __( 'HTML Anchor' ) } value={ attributes.htmlAnchor || '' } onChange={ ( v ) => setAttributes( { htmlAnchor: v } ) } />
-				<TextControl label={ __( 'Additional CSS Class(es)' ) } value={ extraClasses || '' } onChange={ ( v ) => setAttributes( { extraClasses: v } ) } />
-			</PanelBody>
-		</>
+		<PanelBody title={ __( 'Settings' ) } initialOpen={ true }>
+			<SelectControl
+				label={ __( 'Tag Name' ) }
+				value={ Tag }
+				options={ TAG_OPTIONS }
+				onChange={ ( v ) => setAttributes( { tagName: v } ) }
+			/>
+		</PanelBody>
 	);
 
 	return (
@@ -53,12 +63,15 @@ export default function GridEdit( { attributes, setAttributes, clientId } ) {
 			{ css && <style>{ css }</style> }
 			<InspectorControls>
 				<InspectorTabs
+					clientId={ clientId }
 					settings={ settings }
 					styles={ <StylesPanel attributes={ attributes } setAttributes={ setAttributes } /> }
 				/>
 			</InspectorControls>
 			<Tag { ...blockProps }>
-				<InnerBlocks templateLock={ false } />
+				<div className={ innerClass }>
+					<InnerBlocks templateLock={ false } />
+				</div>
 			</Tag>
 		</>
 	);

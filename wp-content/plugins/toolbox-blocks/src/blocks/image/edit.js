@@ -11,7 +11,7 @@ import StylesPanel from '../../shared/StylesPanel';
 import { generateBlockCss } from '../../utils/generate-css';
 
 export default function ImageEdit( { attributes, setAttributes, clientId } ) {
-	const { uniqueId, styles, url, imageId, alt, caption, linkUrl, extraClasses } = attributes;
+	const { uniqueId, styles, url, imageId, alt, caption, linkUrl, className } = attributes;
 
 	useEffect( () => {
 		if ( ! uniqueId && clientId ) {
@@ -20,31 +20,26 @@ export default function ImageEdit( { attributes, setAttributes, clientId } ) {
 	}, [ clientId ] );
 
 	const css = uniqueId ? generateBlockCss( uniqueId, styles ) : '';
-	const cls = [ 'tb-block', 'tb-image', uniqueId && `tb-${ uniqueId }`, extraClasses ]
+	const cls = [ 'tb-block', 'tb-image', uniqueId && `tb-${ uniqueId }`, className ]
 		.filter( Boolean ).join( ' ' );
 	const blockProps = useBlockProps( { className: cls } );
 
 	const settings = (
-		<>
-			<PanelBody title={ __( 'Settings' ) } initialOpen={ true }>
-				<TextControl
-					label={ __( 'Alt Text' ) }
-					value={ alt || '' }
-					onChange={ ( v ) => setAttributes( { alt: v } ) }
-				/>
-				<TextControl
-					label={ __( 'Link URL' ) }
-					value={ linkUrl || '' }
-					onChange={ ( v ) => setAttributes( { linkUrl: v } ) }
-					placeholder="https://…"
-					type="url"
-				/>
-			</PanelBody>
-			<PanelBody title={ __( 'Advanced' ) } initialOpen={ false }>
-				<TextControl label={ __( 'HTML Anchor' ) } value={ attributes.htmlAnchor || '' } onChange={ ( v ) => setAttributes( { htmlAnchor: v } ) } />
-				<TextControl label={ __( 'Additional CSS Class(es)' ) } value={ extraClasses || '' } onChange={ ( v ) => setAttributes( { extraClasses: v } ) } />
-			</PanelBody>
-		</>
+		<PanelBody title={ __( 'Settings' ) } initialOpen={ true }>
+			<TextControl
+				label={ __( 'Alt Text' ) }
+				help={ __( 'Describe the image for accessibility. Leave empty only if the image is purely decorative.' ) }
+				value={ alt || '' }
+				onChange={ ( v ) => setAttributes( { alt: v } ) }
+			/>
+			<TextControl
+				label={ __( 'Link URL' ) }
+				value={ linkUrl || '' }
+				onChange={ ( v ) => setAttributes( { linkUrl: v } ) }
+				placeholder="https://…"
+				type="url"
+			/>
+		</PanelBody>
 	);
 
 	return (
@@ -52,6 +47,7 @@ export default function ImageEdit( { attributes, setAttributes, clientId } ) {
 			{ css && <style>{ css }</style> }
 			<InspectorControls>
 				<InspectorTabs
+					clientId={ clientId }
 					settings={ settings }
 					styles={ <StylesPanel attributes={ attributes } setAttributes={ setAttributes } sections={ [ 'sizing', 'spacing', 'backgrounds', 'borders', 'position', 'effects', 'media', 'pointerEvents', 'cursor' ] } /> }
 				/>

@@ -14,14 +14,17 @@ class Toolbox_Block_Query extends Toolbox_Block_Base {
 	const BLOCK_NAME = 'toolbox-blocks/query';
 
 	public static function render( $attributes, $content, $block ) {
-		$meta        = self::block_meta( $attributes, 'tb-query' );
-		$post_type   = sanitize_key( $attributes['postType'] ?? 'post' );
-		$per_page    = absint( $attributes['postsPerPage'] ?? 10 );
-		$order       = in_array( $attributes['order'] ?? 'DESC', array( 'ASC', 'DESC' ), true )
-			? $attributes['order']
+		$meta     = self::block_meta( $attributes, 'tb-query' );
+		$post_type = sanitize_key( $attributes['postType'] ?? 'post' );
+		$per_page  = absint( $attributes['postsPerPage'] ?? 10 );
+		$per_page  = min( 100, max( 1, $per_page ) );
+		$order     = in_array( strtoupper( (string) ( $attributes['order'] ?? 'DESC' ) ), array( 'ASC', 'DESC' ), true )
+			? strtoupper( $attributes['order'] )
 			: 'DESC';
-		$orderby     = sanitize_key( $attributes['orderBy'] ?? 'date' );
-		$offset      = absint( $attributes['offset'] ?? 0 );
+		$allowed_orderby = array( 'date', 'title', 'modified', 'menu_order', 'comment_count', 'rand' );
+		$orderby        = sanitize_key( $attributes['orderBy'] ?? 'date' );
+		$orderby        = in_array( $orderby, $allowed_orderby, true ) ? $orderby : 'date';
+		$offset         = absint( $attributes['offset'] ?? 0 );
 		$no_results  = wp_kses_post( $attributes['noResultsText'] ?? __( 'No posts found.', 'toolbox-blocks' ) );
 
 		$query_args = array(
