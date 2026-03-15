@@ -26,6 +26,17 @@ import MainHoverTabs from './MainHoverTabs';
 import useEditorDevice from '../hooks/useEditorDevice';
 import { getStyleValue, setStyleValue } from '../utils/generate-css';
 
+/** Dashicon element for panel section titles (improves visual scanning). */
+function SectionIcon( { icon } ) {
+	return (
+		<span
+			className={ 'dashicons dashicons-' + icon }
+			style={ { fontSize: 20, width: 20, height: 20 } }
+			aria-hidden="true"
+		/>
+	);
+}
+
 const UNITS = [
 	{ value: 'px', label: 'px' },
 	{ value: 'em', label: 'em' },
@@ -66,15 +77,15 @@ function UCV( { label, value, onChange, hideLabelFromVision = false } ) {
 }
 
 /** Four-sided dimension control with link toggle */
-function DimensionControl( { label, propPrefix, get, set } ) {
+function DimensionControl( { label, propPrefix, get, set, setMultiple } ) {
 	const [ linked, setLinked ] = useState( true );
 	return (
 		<div className="tb-dimension-control">
-			<div className="tb-dimension-header">
-				<span className="tb-dimension-label">{ label }</span>
+			<div className="tb-dimension-control__header">
+				<span className="tb-dimension-control__label">{ label }</span>
 				<button
 					type="button"
-					className={ 'tb-link-toggle' + ( linked ? ' is-linked' : '' ) }
+					className={ 'tb-dimension-control__link-toggle' + ( linked ? ' is-linked' : '' ) }
 					onClick={ () => setLinked( ( v ) => ! v ) }
 					title={ linked ? __( 'Unlink sides' ) : __( 'Link sides' ) }
 					aria-label={ linked ? __( 'Linked' ) : __( 'Unlinked' ) }
@@ -82,7 +93,7 @@ function DimensionControl( { label, propPrefix, get, set } ) {
 					<span className={ 'dashicons dashicons-admin-' + ( linked ? 'links' : 'link' ) } />
 				</button>
 			</div>
-			<div className="tb-dimension-inputs">
+			<div className="tb-dimension-control__inputs">
 				{ SIDES.map( ( { key, label: sideLabel } ) => (
 					<UCV
 						key={ key }
@@ -90,7 +101,7 @@ function DimensionControl( { label, propPrefix, get, set } ) {
 						value={ get( propPrefix + key ) }
 						onChange={ ( v ) => {
 							if ( linked ) {
-								SIDES.forEach( ( { key: k } ) => set( propPrefix + k, v ) );
+								setMultiple( SIDES.map( ( { key: k } ) => [ propPrefix + k, v ] ) );
 							} else {
 								set( propPrefix + key, v );
 							}
@@ -114,7 +125,7 @@ function InlineColorPicker( { label, value, onChange } ) {
 			<span className="tb-inline-color__label">{ label }</span>
 			<button
 				type="button"
-				className="tb-color-btn"
+				className="tb-inline-color__swatch"
 				style={ { backgroundColor: value || 'transparent' } }
 				onClick={ () => setOpen( ( v ) => ! v ) }
 				title={ label }
@@ -166,17 +177,17 @@ function BorderStyleLine( { style } ) {
 function BorderStylePicker( { value, onChange } ) {
 	const [ open, setOpen ] = useState( false );
 	return (
-		<>
-			<button type="button" className="tb-border-style-btn"
+		<div className="tb-border-style-picker">
+			<button type="button" className="tb-border-style-picker__trigger"
 				onClick={ () => setOpen( ( v ) => ! v ) } title={ __( 'Border Style' ) }>
 				<BorderStyleLine style={ value || 'none' } />
 			</button>
 			{ open && (
 				<Popover placement="bottom-start" onClose={ () => setOpen( false ) }>
-					<div className="tb-style-popover">
+					<div className="tb-border-style-picker__popover">
 						{ BORDER_STYLES.map( ( s ) => (
 							<button key={ s.value } type="button"
-								className={ 'tb-style-option' + ( value === s.value ? ' is-active' : '' ) }
+								className={ 'tb-border-style-picker__option' + ( value === s.value ? ' is-active' : '' ) }
 								onClick={ () => { onChange( s.value ); setOpen( false ); } }
 								title={ s.label }>
 								<BorderStyleLine style={ s.value } />
@@ -186,153 +197,248 @@ function BorderStylePicker( { value, onChange } ) {
 					</div>
 				</Popover>
 			) }
-		</>
+		</div>
 	);
 }
+
+// ─── Layout section helpers ────────────────────────────────────────────────────
+
+/** Segmented button group (icon or text). */
+function SegmentedGroup( { label, options, value, onChange, className = '' } ) {
+	return (
+		<div className={ 'tb-layout-control' + ( className ? ' ' + className : '' ) }>
+			<span className="tb-layout-control__label">{ label }</span>
+			<div className="tb-layout-control__segmented" role="group" aria-label={ label }>
+				{ options.map( ( opt ) => (
+					<button
+						key={ opt.value }
+						type="button"
+						className={ 'tb-layout-control__btn' + ( value === opt.value ? ' is-active' : '' ) }
+						onClick={ () => onChange( opt.value ) }
+						title={ opt.label }
+						aria-label={ opt.label }
+						aria-pressed={ value === opt.value }
+					>
+						{ opt.icon ? opt.icon : opt.label }
+					</button>
+				) ) }
+			</div>
+		</div>
+	);
+}
+
+// Align-items icons (cross-axis: start, center, end, stretch, baseline)
+const ALIGN_ITEMS_OPTIONS = [
+	{ value: 'flex-start', label: __( 'Align start' ), icon: (
+		<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="5" height="5" rx="0.5"/><rect x="9" y="2" width="5" height="5" rx="0.5"/><rect x="16" y="2" width="2" height="5" rx="0.5"/></svg>
+	) },
+	{ value: 'center', label: __( 'Align center' ), icon: (
+		<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7.5" width="5" height="5" rx="0.5"/><rect x="9" y="7.5" width="5" height="5" rx="0.5"/><rect x="16" y="7.5" width="2" height="5" rx="0.5"/></svg>
+	) },
+	{ value: 'flex-end', label: __( 'Align end' ), icon: (
+		<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="13" width="5" height="5" rx="0.5"/><rect x="9" y="13" width="5" height="5" rx="0.5"/><rect x="16" y="13" width="2" height="5" rx="0.5"/></svg>
+	) },
+	{ value: 'stretch', label: __( 'Stretch' ), icon: (
+		<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="5" height="16" rx="0.5"/><rect x="9" y="2" width="5" height="16" rx="0.5"/><rect x="16" y="2" width="2" height="16" rx="0.5"/></svg>
+	) },
+	{ value: 'baseline', label: __( 'Baseline' ), icon: (
+		<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="2" y1="10" x2="7" y2="10"/><line x1="9" y1="10" x2="14" y2="10"/><line x1="16" y1="10" x2="18" y2="10"/><rect x="2" y="5" width="5" height="5" rx="0.5"/><rect x="9" y="7" width="5" height="5" rx="0.5"/><rect x="16" y="8" width="2" height="5" rx="0.5"/></svg>
+	) },
+];
+
+// Justify-content icons (main-axis): vertical reference line(s) + solid rectangles
+const JUSTIFY_OPTIONS = [
+	{ value: 'flex-start', label: __( 'Justify start' ), icon: (
+		<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="4" height="10" rx="1"/><rect x="8" y="7" width="4" height="10" rx="1"/><line x1="20" y1="4" x2="20" y2="20" stroke="currentColor" strokeWidth="1.5"/></svg>
+	) },
+	{ value: 'center', label: __( 'Justify center' ), icon: (
+		<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><line x1="12" y1="4" x2="12" y2="20" stroke="currentColor" strokeWidth="1.5"/><rect x="4" y="7" width="4" height="10" rx="1"/><rect x="16" y="7" width="4" height="10" rx="1"/></svg>
+	) },
+	{ value: 'flex-end', label: __( 'Justify end' ), icon: (
+		<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><line x1="4" y1="4" x2="4" y2="20" stroke="currentColor" strokeWidth="1.5"/><rect x="6" y="7" width="4" height="10" rx="1"/><rect x="12" y="7" width="4" height="10" rx="1"/></svg>
+	) },
+	{ value: 'space-between', label: __( 'Space between' ), icon: (
+		<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><line x1="3" y1="4" x2="3" y2="20" stroke="currentColor" strokeWidth="1.5"/><line x1="21" y1="4" x2="21" y2="20" stroke="currentColor" strokeWidth="1.5"/><rect x="6" y="7" width="4" height="10" rx="1"/><rect x="14" y="7" width="4" height="10" rx="1"/></svg>
+	) },
+	{ value: 'space-around', label: __( 'Space around' ), icon: (
+		<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><line x1="2" y1="4" x2="2" y2="20" stroke="currentColor" strokeWidth="1.5"/><line x1="12" y1="4" x2="12" y2="20" stroke="currentColor" strokeWidth="1.5"/><line x1="22" y1="4" x2="22" y2="20" stroke="currentColor" strokeWidth="1.5"/><rect x="5" y="7" width="3" height="10" rx="1"/><rect x="16" y="7" width="3" height="10" rx="1"/></svg>
+	) },
+];
 
 // ─── Section: Layout ──────────────────────────────────────────────────────────
 
 function LayoutSection( { get, set } ) {
 	const display = get( 'display' );
+	const isFlex = display === 'flex' || display === 'inline-flex';
+	const flexDirection = get( 'flexDirection' ) || 'row';
+	const flexWrap = get( 'flexWrap' ) || 'nowrap';
+	const alignItems = get( 'alignItems' ) || '';
+	const justifyContent = get( 'justifyContent' ) || '';
+
+	const directionOptions = [
+		{ value: 'row', label: __( 'Row' ) },
+		{ value: 'column', label: __( 'Column' ) },
+		{ value: 'row-reverse', label: __( 'Row reverse' ), icon: (
+			<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M4 8h8M8 12l4-4-4-4"/></svg>
+		) },
+	];
+	const wrapOptions = [
+		{ value: 'nowrap', label: __( 'No Wrap' ) },
+		{ value: 'wrap', label: __( 'Wrap' ) },
+		{ value: 'wrap-reverse', label: __( 'Reverse Wrap' ) },
+	];
+
+	const overflowOptions = [
+		{ value: '', label: __( 'Default' ) },
+		{ value: 'visible', label: 'visible' },
+		{ value: 'hidden', label: 'hidden' },
+		{ value: 'scroll', label: 'scroll' },
+		{ value: 'auto', label: 'auto' },
+	];
+	const positionOptions = [
+		{ value: '', label: __( 'Default' ) },
+		{ value: 'static', label: 'static' },
+		{ value: 'relative', label: 'relative' },
+		{ value: 'absolute', label: 'absolute' },
+		{ value: 'fixed', label: 'fixed' },
+		{ value: 'sticky', label: 'sticky' },
+	];
+
 	return (
-		<PanelBody title={ __( 'Layout' ) } initialOpen={ false }>
-			<SelectControl
-				label={ __( 'Display' ) }
-				value={ display || '' }
-				options={ [
-					{ value: '',             label: __( '—' ) },
-					{ value: 'block',        label: 'block' },
-					{ value: 'flex',         label: 'flex' },
-					{ value: 'grid',         label: 'grid' },
-					{ value: 'inline',       label: 'inline' },
-					{ value: 'inline-block', label: 'inline-block' },
-					{ value: 'inline-flex',  label: 'inline-flex' },
-					{ value: 'none',         label: 'none' },
-				] }
-				onChange={ ( v ) => set( 'display', v ) }
-			/>
-			{ ( display === 'flex' || display === 'inline-flex' ) && (
+		<PanelBody title={ __( 'Layout' ) } icon={ <SectionIcon icon="layout" /> } initialOpen={ false }>
+			<div className="tb-layout-control">
+				<span className="tb-layout-control__label">{ __( 'DISPLAY' ) }</span>
+				<SelectControl
+					value={ display || '' }
+					options={ [
+						{ value: '',             label: __( '—' ) },
+						{ value: 'block',        label: 'Block' },
+						{ value: 'flex',         label: 'Flex' },
+						{ value: 'grid',         label: 'Grid' },
+						{ value: 'inline',       label: 'inline' },
+						{ value: 'inline-block', label: 'inline-block' },
+						{ value: 'inline-flex',  label: 'inline-flex' },
+						{ value: 'none',         label: 'none' },
+					] }
+					onChange={ ( v ) => set( 'display', v ) }
+					hideLabelFromVision
+					__nextHasNoMarginBottom
+				/>
+			</div>
+			{ isFlex && (
 				<>
-					<SelectControl
-						label={ __( 'Flex Direction' ) }
-						value={ get( 'flexDirection' ) || '' }
-						options={ [
-							{ value: '',               label: __( '—' ) },
-							{ value: 'row',            label: 'row' },
-							{ value: 'row-reverse',    label: 'row-reverse' },
-							{ value: 'column',         label: 'column' },
-							{ value: 'column-reverse', label: 'column-reverse' },
-						] }
+					<SegmentedGroup
+						label={ __( 'DIRECTION' ) }
+						options={ directionOptions }
+						value={ flexDirection }
 						onChange={ ( v ) => set( 'flexDirection', v ) }
 					/>
-					<SelectControl
-						label={ __( 'Flex Wrap' ) }
-						value={ get( 'flexWrap' ) || '' }
-						options={ [
-							{ value: '',             label: __( '—' ) },
-							{ value: 'nowrap',       label: 'nowrap' },
-							{ value: 'wrap',         label: 'wrap' },
-							{ value: 'wrap-reverse', label: 'wrap-reverse' },
-						] }
-						onChange={ ( v ) => set( 'flexWrap', v ) }
-					/>
-					<SelectControl
-						label={ __( 'Align Items' ) }
-						value={ get( 'alignItems' ) || '' }
-						options={ [
-							{ value: '',           label: __( '—' ) },
-							{ value: 'flex-start', label: 'flex-start' },
-							{ value: 'center',     label: 'center' },
-							{ value: 'flex-end',   label: 'flex-end' },
-							{ value: 'stretch',    label: 'stretch' },
-							{ value: 'baseline',   label: 'baseline' },
-						] }
+					<SegmentedGroup
+						label={ __( 'ALIGN ITEMS' ) }
+						options={ ALIGN_ITEMS_OPTIONS }
+						value={ alignItems }
 						onChange={ ( v ) => set( 'alignItems', v ) }
 					/>
-					<SelectControl
-						label={ __( 'Justify Content' ) }
-						value={ get( 'justifyContent' ) || '' }
-						options={ [
-							{ value: '',              label: __( '—' ) },
-							{ value: 'flex-start',    label: 'flex-start' },
-							{ value: 'center',        label: 'center' },
-							{ value: 'flex-end',      label: 'flex-end' },
-							{ value: 'space-between', label: 'space-between' },
-							{ value: 'space-around',  label: 'space-around' },
-							{ value: 'space-evenly',  label: 'space-evenly' },
-						] }
+					<SegmentedGroup
+						label={ __( 'JUSTIFY CONTENT' ) }
+						options={ JUSTIFY_OPTIONS }
+						value={ justifyContent }
 						onChange={ ( v ) => set( 'justifyContent', v ) }
+						className="tb-layout-control--justify"
 					/>
-					<SelectControl
-						label={ __( 'Align Content' ) }
-						value={ get( 'alignContent' ) || '' }
-						options={ [
-							{ value: '',              label: __( '—' ) },
-							{ value: 'flex-start',    label: 'flex-start' },
-							{ value: 'center',        label: 'center' },
-							{ value: 'flex-end',      label: 'flex-end' },
-							{ value: 'space-between', label: 'space-between' },
-							{ value: 'space-around',  label: 'space-around' },
-							{ value: 'stretch',       label: 'stretch' },
-						] }
-						onChange={ ( v ) => set( 'alignContent', v ) }
+					<SegmentedGroup
+						label={ __( 'WRAP' ) }
+						options={ wrapOptions }
+						value={ flexWrap }
+						onChange={ ( v ) => set( 'flexWrap', v ) }
 					/>
-					<UCV label={ __( 'Gap' ) } value={ get( 'gap' ) } onChange={ ( v ) => set( 'gap', v ) } />
-					<UCV label={ __( 'Column Gap' ) } value={ get( 'columnGap' ) } onChange={ ( v ) => set( 'columnGap', v ) } />
-					<UCV label={ __( 'Row Gap' ) } value={ get( 'rowGap' ) } onChange={ ( v ) => set( 'rowGap', v ) } />
-					<UCV label={ __( 'Flex Basis' ) } value={ get( 'flexBasis' ) } onChange={ ( v ) => set( 'flexBasis', v ) } />
-					<UCV label={ __( 'Flex Grow' ) } value={ get( 'flexGrow' ) } onChange={ ( v ) => set( 'flexGrow', v ) } />
-					<UCV label={ __( 'Flex Shrink' ) } value={ get( 'flexShrink' ) } onChange={ ( v ) => set( 'flexShrink', v ) } />
-					<TextControl label={ __( 'Order' ) } value={ get( 'order' ) || '' } onChange={ ( v ) => set( 'order', v ) } type="number" />
+					<div className="tb-layout-control tb-layout-control--gap-row">
+						<div className="tb-layout-control__gap-label-row">
+							<span className="tb-layout-control__label">{ __( 'COLUMN GAP' ) }</span>
+							<span className="tb-layout-control__label">{ __( 'ROW GAP' ) }</span>
+						</div>
+						<div className="tb-layout-control__gap-inputs">
+							<UCV
+								label={ __( 'Column gap' ) }
+								value={ get( 'columnGap' ) }
+								onChange={ ( v ) => set( 'columnGap', v ) }
+								hideLabelFromVision
+							/>
+							<UCV
+								label={ __( 'Row gap' ) }
+								value={ get( 'rowGap' ) }
+								onChange={ ( v ) => set( 'rowGap', v ) }
+								hideLabelFromVision
+							/>
+						</div>
+					</div>
 				</>
 			) }
 			{ display === 'grid' && (
-				<>
-					<TextControl label={ __( 'Grid Template Columns' ) } value={ get( 'gridTemplateColumns' ) || '' } onChange={ ( v ) => set( 'gridTemplateColumns', v ) } />
-					<TextControl label={ __( 'Grid Template Rows' ) } value={ get( 'gridTemplateRows' ) || '' } onChange={ ( v ) => set( 'gridTemplateRows', v ) } />
-					<TextControl label={ __( 'Grid Column' ) } value={ get( 'gridColumn' ) || '' } onChange={ ( v ) => set( 'gridColumn', v ) } />
-					<TextControl label={ __( 'Grid Row' ) } value={ get( 'gridRow' ) || '' } onChange={ ( v ) => set( 'gridRow', v ) } />
-					<SelectControl
-						label={ __( 'Align Items' ) }
-						value={ get( 'alignItems' ) || '' }
-						options={ [
-							{ value: '', label: __( '—' ) },
-							{ value: 'start', label: 'start' },
-							{ value: 'center', label: 'center' },
-							{ value: 'end', label: 'end' },
-							{ value: 'stretch', label: 'stretch' },
-						] }
-						onChange={ ( v ) => set( 'alignItems', v ) }
-					/>
-					<SelectControl
-						label={ __( 'Justify Items' ) }
-						value={ get( 'justifyItems' ) || '' }
-						options={ [
-							{ value: '', label: __( '—' ) },
-							{ value: 'start', label: 'start' },
-							{ value: 'center', label: 'center' },
-							{ value: 'end', label: 'end' },
-							{ value: 'stretch', label: 'stretch' },
-						] }
-						onChange={ ( v ) => set( 'justifyItems', v ) }
-					/>
-					<UCV label={ __( 'Gap' ) } value={ get( 'gap' ) } onChange={ ( v ) => set( 'gap', v ) } />
-					<UCV label={ __( 'Column Gap' ) } value={ get( 'columnGap' ) } onChange={ ( v ) => set( 'columnGap', v ) } />
-					<UCV label={ __( 'Row Gap' ) } value={ get( 'rowGap' ) } onChange={ ( v ) => set( 'rowGap', v ) } />
-				</>
+				<div className="tb-layout-control tb-layout-control--gap-row">
+					<div className="tb-layout-control__gap-label-row">
+						<span className="tb-layout-control__label">{ __( 'COLUMN GAP' ) }</span>
+						<span className="tb-layout-control__label">{ __( 'ROW GAP' ) }</span>
+					</div>
+					<div className="tb-layout-control__gap-inputs">
+						<UCV
+							label={ __( 'Column gap' ) }
+							value={ get( 'columnGap' ) }
+							onChange={ ( v ) => set( 'columnGap', v ) }
+							hideLabelFromVision
+						/>
+						<UCV
+							label={ __( 'Row gap' ) }
+							value={ get( 'rowGap' ) }
+							onChange={ ( v ) => set( 'rowGap', v ) }
+							hideLabelFromVision
+						/>
+					</div>
+				</div>
 			) }
-			<SelectControl
-				label={ __( 'Overflow' ) }
-				value={ get( 'overflow' ) || '' }
-				options={ [
-					{ value: '',        label: __( '—' ) },
-					{ value: 'visible', label: 'visible' },
-					{ value: 'hidden',  label: 'hidden' },
-					{ value: 'scroll',  label: 'scroll' },
-					{ value: 'auto',    label: 'auto' },
-				] }
-				onChange={ ( v ) => set( 'overflow', v ) }
-			/>
+			<div className="tb-layout-control">
+				<span className="tb-layout-control__label">{ __( 'POSITION' ) }</span>
+				<SelectControl
+					value={ get( 'position' ) || '' }
+					options={ positionOptions }
+					onChange={ ( v ) => set( 'position', v ) }
+					hideLabelFromVision
+					__nextHasNoMarginBottom
+				/>
+			</div>
+			<div className="tb-layout-control tb-layout-control--overflow-row">
+				<div className="tb-layout-control__gap-label-row">
+					<span className="tb-layout-control__label">{ __( 'OVERFLOW-X' ) }</span>
+					<span className="tb-layout-control__label">{ __( 'OVERFLOW-Y' ) }</span>
+				</div>
+				<div className="tb-layout-control__overflow-inputs">
+					<SelectControl
+						value={ get( 'overflowX' ) || '' }
+						options={ overflowOptions }
+						onChange={ ( v ) => set( 'overflowX', v ) }
+						hideLabelFromVision
+						__nextHasNoMarginBottom
+					/>
+					<SelectControl
+						value={ get( 'overflowY' ) || '' }
+						options={ overflowOptions }
+						onChange={ ( v ) => set( 'overflowY', v ) }
+						hideLabelFromVision
+						__nextHasNoMarginBottom
+					/>
+				</div>
+			</div>
+			<div className="tb-layout-control">
+				<span className="tb-layout-control__label">{ __( 'Z-INDEX' ) }</span>
+				<TextControl
+					value={ get( 'zIndex' ) || '' }
+					onChange={ ( v ) => set( 'zIndex', v ) }
+					type="number"
+					placeholder="0"
+					hideLabelFromVision
+					__nextHasNoMarginBottom
+				/>
+			</div>
 		</PanelBody>
 	);
 }
@@ -341,24 +447,39 @@ function LayoutSection( { get, set } ) {
 
 function SizingSection( { get, set } ) {
 	return (
-		<PanelBody title={ __( 'Sizing' ) } initialOpen={ false }>
-			<UCV label={ __( 'Width' ) }     value={ get( 'width' ) }     onChange={ ( v ) => set( 'width', v ) } />
-			<UCV label={ __( 'Height' ) }    value={ get( 'height' ) }    onChange={ ( v ) => set( 'height', v ) } />
-			<UCV label={ __( 'Min Width' ) } value={ get( 'minWidth' ) }  onChange={ ( v ) => set( 'minWidth', v ) } />
-			<UCV label={ __( 'Min Height' ) } value={ get( 'minHeight' ) } onChange={ ( v ) => set( 'minHeight', v ) } />
-			<UCV label={ __( 'Max Width' ) } value={ get( 'maxWidth' ) }  onChange={ ( v ) => set( 'maxWidth', v ) } />
-			<UCV label={ __( 'Max Height' ) } value={ get( 'maxHeight' ) } onChange={ ( v ) => set( 'maxHeight', v ) } />
+		<PanelBody title={ __( 'Sizing' ) } icon={ <SectionIcon icon="image-crop" /> } initialOpen={ false }>
+			<div className="tb-sizing-control">
+				<p className="tb-sizing-control__label">{ __( 'WIDTH & HEIGHT' ) }</p>
+				<div className="tb-sizing-control__row">
+					<UCV label={ __( 'Width' ) }  value={ get( 'width' ) }  onChange={ ( v ) => set( 'width', v ) } />
+					<UCV label={ __( 'Height' ) } value={ get( 'height' ) } onChange={ ( v ) => set( 'height', v ) } />
+				</div>
+			</div>
+			<div className="tb-sizing-control">
+				<p className="tb-sizing-control__label">{ __( 'MIN' ) }</p>
+				<div className="tb-sizing-control__row">
+					<UCV label={ __( 'Min Width' ) }  value={ get( 'minWidth' ) }  onChange={ ( v ) => set( 'minWidth', v ) } />
+					<UCV label={ __( 'Min Height' ) } value={ get( 'minHeight' ) } onChange={ ( v ) => set( 'minHeight', v ) } />
+				</div>
+			</div>
+			<div className="tb-sizing-control">
+				<p className="tb-sizing-control__label">{ __( 'MAX' ) }</p>
+				<div className="tb-sizing-control__row">
+					<UCV label={ __( 'Max Width' ) }  value={ get( 'maxWidth' ) }  onChange={ ( v ) => set( 'maxWidth', v ) } />
+					<UCV label={ __( 'Max Height' ) } value={ get( 'maxHeight' ) } onChange={ ( v ) => set( 'maxHeight', v ) } />
+				</div>
+			</div>
 		</PanelBody>
 	);
 }
 
 // ─── Section: Spacing ─────────────────────────────────────────────────────────
 
-function SpacingSection( { get, set } ) {
+function SpacingSection( { get, set, setMultiple } ) {
 	return (
-		<PanelBody title={ __( 'Spacing' ) } initialOpen={ false }>
-			<DimensionControl label={ __( 'Padding' ) } propPrefix="padding" get={ get } set={ set } />
-			<DimensionControl label={ __( 'Margin' ) }  propPrefix="margin"  get={ get } set={ set } />
+		<PanelBody title={ __( 'Spacing' ) } icon={ <SectionIcon icon="align-center" /> } initialOpen={ false }>
+			<DimensionControl label={ __( 'Padding' ) } propPrefix="padding" get={ get } set={ set } setMultiple={ setMultiple } />
+			<DimensionControl label={ __( 'Margin' ) }  propPrefix="margin"  get={ get } set={ set } setMultiple={ setMultiple } />
 		</PanelBody>
 	);
 }
@@ -367,7 +488,7 @@ function SpacingSection( { get, set } ) {
 
 function TypographySection( { get, set } ) {
 	return (
-		<PanelBody title={ __( 'Typography' ) } initialOpen={ false }>
+		<PanelBody title={ __( 'Typography' ) } icon={ <SectionIcon icon="editor-textcolor" /> } initialOpen={ false }>
 			<TextControl
 				label={ __( 'Font Family' ) }
 				value={ get( 'fontFamily' ) || '' }
@@ -474,7 +595,7 @@ function TypographySection( { get, set } ) {
 
 function BackgroundsSection( { get, set } ) {
 	return (
-		<PanelBody title={ __( 'Backgrounds' ) } initialOpen={ false }>
+		<PanelBody title={ __( 'Backgrounds' ) } icon={ <SectionIcon icon="art" /> } initialOpen={ false }>
 			<InlineColorPicker label={ __( 'Background Color' ) } value={ get( 'backgroundColor' ) } onChange={ ( v ) => set( 'backgroundColor', v ) } />
 			<TextControl
 				label={ __( 'Background Image URL' ) }
@@ -562,25 +683,25 @@ function BackgroundsSection( { get, set } ) {
 
 // ─── Section: Borders ─────────────────────────────────────────────────────────
 
-function BordersSection( { get, set } ) {
+function BordersSection( { get, set, setMultiple } ) {
 	const [ borderLinked, setBorderLinked ] = useState( true );
 	const [ radiusLinked, setRadiusLinked ] = useState( true );
 
 	const setAllBorder = ( prop, value ) => {
-		SIDES.forEach( ( { key } ) => set( 'border' + key + prop, value ) );
+		setMultiple( SIDES.map( ( { key } ) => [ 'border' + key + prop, value ] ) );
 	};
 
 	const setAllRadius = ( value ) => {
-		CORNERS.forEach( ( { key } ) => set( 'border' + key + 'Radius', value ) );
+		setMultiple( CORNERS.map( ( { key } ) => [ 'border' + key + 'Radius', value ] ) );
 	};
 
 	return (
-		<PanelBody title={ __( 'Borders' ) } initialOpen={ false }>
-			<div className="tb-border-section">
-				<div className="tb-border-header">
-					<span className="tb-border-label">{ __( 'BORDER' ) }</span>
+		<PanelBody title={ __( 'Borders' ) } icon={ <SectionIcon icon="editor-outdent" /> } initialOpen={ false }>
+			<div className="tb-border-control">
+				<div className="tb-border-control__header">
+					<span className="tb-border-control__label">{ __( 'BORDER' ) }</span>
 					<button type="button"
-						className={ 'tb-link-toggle' + ( borderLinked ? ' is-linked' : '' ) }
+						className={ 'tb-border-control__link-toggle' + ( borderLinked ? ' is-linked' : '' ) }
 						onClick={ () => setBorderLinked( ( v ) => ! v ) }
 						title={ borderLinked ? __( 'Unlink' ) : __( 'Link' ) }
 						aria-label={ borderLinked ? __( 'Linked' ) : __( 'Unlinked' ) }
@@ -589,13 +710,25 @@ function BordersSection( { get, set } ) {
 					</button>
 				</div>
 				{ SIDES.map( ( { key, label } ) => (
-					<div key={ key } className="tb-border-row">
-						<span className={ `tb-border-side-icon tb-border-side-icon--${ key.toLowerCase() }` } aria-hidden="true" />
-						<div className="tb-border-row-inputs">
+					<div key={ key } className="tb-border-control__row">
+						<span className={ `tb-border-control__side-icon tb-border-control__side-icon--${ key.toLowerCase() }` } aria-hidden="true" />
+						<div className="tb-border-control__row-inputs">
 							<UCV
 								label={ label + ' ' + __( 'Width' ) }
 								value={ get( 'border' + key + 'Width' ) }
-								onChange={ ( v ) => borderLinked ? setAllBorder( 'Width', v ) : set( 'border' + key + 'Width', v ) }
+								onChange={ ( v ) => {
+									if ( borderLinked ) {
+										const updates = SIDES.flatMap( ( { key: k } ) => [
+											[ 'border' + k + 'Width', v ],
+											...( v && ! get( 'border' + k + 'Style' ) ? [ [ 'border' + k + 'Style', 'solid' ] ] : [] ),
+										] );
+										setMultiple( updates );
+									} else {
+										const updates = [ [ 'border' + key + 'Width', v ] ];
+										if ( v && ! get( 'border' + key + 'Style' ) ) updates.push( [ 'border' + key + 'Style', 'solid' ] );
+										setMultiple( updates );
+									}
+								} }
 								hideLabelFromVision
 							/>
 							<BorderStylePicker
@@ -611,11 +744,11 @@ function BordersSection( { get, set } ) {
 					</div>
 				) ) }
 			</div>
-			<div className="tb-border-section">
-				<div className="tb-border-header">
-					<span className="tb-border-label">{ __( 'BORDER RADIUS' ) }</span>
+			<div className="tb-border-control">
+				<div className="tb-border-control__header">
+					<span className="tb-border-control__label">{ __( 'BORDER RADIUS' ) }</span>
 					<button type="button"
-						className={ 'tb-link-toggle' + ( radiusLinked ? ' is-linked' : '' ) }
+						className={ 'tb-border-control__link-toggle' + ( radiusLinked ? ' is-linked' : '' ) }
 						onClick={ () => setRadiusLinked( ( v ) => ! v ) }
 						title={ radiusLinked ? __( 'Unlink' ) : __( 'Link' ) }
 						aria-label={ radiusLinked ? __( 'Linked' ) : __( 'Unlinked' ) }
@@ -623,7 +756,7 @@ function BordersSection( { get, set } ) {
 						<span className={ 'dashicons dashicons-admin-' + ( radiusLinked ? 'links' : 'link' ) } />
 					</button>
 				</div>
-				<div className="tb-border-radius-grid">
+				<div className="tb-border-control__radius-grid">
 					{ CORNERS.map( ( { key, label } ) => (
 						<UCV
 							key={ key }
@@ -634,9 +767,9 @@ function BordersSection( { get, set } ) {
 					) ) }
 				</div>
 			</div>
-			<div className="tb-border-section">
-				<p className="tb-border-label">{ __( 'OUTLINE' ) }</p>
-				<div className="tb-border-row-inputs">
+			<div className="tb-border-control">
+				<p className="tb-border-control__label">{ __( 'OUTLINE' ) }</p>
+				<div className="tb-border-control__row-inputs">
 					<UCV label={ __( 'Width' ) }  value={ get( 'outlineWidth' ) }  onChange={ ( v ) => set( 'outlineWidth', v ) } />
 					<BorderStylePicker value={ get( 'outlineStyle' ) || 'none' } onChange={ ( v ) => set( 'outlineStyle', v ) } />
 					<InlineColorPicker label={ __( 'Outline Color' ) } value={ get( 'outlineColor' ) } onChange={ ( v ) => set( 'outlineColor', v ) } />
@@ -652,7 +785,7 @@ function BordersSection( { get, set } ) {
 function PositionSection( { get, set } ) {
 	const position = get( 'position' );
 	return (
-		<PanelBody title={ __( 'Position' ) } initialOpen={ false }>
+		<PanelBody title={ __( 'Position' ) } icon={ <SectionIcon icon="location" /> } initialOpen={ false }>
 			<SelectControl
 				label={ __( 'Position' ) }
 				value={ position || '' }
@@ -699,7 +832,7 @@ function PositionSection( { get, set } ) {
 
 function EffectsSection( { get, set } ) {
 	return (
-		<PanelBody title={ __( 'Effects' ) } initialOpen={ false }>
+		<PanelBody title={ __( 'Effects' ) } icon={ <SectionIcon icon="visibility" /> } initialOpen={ false }>
 			<RangeControl
 				label={ __( 'Opacity' ) }
 				value={ get( 'opacity' ) !== '' ? parseFloat( get( 'opacity' ) ) : undefined }
@@ -765,7 +898,7 @@ function EffectsSection( { get, set } ) {
 
 function MediaSection( { get, set } ) {
 	return (
-		<PanelBody title={ __( 'Media' ) } initialOpen={ false }>
+		<PanelBody title={ __( 'Media' ) } icon={ <SectionIcon icon="format-image" /> } initialOpen={ false }>
 			<SelectControl
 				label={ __( 'Object Fit' ) }
 				value={ get( 'objectFit' ) || '' }
@@ -793,7 +926,7 @@ function MediaSection( { get, set } ) {
 
 function ListsSection( { get, set } ) {
 	return (
-		<PanelBody title={ __( 'Lists' ) } initialOpen={ false }>
+		<PanelBody title={ __( 'Lists' ) } icon={ <SectionIcon icon="editor-ul" /> } initialOpen={ false }>
 			<SelectControl
 				label={ __( 'List Style Type' ) }
 				value={ get( 'listStyleType' ) || '' }
@@ -829,7 +962,7 @@ function ListsSection( { get, set } ) {
 
 function PointerEventsSection( { get, set } ) {
 	return (
-		<PanelBody title={ __( 'Pointer Events' ) } initialOpen={ false }>
+		<PanelBody title={ __( 'Pointer Events' ) } icon={ <SectionIcon icon="admin-generic" /> } initialOpen={ false }>
 			<SelectControl
 				label={ __( 'Pointer Events' ) }
 				value={ get( 'pointerEvents' ) || '' }
@@ -849,7 +982,7 @@ function PointerEventsSection( { get, set } ) {
 
 function CursorSection( { get, set } ) {
 	return (
-		<PanelBody title={ __( 'Cursor' ) } initialOpen={ false }>
+		<PanelBody title={ __( 'Cursor' ) } icon={ <SectionIcon icon="admin-customizer" /> } initialOpen={ false }>
 			<SelectControl
 				label={ __( 'Cursor' ) }
 				value={ get( 'cursor' ) || '' }
@@ -881,10 +1014,10 @@ function CursorSection( { get, set } ) {
 function FillStrokeSection( { get, set } ) {
 	return (
 		<>
-			<PanelBody title={ __( 'Fill Color' ) } initialOpen={ false }>
+			<PanelBody title={ __( 'Fill Color' ) } icon={ <SectionIcon icon="art" /> } initialOpen={ false }>
 				<InlineColorPicker label={ __( 'Fill' ) } value={ get( 'fill' ) } onChange={ ( v ) => set( 'fill', v ) } />
 			</PanelBody>
-			<PanelBody title={ __( 'Stroke Color' ) } initialOpen={ false }>
+			<PanelBody title={ __( 'Stroke Color' ) } icon={ <SectionIcon icon="edit" /> } initialOpen={ false }>
 				<InlineColorPicker label={ __( 'Stroke' ) } value={ get( 'stroke' ) } onChange={ ( v ) => set( 'stroke', v ) } />
 				<UCV label={ __( 'Stroke Width' ) } value={ get( 'strokeWidth' ) } onChange={ ( v ) => set( 'strokeWidth', v ) } />
 			</PanelBody>
@@ -919,18 +1052,36 @@ export default function StylesPanel( { attributes, setAttributes, sections } ) {
 		setAttributes( { styles: setStyleValue( styles, property, value, device, state ) } );
 	};
 
+	const setMultiple = ( updates ) => {
+		let newStyles = styles;
+		updates.forEach( ( [ property, value ] ) => {
+			newStyles = setStyleValue( newStyles, property, value, device, state );
+		} );
+		setAttributes( { styles: newStyles } );
+	};
+
 	const show = ( key ) => enabled.includes( key );
+
+	const screenSizeMessages = {
+		desktop: __( 'Style settings for all screen sizes' ),
+		tablet:  __( 'Medium screen size overrides' ),
+		mobile:  __( 'Small screen size overrides' ),
+	};
+	const screenSizeMessage = screenSizeMessages[ device ] || screenSizeMessages.desktop;
 
 	return (
 		<div className="tb-styles-panel">
 			<DeviceSwitcher />
+			<p className="tb-styles-panel__screen-size-message" role="status">
+				{ screenSizeMessage }
+			</p>
 			<MainHoverTabs state={ state } onChange={ setState } />
 			{ show( 'layout' )       && <LayoutSection       get={ get } set={ set } /> }
 			{ show( 'sizing' )       && <SizingSection       get={ get } set={ set } /> }
-			{ show( 'spacing' )      && <SpacingSection      get={ get } set={ set } /> }
+			{ show( 'spacing' )      && <SpacingSection      get={ get } set={ set } setMultiple={ setMultiple } /> }
 			{ show( 'typography' )   && <TypographySection   get={ get } set={ set } /> }
 			{ show( 'backgrounds' )  && <BackgroundsSection  get={ get } set={ set } /> }
-			{ show( 'borders' )      && <BordersSection      get={ get } set={ set } /> }
+			{ show( 'borders' )      && <BordersSection      get={ get } set={ set } setMultiple={ setMultiple } /> }
 			{ show( 'position' )     && <PositionSection     get={ get } set={ set } /> }
 			{ show( 'effects' )      && <EffectsSection      get={ get } set={ set } /> }
 			{ show( 'media' )        && <MediaSection        get={ get } set={ set } /> }
