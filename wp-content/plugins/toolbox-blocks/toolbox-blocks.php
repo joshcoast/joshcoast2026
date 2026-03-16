@@ -22,6 +22,7 @@ define( 'TOOLBOX_BLOCKS_URL', plugin_dir_url( __FILE__ ) );
 // Core infrastructure.
 require_once TOOLBOX_BLOCKS_DIR . 'includes/class-css-generator.php';
 require_once TOOLBOX_BLOCKS_DIR . 'includes/class-block-base.php';
+require_once TOOLBOX_BLOCKS_DIR . 'includes/class-icon-library.php';
 
 // Block render classes.
 require_once TOOLBOX_BLOCKS_DIR . 'includes/blocks/class-container.php';
@@ -39,7 +40,7 @@ add_action( 'init', 'toolbox_blocks_register' );
  */
 function toolbox_blocks_register() {
 	$asset_file = TOOLBOX_BLOCKS_DIR . 'build/index.asset.php';
-	$asset = file_exists( $asset_file )
+	$asset      = file_exists( $asset_file )
 		? require $asset_file
 		: array(
 			'dependencies' => array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n', 'wp-data' ),
