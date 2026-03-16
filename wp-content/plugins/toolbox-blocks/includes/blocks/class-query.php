@@ -14,18 +14,19 @@ class Toolbox_Block_Query extends Toolbox_Block_Base {
 	const BLOCK_NAME = 'toolbox-blocks/query';
 
 	public static function render( $attributes, $content, $block ) {
-		$meta     = self::block_meta( $attributes, 'tb-query' );
-		$post_type = sanitize_key( $attributes['postType'] ?? 'post' );
-		$per_page  = absint( $attributes['postsPerPage'] ?? 10 );
-		$per_page  = min( 100, max( 1, $per_page ) );
-		$order     = in_array( strtoupper( (string) ( $attributes['order'] ?? 'DESC' ) ), array( 'ASC', 'DESC' ), true )
-			? strtoupper( $attributes['order'] )
+		$meta            = self::block_meta( $attributes, 'tb-query' );
+		$post_type       = sanitize_key( $attributes['postType'] ?? 'post' );
+		$per_page        = absint( $attributes['postsPerPage'] ?? 10 );
+		$per_page        = min( 100, max( 1, $per_page ) );
+		$order_raw       = strtoupper( (string) ( $attributes['order'] ?? 'DESC' ) );
+		$order           = in_array( $order_raw, array( 'ASC', 'DESC' ), true )
+			? $order_raw
 			: 'DESC';
 		$allowed_orderby = array( 'date', 'title', 'modified', 'menu_order', 'comment_count', 'rand' );
-		$orderby        = sanitize_key( $attributes['orderBy'] ?? 'date' );
-		$orderby        = in_array( $orderby, $allowed_orderby, true ) ? $orderby : 'date';
-		$offset         = absint( $attributes['offset'] ?? 0 );
-		$no_results  = wp_kses_post( $attributes['noResultsText'] ?? __( 'No posts found.', 'toolbox-blocks' ) );
+		$orderby         = sanitize_key( $attributes['orderBy'] ?? 'date' );
+		$orderby         = in_array( $orderby, $allowed_orderby, true ) ? $orderby : 'date';
+		$offset          = absint( $attributes['offset'] ?? 0 );
+		$no_results      = wp_kses_post( $attributes['noResultsText'] ?? __( 'No posts found.', 'toolbox-blocks' ) );
 
 		$query_args = array(
 			'post_type'      => $post_type,
@@ -53,8 +54,14 @@ class Toolbox_Block_Query extends Toolbox_Block_Base {
 			$the_query->the_post();
 
 			// Render inner blocks with the current post context.
-			$block_content = ( new WP_Block( $block->parsed_block, array( 'postId' => get_the_ID(), 'postType' => $post_type ) ) )->render();
-			$loop_html .= $block_content;
+			$block_content = ( new WP_Block(
+				$block->parsed_block,
+				array(
+					'postId'   => get_the_ID(),
+					'postType' => $post_type,
+				)
+			) )->render();
+			$loop_html    .= $block_content;
 		}
 		wp_reset_postdata();
 

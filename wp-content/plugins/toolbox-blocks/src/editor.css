@@ -1,9 +1,7 @@
 /* ============================================================
    Toolbox Blocks – Editor Styles
    ============================================================ */
-
 /* ── Inspector Tabs (Settings | Styles) ────────────────────── */
-
 .tb-inspector-tabs__tablist {
 	display: flex;
 	border-bottom: 1px solid #ddd;
@@ -38,7 +36,6 @@
 }
 
 /* ── Device Switcher ────────────────────────────────────────── */
-
 .tb-device-switcher {
 	display: flex;
 	justify-content: flex-end;
@@ -62,7 +59,10 @@
 	transition: color 0.15s, background 0.15s;
 }
 
-.tb-device-switcher__btn:hover { color: #1e1e1e; background: #e0e0e0; }
+.tb-device-switcher__btn:hover {
+	color: #1e1e1e;
+	background: #e0e0e0;
+}
 
 .tb-device-switcher__btn.is-active {
 	color: #007cba;
@@ -96,7 +96,6 @@
 }
 
 /* ── Layout Section ──────────────────────────────────────────── */
-
 .tb-layout-control {
 	margin-bottom: 16px;
 }
@@ -209,7 +208,6 @@
 }
 
 /* ── Main | Hover Tabs ──────────────────────────────────────── */
-
 .tb-main-hover-tabs {
 	display: flex;
 	gap: 4px;
@@ -239,8 +237,9 @@
 }
 
 /* ── Dimension Control (BEM) ────────────────────────────────── */
-
-.tb-dimension-control { margin-bottom: 16px; }
+.tb-dimension-control {
+	margin-bottom: 16px;
+}
 
 .tb-dimension-control__header {
 	display: flex;
@@ -263,10 +262,11 @@
 	gap: 4px;
 }
 
-.tb-dimension-control__inputs .components-base-control { margin-bottom: 0; }
+.tb-dimension-control__inputs .components-base-control {
+	margin-bottom: 0;
+}
 
 /* ── Sizing control (BEM) ─────────────────────────────────────── */
-
 .tb-sizing-control {
 	margin-bottom: 16px;
 }
@@ -290,7 +290,9 @@
 	gap: 8px;
 }
 
-.tb-sizing-control__row .components-base-control { margin-bottom: 0; }
+.tb-sizing-control__row .components-base-control {
+	margin-bottom: 0;
+}
 
 .tb-dimension-control__link-toggle {
 	display: flex;
@@ -313,7 +315,6 @@
 }
 
 /* ── Inline Color Picker ────────────────────────────────────── */
-
 .tb-inline-color {
 	display: flex;
 	align-items: center;
@@ -337,11 +338,15 @@
 	flex-shrink: 0;
 }
 
-.tb-color-popover { padding: 12px; min-width: 220px; }
+.tb-color-popover {
+	padding: 12px;
+	min-width: 220px;
+}
 
 /* ── Border Controls (BEM) ──────────────────────────────────── */
-
-.tb-border-control { margin-bottom: 16px; }
+.tb-border-control {
+	margin-bottom: 16px;
+}
 
 .tb-border-control__header {
 	display: flex;
@@ -382,10 +387,25 @@
 	flex-shrink: 0;
 }
 
-.tb-border-control__side-icon--top    { border-top-width: 3px; border-top-color: #1e1e1e; }
-.tb-border-control__side-icon--right  { border-right-width: 3px; border-right-color: #1e1e1e; }
-.tb-border-control__side-icon--bottom { border-bottom-width: 3px; border-bottom-color: #1e1e1e; }
-.tb-border-control__side-icon--left   { border-left-width: 3px; border-left-color: #1e1e1e; }
+.tb-border-control__side-icon--top {
+	border-top-width: 3px;
+	border-top-color: #1e1e1e;
+}
+
+.tb-border-control__side-icon--right {
+	border-right-width: 3px;
+	border-right-color: #1e1e1e;
+}
+
+.tb-border-control__side-icon--bottom {
+	border-bottom-width: 3px;
+	border-bottom-color: #1e1e1e;
+}
+
+.tb-border-control__side-icon--left {
+	border-left-width: 3px;
+	border-left-color: #1e1e1e;
+}
 
 .tb-border-control__radius-grid {
 	display: grid;
@@ -428,10 +448,11 @@
 }
 
 .tb-border-style-picker__option:hover,
-.tb-border-style-picker__option.is-active { background: #e8f4fb; }
+.tb-border-style-picker__option.is-active {
+	background: #e8f4fb;
+}
 
 /* ── Focus visible (WCAG 2.1) ───────────────────────────────── */
-
 .tb-dimension-control__link-toggle:focus-visible,
 .tb-inline-color__swatch:focus-visible,
 .tb-border-style-picker__trigger:focus-visible,
@@ -443,7 +464,6 @@
 }
 
 /* ── Heading Level Picker ───────────────────────────────────── */
-
 .tb-heading-level-picker {
 	display: flex;
 	gap: 4px;
@@ -468,11 +488,11 @@
 }
 
 /* ── Background Image Control ───────────────────────────────── */
-
-.tb-bg-image-control { margin-bottom: 16px; }
+.tb-bg-image-control {
+	margin-bottom: 16px;
+}
 
 /* ── Query Block Editor Label ───────────────────────────────── */
-
 .tb-query__label {
 	padding: 8px 12px;
 	background: #f0f0f0;
@@ -483,15 +503,94 @@
 	margin-bottom: 8px;
 }
 
-/* ── Block min-height in editor ─────────────────────────────── */
+/* ── Icon Picker ────────────────────────────────────────────── */
+.tb-icon-picker {
+	margin: 12px 0;
+}
 
+.tb-icon-picker__label {
+	display: block;
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	color: #757575;
+	margin-bottom: 6px;
+}
+
+.tb-icon-picker__grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 6px;
+}
+
+.tb-icon-picker__option {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 6px;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	background: #fff;
+	color: #1e1e1e;
+	cursor: pointer;
+	text-align: left;
+}
+
+.tb-icon-picker__option:hover {
+	background: #f6f7f7;
+}
+
+.tb-icon-picker__option.is-active {
+	border-color: #007cba;
+	background: #e8f4fb;
+}
+
+.tb-icon-picker__svg {
+	width: 16px;
+	height: 16px;
+	flex-shrink: 0;
+}
+
+.tb-icon-picker__name {
+	font-size: 11px;
+	line-height: 1.2;
+}
+
+.tb-icon-picker__option:focus-visible {
+	outline: 2px solid #007cba;
+	outline-offset: 1px;
+}
+
+/* ── Button block icon rendering ────────────────────────────── */
+.tb-button__icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 1em;
+	height: 1em;
+	line-height: 1;
+}
+
+.tb-button__icon-svg {
+	width: 1em;
+	height: 1em;
+	display: block;
+}
+
+.tb-button__text {
+	display: inline-block;
+}
+
+/* ── Block min-height in editor ─────────────────────────────── */
 .wp-block-toolbox-blocks-container,
-.wp-block-toolbox-blocks-grid { min-height: 40px; }
+.wp-block-toolbox-blocks-grid {
+	min-height: 40px;
+}
 
 /* ── Container flex/grid layout passthrough ────────────────────
    Editor adds .block-editor-inner-blocks and .block-editor-block-list__layout
    wrappers; display:contents lets inner blocks participate in flex/grid. */
-
 .tb-container--layout-passthrough .block-editor-inner-blocks,
 .tb-container--layout-passthrough .block-editor-block-list__layout,
 .tb-grid--layout-passthrough .block-editor-inner-blocks,
