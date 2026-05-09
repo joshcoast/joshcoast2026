@@ -4,13 +4,14 @@
 
 import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
+import { toolboxBlockIcon } from '../../shared/block-icon-config';
 import ImageEdit from './edit';
 
 registerBlockType( 'toolbox-blocks/image', {
 	apiVersion: 3,
 	title: __( 'Image' ),
 	description: __( 'An image element with full style controls.' ),
-	icon: 'format-image',
+	icon: toolboxBlockIcon( 'format-image' ),
 	category: 'toolbox-blocks',
 	supports: { anchor: true, customClassName: true },
 	attributes: {

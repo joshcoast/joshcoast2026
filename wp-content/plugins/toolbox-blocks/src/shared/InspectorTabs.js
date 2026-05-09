@@ -1,6 +1,6 @@
 /**
  * Two-tab inspector layout: Settings | Styles.
- * Wraps the block inspector panel with GenerateBlocks-style tabs.
+ * Wraps the block inspector panel with Settings | Styles tabs.
  *
  * Persists active tab per block so switching screen size (device) does not reset to Settings.
  */
