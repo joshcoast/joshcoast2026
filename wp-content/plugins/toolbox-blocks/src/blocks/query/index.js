@@ -5,13 +5,14 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
+import { toolboxBlockIcon } from '../../shared/block-icon-config';
 import QueryEdit from './edit';
 
 registerBlockType( 'toolbox-blocks/query', {
 	apiVersion: 3,
 	title: __( 'Query' ),
 	description: __( 'Loop posts with a custom query and template.' ),
-	icon: 'list-view',
+	icon: toolboxBlockIcon( 'list-view' ),
 	category: 'toolbox-blocks',
 	supports: { anchor: true, customClassName: true },
 	attributes: {

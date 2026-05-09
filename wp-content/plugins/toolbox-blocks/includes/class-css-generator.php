@@ -86,12 +86,47 @@ class Toolbox_Blocks_CSS_Generator {
 	}
 
 	/**
+	 * Combine gradient (`background`) and photo (`backgroundImage`) into one layered `background-image`
+	 * (CSS lists first image on top, so gradient is drawn above the photo).
+	 *
+	 * @param array $props Style props camelCase.
+	 * @return array
+	 */
+	private static function merge_background_image_layers( array $props ) {
+		$bg  = isset( $props['background'] ) ? trim( (string) $props['background'] ) : '';
+		$img = isset( $props['backgroundImage'] ) ? trim( (string) $props['backgroundImage'] ) : '';
+		if ( '' === $bg || '' === $img ) {
+			return $props;
+		}
+		if ( ! self::is_gradient_only_layer_value( $bg ) ) {
+			return $props;
+		}
+		$out                      = $props;
+		$out['backgroundImage'] = $bg . ', ' . $img;
+		unset( $out['background'] );
+		return $out;
+	}
+
+	/**
+	 * @param string $value Trimmed `background` value.
+	 * @return bool
+	 */
+	private static function is_gradient_only_layer_value( $value ) {
+		$v = trim( (string) $value );
+		if ( '' === $v ) {
+			return false;
+		}
+		return 1 === preg_match( '/^(?:linear|radial|repeating-linear|repeating-radial)-gradient\s*\(/i', $v );
+	}
+
+	/**
 	 * Convert an array of camelCase properties to CSS declarations.
 	 *
 	 * @param array $props Key-value pairs of camelCase props.
 	 * @return string Declarations string (no braces).
 	 */
 	protected static function declarations( array $props ) {
+		$props = self::merge_background_image_layers( $props );
 		$parts = array();
 		foreach ( $props as $prop => $value ) {
 			if ( $value === '' || $value === null ) {

@@ -18,7 +18,7 @@ class Toolbox_Block_Grid extends Toolbox_Block_Base {
 		$meta      = self::block_meta( $attributes, 'tb-grid', true );
 		$unique_id = sanitize_html_class( $attributes['uniqueId'] ?? '' );
 
-		// Inner wrapper (GenerateBlocks-style): layout styles target this element so flex/grid
+		// Inner wrapper: layout styles target this element so flex/grid
 		// applies directly to block content; ensures editor and frontend structure match.
 		$inner_class = $unique_id ? 'tb-grid__inner tb-' . $unique_id : 'tb-grid__inner';
 

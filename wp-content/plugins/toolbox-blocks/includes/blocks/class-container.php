@@ -25,7 +25,7 @@ class Toolbox_Block_Container extends Toolbox_Block_Base {
 			$bg_style = ' style="background-image:url(' . esc_url( $bg_url ) . ')"';
 		}
 
-		// Inner wrapper (GenerateBlocks-style): layout styles target this element so flex/grid
+		// Inner wrapper: layout styles target this element so flex/grid
 		// applies directly to block content; ensures editor and frontend structure match.
 		$inner_class = $unique_id ? 'tb-container__inner tb-' . $unique_id : 'tb-container__inner';
 
