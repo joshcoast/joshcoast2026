@@ -1,5 +1,5 @@
 /**
- * StylesPanel – full GenerateBlocks-style CSS controls.
+ * StylesPanel – responsive CSS controls (layout, spacing, typography, etc.).
  *
  * Sections:
  *   Layout, Sizing, Spacing, Typography, Backgrounds, Borders,
@@ -7,7 +7,7 @@
  *   Fill Color, Stroke Color
  */
 
-import { useState } from '@wordpress/element';
+import { useState, useRef, useCallback, useMemo, useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import {
 	PanelBody,
@@ -21,6 +21,7 @@ import {
 	Button,
 } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
+import { MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
 import DeviceSwitcher from './DeviceSwitcher';
 import MainHoverTabs from './MainHoverTabs';
 import useEditorDevice from '../hooks/useEditorDevice';
@@ -115,14 +116,14 @@ function DimensionControl( { label, propPrefix, get, set, setMultiple } ) {
 }
 
 /** Color swatch + popover picker */
-function InlineColorPicker( { label, value, onChange } ) {
+function InlineColorPicker( { label, value, onChange, hideLabel = false } ) {
 	const [ open, setOpen ] = useState( false );
 	const colors = useSelect( ( select ) =>
 		select( 'core/block-editor' )?.getSettings?.()?.colors || [], [] );
 
 	return (
-		<div className="tb-inline-color">
-			<span className="tb-inline-color__label">{ label }</span>
+		<div className={ 'tb-inline-color' + ( hideLabel ? ' tb-inline-color--no-field-label' : '' ) }>
+			{ ! hideLabel && <span className="tb-inline-color__label">{ label }</span> }
 			<button
 				type="button"
 				className="tb-inline-color__swatch"
@@ -591,18 +592,568 @@ function TypographySection( { get, set } ) {
 	);
 }
 
+// ─── Background image: CSS `url(...)` ↔ editable URL string ────────────────────
+
+/**
+ * @param {string} value Stored `backgroundImage` (e.g. url("https://…")).
+ * @return {string} Raw URL for preview / text field, or ''.
+ */
+function getUrlFromBackgroundImageValue( value ) {
+	if ( ! value || typeof value !== 'string' ) {
+		return '';
+	}
+	const v = value.trim();
+	const m = v.match( /^url\s*\(\s*(.+)\s*\)$/is );
+	if ( m ) {
+		let inner = m[ 1 ].trim();
+		if (
+			( inner.startsWith( '"' ) && inner.endsWith( '"' ) ) ||
+			( inner.startsWith( "'" ) && inner.endsWith( "'" ) )
+		) {
+			inner = inner.slice( 1, -1 );
+		}
+		return inner;
+	}
+	if ( /^https?:\/\//i.test( v ) ) {
+		return v;
+	}
+	return '';
+}
+
+/**
+ * @param {string} rawUrl Absolute image URL.
+ * @return {string} Safe `background-image` value.
+ */
+function toBackgroundImageDeclaration( rawUrl ) {
+	if ( ! rawUrl || ! String( rawUrl ).trim() ) {
+		return '';
+	}
+	const u = String( rawUrl ).trim();
+	const escaped = u.replace( /\\/g, '\\\\' ).replace( /"/g, '\\"' );
+	return `url("${ escaped }")`;
+}
+
+/**
+ * Split a CSS-like argument list at top-level commas (respects parentheses).
+ *
+ * @param {string} str
+ * @return {string[]}
+ */
+function splitTopLevelCommas( str ) {
+	const parts = [];
+	let depth = 0;
+	let start = 0;
+	for ( let i = 0; i < str.length; i += 1 ) {
+		const ch = str[ i ];
+		if ( ch === '(' ) {
+			depth += 1;
+		} else if ( ch === ')' ) {
+			depth -= 1;
+		} else if ( ch === ',' && depth === 0 ) {
+			parts.push( str.slice( start, i ).trim() );
+			start = i + 1;
+		}
+	}
+	parts.push( str.slice( start ).trim() );
+	return parts;
+}
+
+/**
+ * Parse exactly `linear-gradient(NDEG, color1, color2)` produced by our builder or matching hand-entered syntax.
+ *
+ * @param {string} value Trimmed CSS `background` fragment.
+ * @return {Object|null} With angle, color1, color2, or null.
+ */
+function parseSimpleTwoStopLinearGradient( value ) {
+	if ( ! value || typeof value !== 'string' ) {
+		return null;
+	}
+	const v = value.trim();
+	if ( ! v.toLowerCase().startsWith( 'linear-gradient(' ) ) {
+		return null;
+	}
+	const inner = v.slice( 'linear-gradient('.length ).trim();
+	if ( ! inner.endsWith( ')' ) ) {
+		return null;
+	}
+	const body = inner.slice( 0, -1 ).trim();
+	const parts = splitTopLevelCommas( body );
+	if ( parts.length !== 3 ) {
+		return null;
+	}
+	const degM = parts[ 0 ].match( /^(-?[\d.]+)deg$/i );
+	if ( ! degM ) {
+		return null;
+	}
+	const angle = parseFloat( degM[ 1 ] );
+	if ( Number.isNaN( angle ) ) {
+		return null;
+	}
+	return {
+		angle,
+		color1: parts[ 1 ].trim(),
+		color2: parts[ 2 ].trim(),
+	};
+}
+
+/**
+ * @param {number|string} angleDeg
+ * @param {string}        color1
+ * @param {string}        color2
+ * @return {string} CSS `linear-gradient(...)` or '' when invisible.
+ */
+function buildSimpleTwoStopLinearGradient( angleDeg, color1, color2 ) {
+	const c1 = ( color1 || '' ).trim() || 'transparent';
+	const c2 = ( color2 || '' ).trim() || 'transparent';
+	if ( c1 === 'transparent' && c2 === 'transparent' ) {
+		return '';
+	}
+	const raw = typeof angleDeg === 'number' ? angleDeg : parseFloat( angleDeg );
+	const clamped = Math.round( Number.isFinite( raw ) ? Math.min( 360, Math.max( 0, raw ) ) : 180 );
+	return `linear-gradient(${ clamped }deg, ${ c1 }, ${ c2 })`;
+}
+
+/** Keyword pairs for matching two-keyword background-position (focal ring). */
+const BACKGROUND_POSITION_PRESETS = [
+	[ 'left top', 'center top', 'right top' ],
+	[ 'left center', 'center center', 'right center' ],
+	[ 'left bottom', 'center bottom', 'right bottom' ],
+];
+
+/**
+ * Stable key for two-keyword positions: `top left` and `left top` both → `left top`.
+ *
+ * @param {string} phrase
+ * @return {string}
+ */
+function backgroundPositionKeywordKey( phrase ) {
+	return phrase
+		.trim()
+		.toLowerCase()
+		.replace( /\s+/g, ' ' )
+		.split( ' ' )
+		.filter( Boolean )
+		.sort()
+		.join( ' ' );
+}
+
+/**
+ * @param {string} value Current CSS background-position.
+ * @return {string|null} Canonical keyword pair for focal ring, or null if not a two-keyword preset.
+ */
+function matchBackgroundPositionPreset( value ) {
+	if ( ! value || typeof value !== 'string' ) {
+		return null;
+	}
+	const t = value.trim().toLowerCase().replace( /\s+/g, ' ' );
+	if ( ! t ) {
+		return null;
+	}
+	/* Single "center" is valid CSS shorthand for center / center. */
+	if ( t === 'center' ) {
+		return 'center center';
+	}
+	/* Lengths, percentages, or calc — not a nine-point preset. */
+	if ( /[%]|px|rem|em|vw|vh|deg|calc\s*\(/.test( t ) || /\d/.test( t ) ) {
+		return null;
+	}
+	const key = backgroundPositionKeywordKey( t );
+	if ( ! key ) {
+		return null;
+	}
+	for ( let r = 0; r < 3; r++ ) {
+		for ( let c = 0; c < 3; c++ ) {
+			const preset = BACKGROUND_POSITION_PRESETS[ r ][ c ];
+			if ( backgroundPositionKeywordKey( preset ) === key ) {
+				return preset;
+			}
+		}
+	}
+	return null;
+}
+
+/** Keyword presets → approximate % for focal display (CSS alignment points). */
+const PRESET_TO_PERCENT = {
+	'left top': { x: 0, y: 0 },
+	'center top': { x: 50, y: 0 },
+	'right top': { x: 100, y: 0 },
+	'left center': { x: 0, y: 50 },
+	'center center': { x: 50, y: 50 },
+	'right center': { x: 100, y: 50 },
+	'left bottom': { x: 0, y: 100 },
+	'center bottom': { x: 50, y: 100 },
+	'right bottom': { x: 100, y: 100 },
+};
+
+/**
+ * Parse background-position into 0–100 % pair for focal UI (best effort).
+ *
+ * @param {string} position
+ * @return {{ x: number, y: number }}
+ */
+function parseBackgroundPositionToFocalPercent( position ) {
+	if ( ! position || typeof position !== 'string' ) {
+		return { x: 50, y: 50 };
+	}
+	const t = position.trim();
+	const pair = t.match( /^([+-]?[\d.]+)%\s+([+-]?[\d.]+)%$/ );
+	if ( pair ) {
+		return {
+			x: Math.round( Math.min( 100, Math.max( 0, parseFloat( pair[ 1 ] ) ) ) ),
+			y: Math.round( Math.min( 100, Math.max( 0, parseFloat( pair[ 2 ] ) ) ) ),
+		};
+	}
+	const tl = t.toLowerCase();
+	if ( tl === 'center' ) {
+		return { x: 50, y: 50 };
+	}
+	const matched = matchBackgroundPositionPreset( t );
+	if ( matched && PRESET_TO_PERCENT[ matched ] ) {
+		return PRESET_TO_PERCENT[ matched ];
+	}
+	return { x: 50, y: 50 };
+}
+
+/**
+ * If value is two percentages, round each to a whole number (0–100).
+ *
+ * @param {string} value
+ * @return {string}
+ */
+function roundPercentPairValue( value ) {
+	if ( ! value || typeof value !== 'string' ) {
+		return value;
+	}
+	const t = value.trim();
+	const m = t.match( /^([+-]?[\d.]+)%\s+([+-]?[\d.]+)%$/ );
+	if ( ! m ) {
+		return value;
+	}
+	const x = Math.round( Math.min( 100, Math.max( 0, parseFloat( m[ 1 ] ) ) ) );
+	const y = Math.round( Math.min( 100, Math.max( 0, parseFloat( m[ 2 ] ) ) ) );
+	return `${ x }% ${ y }%`;
+}
+
+/**
+ * Clickable image thumbnail with focal ring; writes percentage background-position.
+ *
+ * @param {Object} props
+ * @param {string} props.imageUrl
+ * @param {string} props.positionValue
+ * @param {Function} props.onPickPercent (css: string) => void
+ */
+function BackgroundFocusThumbnail( { imageUrl, positionValue, onPickPercent } ) {
+	const frameRef = useRef( null );
+	const focal = useMemo(
+		() => parseBackgroundPositionToFocalPercent( positionValue ),
+		[ positionValue ]
+	);
+
+	const setFromEvent = useCallback(
+		( clientX, clientY ) => {
+			const el = frameRef.current;
+			if ( ! el ) {
+				return;
+			}
+			const rect = el.getBoundingClientRect();
+			if ( rect.width < 1 || rect.height < 1 ) {
+				return;
+			}
+			const nx = ( ( clientX - rect.left ) / rect.width ) * 100;
+			const ny = ( ( clientY - rect.top ) / rect.height ) * 100;
+			const clamp = ( v ) => Math.min( 100, Math.max( 0, v ) );
+			const rx = Math.round( clamp( nx ) );
+			const ry = Math.round( clamp( ny ) );
+			onPickPercent( `${ rx }% ${ ry }%` );
+		},
+		[ onPickPercent ]
+	);
+
+	const onPointerDown = useCallback(
+		( e ) => {
+			if ( e.button !== 0 ) {
+				return;
+			}
+			setFromEvent( e.clientX, e.clientY );
+		},
+		[ setFromEvent ]
+	);
+
+	return (
+		<div className="tb-bg-focus">
+			<p className="components-base-control__label tb-bg-focus__label">
+				{ __( 'Focus point', 'toolbox-blocks' ) }
+			</p>
+			<div
+				ref={ frameRef }
+				className="tb-bg-focus__frame"
+				role="button"
+				tabIndex={ 0 }
+				aria-label={ __(
+					'Click to set background focus point on the image',
+					'toolbox-blocks'
+				) }
+				onPointerDown={ onPointerDown }
+				onKeyDown={ ( e ) => {
+					if ( e.key !== 'Enter' && e.key !== ' ' ) {
+						return;
+					}
+					e.preventDefault();
+					const el = frameRef.current;
+					if ( ! el ) {
+						return;
+					}
+					const r = el.getBoundingClientRect();
+					setFromEvent( r.left + r.width / 2, r.top + r.height / 2 );
+				} }
+			>
+				<img
+					src={ imageUrl }
+					alt=""
+					className="tb-bg-focus__img"
+					draggable={ false }
+					onDragStart={ ( e ) => e.preventDefault() }
+				/>
+				<span
+					className="tb-bg-focus__ring"
+					style={ {
+						left: `${ focal.x }%`,
+						top: `${ focal.y }%`,
+					} }
+					aria-hidden="true"
+				/>
+			</div>
+			<p className="components-base-control__help tb-bg-focus__help">
+				{ __(
+					'Click where the image should be anchored. Updates percentage values below.',
+					'toolbox-blocks'
+				) }
+			</p>
+		</div>
+	);
+}
+
+function BackgroundPositionControl( { get, set } ) {
+	/* Do not trim the stored value for the text field: trimming on every render removes spaces the user is typing (e.g. between "50%" and "50%"). */
+	const stored = get( 'backgroundPosition' ) || '';
+	const trimmedForFocal = stored.trim();
+	const thumbUrl = getUrlFromBackgroundImageValue( get( 'backgroundImage' ) || '' );
+	const onPickPercent = useCallback(
+		( css ) => set( 'backgroundPosition', css ),
+		[ set ]
+	);
+
+	return (
+		<div className="tb-bg-position">
+			<p className="components-base-control__label">
+				{ __( 'Background Position', 'toolbox-blocks' ) }
+			</p>
+			{ thumbUrl ? (
+				<BackgroundFocusThumbnail
+					imageUrl={ thumbUrl }
+					positionValue={ trimmedForFocal }
+					onPickPercent={ onPickPercent }
+				/>
+			) : null }
+			<TextControl
+				label={ __( 'Custom position', 'toolbox-blocks' ) }
+				value={ stored }
+				onChange={ ( v ) => set( 'backgroundPosition', v ) }
+				onBlur={ ( e ) => {
+					const current = ( e.target?.value ?? stored ).trim();
+					const next = roundPercentPairValue( current );
+					if ( next !== current ) {
+						set( 'backgroundPosition', next );
+					}
+				} }
+				help={ __(
+					'Optional. You can type position keywords (e.g. center center, top left) or any valid CSS.',
+					'toolbox-blocks'
+				) }
+				placeholder="50% 50%"
+			/>
+		</div>
+	);
+}
+
+function BackgroundImageControl( { get, set } ) {
+	const bg = get( 'backgroundImage' ) || '';
+	const rawUrl = getUrlFromBackgroundImageValue( bg );
+	const hasUrl = Boolean( rawUrl );
+
+	return (
+		<MediaUploadCheck>
+			<div className="tb-bg-image-control">
+				<p className="components-base-control__label">
+					{ __( 'Background Image', 'toolbox-blocks' ) }
+				</p>
+				<div style={ { display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 8 } }>
+					<MediaUpload
+						onSelect={ ( media ) => {
+							const url = media?.sizes?.large?.url || media?.sizes?.full?.url || media?.url;
+							if ( url ) {
+								set( 'backgroundImage', toBackgroundImageDeclaration( url ) );
+							}
+						} }
+						allowedTypes={ [ 'image' ] }
+						value={ undefined }
+						render={ ( { open } ) => (
+							<button type="button" className="components-button is-secondary" onClick={ open }>
+								{ hasUrl ? __( 'Replace image', 'toolbox-blocks' ) : __( 'Select image', 'toolbox-blocks' ) }
+							</button>
+						) }
+					/>
+					{ hasUrl && (
+						<button
+							type="button"
+							className="components-button is-secondary is-destructive"
+							onClick={ () => set( 'backgroundImage', '' ) }
+						>
+							{ __( 'Remove', 'toolbox-blocks' ) }
+						</button>
+					) }
+				</div>
+				<TextControl
+					label={ __( 'Image URL (optional)', 'toolbox-blocks' ) }
+					value={ rawUrl }
+					onChange={ ( v ) => set( 'backgroundImage', v ? toBackgroundImageDeclaration( v ) : '' ) }
+					help={ __( 'Use media library above when possible, or paste an external image URL.', 'toolbox-blocks' ) }
+					placeholder="https://…"
+				/>
+			</div>
+		</MediaUploadCheck>
+	);
+}
+
+/** Two-color linear gradient → `background`. Other values edit as raw CSS until you switch back. */
+function GradientBackgroundControl( { get, set } ) {
+	const rawBg = get( 'background' ) || '';
+	const rawTrim = rawBg.trim();
+	const parsed = useMemo( () => parseSimpleTwoStopLinearGradient( rawTrim ), [ rawTrim ] );
+	const simple = parsed !== null;
+	const custom = rawTrim !== '' && ! simple;
+
+	const [ draftAngle, setDraftAngle ] = useState( 180 );
+	useEffect( () => {
+		if ( simple ) {
+			setDraftAngle( Math.round( parsed.angle ) );
+		} else if ( ! rawTrim && ! custom ) {
+			setDraftAngle( 180 );
+		}
+	}, [ simple, parsed, rawTrim, custom ] );
+
+	const applyBuilt = useCallback(
+		( angle, color1, color2 ) => {
+			set( 'background', buildSimpleTwoStopLinearGradient( angle, color1, color2 ) );
+		},
+		[ set ]
+	);
+
+	if ( custom ) {
+		return (
+			<div className="tb-gradient-control tb-gradient-control--custom">
+				<p className="components-base-control__label">{ __( 'Gradient', 'toolbox-blocks' ) }</p>
+				<p className="tb-gradient-control__help">
+					{ __( 'With a background image, this gradient is drawn above the photo.', 'toolbox-blocks' ) }
+				</p>
+				<TextControl
+					label={ __( 'Background value', 'toolbox-blocks' ) }
+					value={ rawBg }
+					onChange={ ( v ) => set( 'background', v ) }
+					help={ __(
+						'This value is not the simple two-color pattern. Paste any valid CSS background. Use the button to switch back.',
+						'toolbox-blocks'
+					) }
+					placeholder="linear-gradient(…)"
+				/>
+				<Button
+					variant="secondary"
+					onClick={ () =>
+						set( 'background', buildSimpleTwoStopLinearGradient( 180, '#6366f1', '#c084fc' ) )
+					}
+				>
+					{ __( 'Use simple gradient', 'toolbox-blocks' ) }
+				</Button>
+			</div>
+		);
+	}
+
+	const angleForApply = simple ? parsed.angle : draftAngle;
+	const color1 = simple ? parsed.color1 : '';
+	const color2 = simple ? parsed.color2 : '';
+
+	const previewBg = buildSimpleTwoStopLinearGradient( angleForApply, color1, color2 );
+
+	const onAngleChange = ( v ) => {
+		let nextAng = typeof v === 'number' ? v : parseFloat( v );
+		if ( ! Number.isFinite( nextAng ) ) {
+			nextAng = 180;
+		}
+		nextAng = Math.round( Math.min( 360, Math.max( 0, nextAng ) ) );
+		setDraftAngle( nextAng );
+		if ( simple || color1 || color2 ) {
+			applyBuilt( nextAng, color1, color2 );
+		}
+	};
+
+	return (
+		<div className="tb-gradient-control">
+			<p className="components-base-control__label">{ __( 'Gradient', 'toolbox-blocks' ) }</p>
+			<p className="tb-gradient-control__help">
+				{ __( 'With a background image, this gradient is drawn above the photo.', 'toolbox-blocks' ) }
+			</p>
+			<div
+				className="tb-gradient-preview"
+				style={ previewBg ? { backgroundImage: previewBg } : undefined }
+				role="img"
+				aria-label={ __( 'Gradient preview', 'toolbox-blocks' ) }
+			/>
+			<RangeControl
+				label={ __( 'Angle', 'toolbox-blocks' ) }
+				value={ simple ? Math.round( parsed.angle ) : draftAngle }
+				onChange={ onAngleChange }
+				min={ 0 }
+				max={ 360 }
+				step={ 1 }
+			/>
+			<div className="tb-gradient-colors">
+				<InlineColorPicker
+					label={ __( 'Color 1', 'toolbox-blocks' ) }
+					value={ color1 }
+					onChange={ ( v ) => applyBuilt( angleForApply, v ?? '', color2 ) }
+				/>
+				<InlineColorPicker
+					label={ __( 'Color 2', 'toolbox-blocks' ) }
+					value={ color2 }
+					onChange={ ( v ) => applyBuilt( angleForApply, color1, v ?? '' ) }
+				/>
+			</div>
+			{ previewBg ? (
+				<Button
+					variant="secondary"
+					isDestructive
+					onClick={ () => {
+						setDraftAngle( 180 );
+						set( 'background', '' );
+					} }
+				>
+					{ __( 'Clear gradient', 'toolbox-blocks' ) }
+				</Button>
+			) : null }
+		</div>
+	);
+}
+
 // ─── Section: Backgrounds ─────────────────────────────────────────────────────
 
 function BackgroundsSection( { get, set } ) {
+	const bgColorLabelId = 'tb-backgrounds-color-heading';
+
 	return (
 		<PanelBody title={ __( 'Backgrounds' ) } icon={ <SectionIcon icon="art" /> } initialOpen={ false }>
-			<InlineColorPicker label={ __( 'Background Color' ) } value={ get( 'backgroundColor' ) } onChange={ ( v ) => set( 'backgroundColor', v ) } />
-			<TextControl
-				label={ __( 'Background Image URL' ) }
-				value={ get( 'backgroundImage' ) || '' }
-				onChange={ ( v ) => set( 'backgroundImage', v ? `url(${ v })` : '' ) }
-				placeholder="https://…"
-			/>
+			<GradientBackgroundControl get={ get } set={ set } />
+			<hr className="tb-backgrounds-divider" aria-hidden="true" />
+			<BackgroundImageControl get={ get } set={ set } />
 			{ get( 'backgroundImage' ) && (
 				<>
 					<SelectControl
@@ -616,12 +1167,7 @@ function BackgroundsSection( { get, set } ) {
 						] }
 						onChange={ ( v ) => set( 'backgroundSize', v ) }
 					/>
-					<TextControl
-						label={ __( 'Background Position' ) }
-						value={ get( 'backgroundPosition' ) || '' }
-						onChange={ ( v ) => set( 'backgroundPosition', v ) }
-						placeholder="center center"
-					/>
+					<BackgroundPositionControl get={ get } set={ set } />
 					<SelectControl
 						label={ __( 'Background Repeat' ) }
 						value={ get( 'backgroundRepeat' ) || '' }
@@ -647,12 +1193,6 @@ function BackgroundsSection( { get, set } ) {
 					/>
 				</>
 			) }
-			<TextControl
-				label={ __( 'Gradient' ) }
-				value={ get( 'background' ) || '' }
-				onChange={ ( v ) => set( 'background', v ) }
-				placeholder="linear-gradient(…)"
-			/>
 			<SelectControl
 				label={ __( 'Background Blend Mode' ) }
 				value={ get( 'backgroundBlendMode' ) || '' }
@@ -677,6 +1217,18 @@ function BackgroundsSection( { get, set } ) {
 				] }
 				onChange={ ( v ) => set( 'backgroundBlendMode', v ) }
 			/>
+			<hr className="tb-backgrounds-divider" aria-hidden="true" />
+			<div className="tb-bg-color-subsection" role="group" aria-labelledby={ bgColorLabelId }>
+				<p id={ bgColorLabelId } className="components-base-control__label">
+					{ __( 'Background Color', 'toolbox-blocks' ) }
+				</p>
+				<InlineColorPicker
+					hideLabel
+					label={ __( 'Pick background color', 'toolbox-blocks' ) }
+					value={ get( 'backgroundColor' ) }
+					onChange={ ( v ) => set( 'backgroundColor', v ) }
+				/>
+			</div>
 		</PanelBody>
 	);
 }

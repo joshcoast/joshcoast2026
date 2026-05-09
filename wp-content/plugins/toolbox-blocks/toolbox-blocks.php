@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Toolbox Blocks
  * Description: A suite of blocks (Container, Grid, Text, Headline, Button, Image, Query) with full responsive style controls.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: JoshCoast
  * Text Domain: toolbox-blocks
  * Requires at least: 6.5
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'TOOLBOX_BLOCKS_VERSION', '1.0.0' );
+define( 'TOOLBOX_BLOCKS_VERSION', '1.0.1' );
 define( 'TOOLBOX_BLOCKS_DIR', plugin_dir_path( __FILE__ ) );
 define( 'TOOLBOX_BLOCKS_URL', plugin_dir_url( __FILE__ ) );
 
@@ -75,26 +75,9 @@ function toolbox_blocks_register() {
 	Toolbox_Block_Image::register();
 	Toolbox_Block_Query::register();
 
-	// Attach the editor script/style to every registered block.
-	$blocks = array(
-		'toolbox-blocks/container',
-		'toolbox-blocks/grid',
-		'toolbox-blocks/text',
-		'toolbox-blocks/headline',
-		'toolbox-blocks/button',
-		'toolbox-blocks/image',
-		'toolbox-blocks/query',
-	);
-	foreach ( $blocks as $block_name ) {
-		$block_type = WP_Block_Type_Registry::get_instance()->get_registered( $block_name );
-		if ( $block_type ) {
-			$block_type->editor_script_handles = array( 'toolbox-blocks-editor' );
-			$block_type->editor_style_handles  = array( 'toolbox-blocks-editor' );
-		}
-	}
 }
 
-add_filter( 'block_categories_all', 'toolbox_blocks_add_category', 10, 2 );
+add_filter( 'block_categories_all', 'toolbox_blocks_add_category', 1, 2 );
 
 /**
  * Add a "Toolbox Blocks" category to the block inserter.

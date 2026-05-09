@@ -5,13 +5,14 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
+import { toolboxBlockIcon } from '../../shared/block-icon-config';
 import ContainerEdit from './edit';
 
 registerBlockType( 'toolbox-blocks/container', {
 	apiVersion: 3,
 	title: __( 'Container' ),
 	description: __( 'A wrapper element with full style controls.' ),
-	icon: 'layout',
+	icon: toolboxBlockIcon( 'layout' ),
 	category: 'toolbox-blocks',
 	supports: {
 		anchor: true,

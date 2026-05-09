@@ -20,10 +20,48 @@ function camelToKebab( str ) {
 	return str.replace( /([A-Z])/g, ( m ) => '-' + m.toLowerCase() );
 }
 
+/**
+ * True when `background` holds only a gradient image (comma-free shorthand not supported here).
+ *
+ * @param {string} value
+ * @return {boolean}
+ */
+function isGradientOnlyLayerValue( value ) {
+	const v = String( value || '' ).trim();
+	if ( ! v ) return false;
+	return /^(?:linear|radial|repeating-linear|repeating-radial)-gradient\s*\(/i.test( v );
+}
+
+/**
+ * Layers gradient over `background-image` URL using one comma-separated list (CSS: first layer on top).
+ *
+ * @param {Object} obj Style props camelCase.
+ * @return {Object} Shallow clone with merged layers when applicable.
+ */
+function mergeBackgroundImageLayers( obj ) {
+	if ( ! obj || typeof obj !== 'object' ) return obj;
+	const bg = String( obj.background || '' ).trim();
+	const img = String( obj.backgroundImage || '' ).trim();
+	if ( ! bg || ! img || ! isGradientOnlyLayerValue( bg ) ) return obj;
+	return {
+		...obj,
+		backgroundImage: `${ bg }, ${ img }`,
+		background: undefined,
+	};
+}
+
+/** Omit keys removed by merge (spread leaves undefined props in iteration). */
+function omitUndefined( merged ) {
+	return Object.fromEntries(
+		Object.entries( merged ).filter( ( [ , v ] ) => v !== undefined )
+	);
+}
+
 /** Convert a style object to a CSS declarations string. */
 export function objectToDeclarations( obj ) {
 	if ( ! obj || typeof obj !== 'object' ) return '';
-	return Object.entries( obj )
+	const merged = omitUndefined( mergeBackgroundImageLayers( { ...obj } ) );
+	return Object.entries( merged )
 		.filter( ( [ , v ] ) => v !== '' && v !== null && v !== undefined )
 		.map( ( [ prop, value ] ) => `${ camelToKebab( prop ) }:${ value }` )
 		.join( ';' );

@@ -1,6 +1,7 @@
 /**
  * Toolbox Blocks – editor entry point.
  * Each block self-registers when imported.
+ * Block category "Toolbox Blocks" is registered in PHP (block_categories_all).
  */
 import './editor.css';
 

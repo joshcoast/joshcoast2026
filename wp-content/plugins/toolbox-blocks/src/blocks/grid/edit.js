@@ -18,6 +18,24 @@ const TAG_OPTIONS = [
 	{ value: 'ol',      label: 'ol' },
 ];
 
+/** Two Toolbox Containers with a paragraph each—no GenerateBlocks dependency. Applies when the grid is newly inserted empty. */
+const GRID_TEMPLATE = [
+	[
+		'toolbox-blocks/container',
+		{},
+		[
+			[ 'core/paragraph', { placeholder: __( 'Column 1…', 'toolbox-blocks' ) } ],
+		],
+	],
+	[
+		'toolbox-blocks/container',
+		{},
+		[
+			[ 'core/paragraph', { placeholder: __( 'Column 2…', 'toolbox-blocks' ) } ],
+		],
+	],
+];
+
 export default function GridEdit( { attributes, setAttributes, clientId } ) {
 	const { uniqueId, styles, tagName: Tag = 'div', className } = attributes;
 
@@ -70,7 +88,10 @@ export default function GridEdit( { attributes, setAttributes, clientId } ) {
 			</InspectorControls>
 			<Tag { ...blockProps }>
 				<div className={ innerClass }>
-					<InnerBlocks templateLock={ false } />
+					<InnerBlocks
+						template={ GRID_TEMPLATE }
+						templateLock={ false }
+					/>
 				</div>
 			</Tag>
 		</>
