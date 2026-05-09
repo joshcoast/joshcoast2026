@@ -4,13 +4,14 @@
 
 import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
+import { toolboxBlockIcon } from '../../shared/block-icon-config';
 import HeadlineEdit from './edit';
 
 registerBlockType( 'toolbox-blocks/headline', {
 	apiVersion: 3,
 	title: __( 'Headline' ),
 	description: __( 'A heading element with full style controls.' ),
-	icon: 'heading',
+	icon: toolboxBlockIcon( 'heading' ),
 	category: 'toolbox-blocks',
 	supports: { anchor: true, customClassName: true },
 	attributes: {

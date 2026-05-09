@@ -328,6 +328,15 @@
 	flex: 1;
 }
 
+.tb-inline-color--no-field-label {
+	margin-bottom: 0;
+	justify-content: flex-start;
+}
+
+.tb-bg-color-subsection .components-base-control__label {
+	margin-bottom: 6px;
+}
+
 .tb-inline-color__swatch {
 	width: 28px;
 	height: 28px;
@@ -487,9 +496,121 @@
 	color: #fff;
 }
 
+/* ── Backgrounds section (inspector) ───────────────────────── */
+.tb-backgrounds-divider {
+	display: block;
+	height: 0;
+	margin: 16px 0;
+	padding: 0;
+	border: 0;
+	border-top: 1px solid #ddd;
+}
+
 /* ── Background Image Control ───────────────────────────────── */
 .tb-bg-image-control {
 	margin-bottom: 16px;
+}
+
+/* ── Background position (focus + custom field) ─────────────── */
+.tb-bg-position {
+	margin-bottom: 12px;
+}
+
+/* ── Simple gradient (`background`) ────────────────────────── */
+.tb-gradient-control {
+	margin-bottom: 16px;
+}
+
+.tb-gradient-control__help {
+	margin: 0 0 10px;
+	font-size: 11px;
+	color: #757575;
+	line-height: 1.4;
+}
+
+.tb-gradient-control--custom .components-base-control:last-of-type {
+	margin-bottom: 8px;
+}
+
+.tb-gradient-preview {
+	height: 40px;
+	border-radius: 4px;
+	border: 1px solid #949494;
+	margin-bottom: 12px;
+	background-color: #fff;
+}
+
+.tb-gradient-colors {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px 20px;
+	align-items: center;
+	margin-bottom: 8px;
+}
+
+/* ── Background focus point (thumbnail + ring) ──────────────── */
+.tb-bg-focus {
+	margin-bottom: 12px;
+}
+
+.tb-bg-focus__label {
+	margin-bottom: 6px;
+}
+
+.tb-bg-focus__frame {
+	position: relative;
+	display: block;
+	width: 100%;
+	max-width: 220px;
+	margin: 0 0 4px;
+	padding: 0;
+	border: 1px solid #949494;
+	border-radius: 4px;
+	overflow: hidden;
+	cursor: crosshair;
+	background: #e8e8e8;
+	line-height: 0;
+	outline: none;
+}
+
+.tb-bg-focus__frame:hover {
+	border-color: #757575;
+}
+
+.tb-bg-focus__frame:focus-visible {
+	outline: 2px solid #007cba;
+	outline-offset: 2px;
+}
+
+.tb-bg-focus__img {
+	display: block;
+	width: 100%;
+	height: auto;
+	max-height: 140px;
+	object-fit: contain;
+	vertical-align: top;
+	pointer-events: none;
+	user-select: none;
+}
+
+.tb-bg-focus__ring {
+	position: absolute;
+	width: 40px;
+	height: 40px;
+	margin: 0;
+	padding: 0;
+	border-radius: 50%;
+	transform: translate(-50%, -50%);
+	pointer-events: none;
+	background: rgba(255, 255, 255, 0.42);
+	border: 2px solid rgba(255, 255, 255, 0.95);
+	box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+}
+
+.tb-bg-focus__help {
+	margin-top: 0;
+	font-size: 11px;
+	color: #757575;
 }
 
 /* ── Query Block Editor Label ───────────────────────────────── */
@@ -596,4 +717,11 @@
 .tb-grid--layout-passthrough .block-editor-inner-blocks,
 .tb-grid--layout-passthrough .block-editor-block-list__layout {
 	display: contents;
+}
+
+/* ── Block inserter: Toolbox Blocks icons (#2271b1 matches block-icon-config.js) ── */
+.block-editor-block-types-list__item[id^="block-toolbox-blocks"]
+	.block-editor-block-icon {
+	fill: #2271b1;
+	color: #2271b1;
 }

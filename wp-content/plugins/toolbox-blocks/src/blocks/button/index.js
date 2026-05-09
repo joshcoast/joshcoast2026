@@ -4,6 +4,7 @@
 
 import { registerBlockType } from "@wordpress/blocks";
 import { __ } from "@wordpress/i18n";
+import { toolboxBlockIcon } from "../../shared/block-icon-config";
 import ButtonEdit from "./edit";
 import {
 	DEFAULT_BUTTON_STYLES,
@@ -15,7 +16,7 @@ registerBlockType("toolbox-blocks/button", {
 	apiVersion: 3,
 	title: __("Button"),
 	description: __("A link button with full style controls."),
-	icon: "button",
+	icon: toolboxBlockIcon("button"),
 	category: "toolbox-blocks",
 	supports: { anchor: true, customClassName: true },
 	attributes: {

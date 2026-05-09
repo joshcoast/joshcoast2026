@@ -4,13 +4,14 @@
 
 import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
+import { toolboxBlockIcon } from '../../shared/block-icon-config';
 import TextEdit from './edit';
 
 registerBlockType( 'toolbox-blocks/text', {
 	apiVersion: 3,
 	title: __( 'Text' ),
 	description: __( 'A rich-text paragraph with full style controls.' ),
-	icon: 'editor-paragraph',
+	icon: toolboxBlockIcon( 'editor-paragraph' ),
 	category: 'toolbox-blocks',
 	supports: { anchor: true, customClassName: true },
 	attributes: {

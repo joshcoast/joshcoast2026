@@ -5,13 +5,14 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
+import { toolboxBlockIcon } from '../../shared/block-icon-config';
 import GridEdit from './edit';
 
 registerBlockType( 'toolbox-blocks/grid', {
 	apiVersion: 3,
 	title: __( 'Grid' ),
 	description: __( 'A grid or flex layout container.' ),
-	icon: 'grid-view',
+	icon: toolboxBlockIcon( 'grid-view' ),
 	category: 'toolbox-blocks',
 	supports: { anchor: true, customClassName: true },
 	attributes: {

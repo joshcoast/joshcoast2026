@@ -25,7 +25,23 @@ abstract class Toolbox_Block_Base {
 		if ( ! static::BLOCK_NAME ) {
 			return;
 		}
+		$slash_pos = strrpos( static::BLOCK_NAME, '/' );
+		$name_tail = false !== $slash_pos ? substr( static::BLOCK_NAME, $slash_pos + 1 ) : static::BLOCK_NAME;
+		if ( ! $name_tail ) {
+			return;
+		}
+
 		register_block_type( static::BLOCK_NAME, array(
+			'title'           => ucfirst( $name_tail ),
+			'category'        => 'toolbox-blocks',
+			'keywords'        => array( 'toolbox', 'toolboxblocks', $name_tail ),
+			'editor_script'   => 'toolbox-blocks-editor',
+			'editor_style'    => 'toolbox-blocks-editor',
+			'supports'        => array(
+				'anchor'           => true,
+				'customClassName'  => true,
+			),
+			'api_version'     => 3,
 			'render_callback' => array( static::class, 'render' ),
 		) );
 	}
