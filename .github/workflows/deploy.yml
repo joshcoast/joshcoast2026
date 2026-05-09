@@ -38,3 +38,4 @@ jobs:
           eval $RSYNC_CMD wp-content/plugins/word-count/ $DEST/wp-content/plugins/word-count/
           eval $RSYNC_CMD wp-content/plugins/wp-blog-category-filter/ $DEST/wp-content/plugins/wp-blog-category-filter/
           eval $RSYNC_CMD wp-content/plugins/coast-blocks/ $DEST/wp-content/plugins/coast-blocks/
+          eval $RSYNC_CMD wp-content/plugins/toolbox-blocks/ $DEST/wp-content/plugins/toolbox-blocks/
