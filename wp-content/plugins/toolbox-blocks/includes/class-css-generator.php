@@ -132,10 +132,64 @@ class Toolbox_Blocks_CSS_Generator {
 			if ( $value === '' || $value === null ) {
 				continue;
 			}
-			$css_prop = strtolower( preg_replace( '/([A-Z])/', '-$1', $prop ) );
-			$parts[]  = $css_prop . ':' . $value;
+			$css_prop = self::css_property_name( $prop );
+			$value    = self::css_value( $value );
+			if ( '' === $css_prop || '' === $value ) {
+				continue;
+			}
+			$parts[] = $css_prop . ':' . $value;
 		}
 		return implode( ';', $parts );
+	}
+
+	/**
+	 * Convert a JS style property name to a safe CSS property name.
+	 *
+	 * @param mixed $prop Style property key.
+	 * @return string
+	 */
+	private static function css_property_name( $prop ) {
+		$prop = (string) $prop;
+		if ( '' === $prop ) {
+			return '';
+		}
+
+		if ( str_starts_with( $prop, '--' ) ) {
+			return preg_match( '/^--[a-zA-Z0-9_-]+$/', $prop ) ? strtolower( $prop ) : '';
+		}
+
+		if ( ! preg_match( '/^[a-zA-Z][a-zA-Z0-9-]*$/', $prop ) ) {
+			return '';
+		}
+
+		return strtolower( preg_replace( '/([A-Z])/', '-$1', $prop ) );
+	}
+
+	/**
+	 * Escape a CSS value before it is emitted into a raw <style> tag.
+	 *
+	 * @param mixed $value Style value.
+	 * @return string
+	 */
+	private static function css_value( $value ) {
+		if ( is_array( $value ) || is_object( $value ) ) {
+			return '';
+		}
+
+		$value = trim( (string) $value );
+		if ( '' === $value ) {
+			return '';
+		}
+
+		$value = str_replace( "\0", '', $value );
+		$value = preg_replace( '/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', '', $value );
+
+		// Keep user-controlled values inside this declaration and inside the style element.
+		return str_replace(
+			array( '\\', '<', '>', ';', '{', '}' ),
+			array( '\\\\', '\\3C ', '\\3E ', '\\3B ', '\\7B ', '\\7D ' ),
+			$value
+		);
 	}
 
 	/**
