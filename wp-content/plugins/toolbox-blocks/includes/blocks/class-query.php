@@ -53,15 +53,7 @@ class Toolbox_Block_Query extends Toolbox_Block_Base {
 		while ( $the_query->have_posts() ) {
 			$the_query->the_post();
 
-			// Render inner blocks with the current post context.
-			$block_content = ( new WP_Block(
-				$block->parsed_block,
-				array(
-					'postId'   => get_the_ID(),
-					'postType' => $post_type,
-				)
-			) )->render();
-			$loop_html    .= $block_content;
+			$loop_html .= self::render_inner_blocks_for_post( $block, $post_type );
 		}
 		wp_reset_postdata();
 
@@ -72,5 +64,36 @@ class Toolbox_Block_Query extends Toolbox_Block_Base {
 			$meta['anchor'],
 			$loop_html
 		);
+	}
+
+	/**
+	 * Render only the query template's inner blocks for the current queried post.
+	 *
+	 * Rendering the query block itself here would recursively enter this render callback.
+	 *
+	 * @param WP_Block $block     Query block instance.
+	 * @param string   $post_type Queried post type.
+	 * @return string
+	 */
+	private static function render_inner_blocks_for_post( $block, $post_type ) {
+		$parsed_inner_blocks = $block->parsed_block['innerBlocks'] ?? array();
+		if ( empty( $parsed_inner_blocks ) || ! is_array( $parsed_inner_blocks ) ) {
+			return '';
+		}
+
+		$context = array_merge(
+			is_array( $block->context ?? null ) ? $block->context : array(),
+			array(
+				'postId'   => get_the_ID(),
+				'postType' => $post_type,
+			)
+		);
+
+		$html = '';
+		foreach ( $parsed_inner_blocks as $parsed_inner_block ) {
+			$html .= ( new WP_Block( $parsed_inner_block, $context ) )->render();
+		}
+
+		return $html;
 	}
 }
