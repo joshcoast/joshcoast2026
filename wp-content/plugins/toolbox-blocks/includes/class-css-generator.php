@@ -120,6 +120,51 @@ class Toolbox_Blocks_CSS_Generator {
 	}
 
 	/**
+	 * Convert a camelCase property name to a safe CSS property name.
+	 *
+	 * @param string $prop Raw camelCase property name.
+	 * @return string Empty string when invalid.
+	 */
+	private static function css_property_name( $prop ) {
+		$css_prop = strtolower( preg_replace( '/([A-Z])/', '-$1', (string) $prop ) );
+		$css_prop = trim( $css_prop );
+
+		if ( 1 !== preg_match( '/^(?:--[a-z0-9_-]+|[a-z][a-z0-9-]*)$/', $css_prop ) ) {
+			return '';
+		}
+
+		return $css_prop;
+	}
+
+	/**
+	 * Sanitize a declaration value before placing it in a raw <style> element.
+	 *
+	 * @param mixed $value Raw CSS value.
+	 * @return string Empty string when invalid.
+	 */
+	private static function css_declaration_value( $value ) {
+		if ( is_array( $value ) || is_object( $value ) ) {
+			return '';
+		}
+
+		$value = trim( (string) $value );
+
+		if ( '' === $value ) {
+			return '';
+		}
+
+		if ( 1 === preg_match( '/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', $value ) ) {
+			return '';
+		}
+
+		if ( false !== strpos( $value, '<' ) || false !== strpos( $value, '>' ) ) {
+			return '';
+		}
+
+		return $value;
+	}
+
+	/**
 	 * Convert an array of camelCase properties to CSS declarations.
 	 *
 	 * @param array $props Key-value pairs of camelCase props.
@@ -129,11 +174,17 @@ class Toolbox_Blocks_CSS_Generator {
 		$props = self::merge_background_image_layers( $props );
 		$parts = array();
 		foreach ( $props as $prop => $value ) {
-			if ( $value === '' || $value === null ) {
+			if ( $value === null ) {
 				continue;
 			}
-			$css_prop = strtolower( preg_replace( '/([A-Z])/', '-$1', $prop ) );
-			$parts[]  = $css_prop . ':' . $value;
+
+			$css_prop  = self::css_property_name( $prop );
+			$css_value = self::css_declaration_value( $value );
+			if ( '' === $css_prop || '' === $css_value ) {
+				continue;
+			}
+
+			$parts[] = $css_prop . ':' . $css_value;
 		}
 		return implode( ';', $parts );
 	}
