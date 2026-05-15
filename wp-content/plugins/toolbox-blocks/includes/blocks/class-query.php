@@ -53,15 +53,13 @@ class Toolbox_Block_Query extends Toolbox_Block_Base {
 		while ( $the_query->have_posts() ) {
 			$the_query->the_post();
 
-			// Render inner blocks with the current post context.
-			$block_content = ( new WP_Block(
-				$block->parsed_block,
+			$loop_html .= self::render_inner_blocks_for_post(
+				$block,
 				array(
 					'postId'   => get_the_ID(),
 					'postType' => $post_type,
 				)
-			) )->render();
-			$loop_html    .= $block_content;
+			);
 		}
 		wp_reset_postdata();
 
@@ -72,5 +70,30 @@ class Toolbox_Block_Query extends Toolbox_Block_Base {
 			$meta['anchor'],
 			$loop_html
 		);
+	}
+
+	/**
+	 * Render the query template for the current post without re-entering the query block.
+	 *
+	 * @param WP_Block $block   Current query block instance.
+	 * @param array    $context Context values for nested post-aware blocks.
+	 * @return string
+	 */
+	private static function render_inner_blocks_for_post( $block, $context ) {
+		if ( empty( $block->inner_blocks ) || ! is_array( $block->inner_blocks ) ) {
+			return '';
+		}
+
+		$output = '';
+
+		foreach ( $block->inner_blocks as $inner_block ) {
+			if ( ! $inner_block instanceof WP_Block || empty( $inner_block->parsed_block ) ) {
+				continue;
+			}
+
+			$output .= ( new WP_Block( $inner_block->parsed_block, $context ) )->render();
+		}
+
+		return $output;
 	}
 }

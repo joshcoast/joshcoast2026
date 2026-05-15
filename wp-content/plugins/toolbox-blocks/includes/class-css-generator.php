@@ -129,13 +129,38 @@ class Toolbox_Blocks_CSS_Generator {
 		$props = self::merge_background_image_layers( $props );
 		$parts = array();
 		foreach ( $props as $prop => $value ) {
-			if ( $value === '' || $value === null ) {
+			if ( ! self::is_valid_property_name( $prop ) || ! is_scalar( $value ) ) {
 				continue;
 			}
+			$value = trim( (string) $value );
+			if ( '' === $value || ! self::is_safe_declaration_value( $value ) ) {
+				continue;
+			}
+
 			$css_prop = strtolower( preg_replace( '/([A-Z])/', '-$1', $prop ) );
 			$parts[]  = $css_prop . ':' . $value;
 		}
 		return implode( ';', $parts );
+	}
+
+	/**
+	 * Validate a camelCase CSS property key from block attributes.
+	 *
+	 * @param mixed $prop Property key.
+	 * @return bool
+	 */
+	private static function is_valid_property_name( $prop ) {
+		return is_string( $prop ) && 1 === preg_match( '/^[a-z][a-zA-Z0-9]*$/', $prop );
+	}
+
+	/**
+	 * Reject values that can break out of a declaration, rule, or style tag.
+	 *
+	 * @param string $value CSS declaration value.
+	 * @return bool
+	 */
+	private static function is_safe_declaration_value( $value ) {
+		return 0 === preg_match( '/[;{}<>]/', $value );
 	}
 
 	/**
