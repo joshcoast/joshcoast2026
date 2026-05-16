@@ -93,8 +93,8 @@ class Toolbox_Blocks_CSS_Generator {
 	 * @return array
 	 */
 	private static function merge_background_image_layers( array $props ) {
-		$bg  = isset( $props['background'] ) ? trim( (string) $props['background'] ) : '';
-		$img = isset( $props['backgroundImage'] ) ? trim( (string) $props['backgroundImage'] ) : '';
+		$bg  = isset( $props['background'] ) && is_scalar( $props['background'] ) ? trim( (string) $props['background'] ) : '';
+		$img = isset( $props['backgroundImage'] ) && is_scalar( $props['backgroundImage'] ) ? trim( (string) $props['backgroundImage'] ) : '';
 		if ( '' === $bg || '' === $img ) {
 			return $props;
 		}
@@ -132,10 +132,58 @@ class Toolbox_Blocks_CSS_Generator {
 			if ( $value === '' || $value === null ) {
 				continue;
 			}
-			$css_prop = strtolower( preg_replace( '/([A-Z])/', '-$1', $prop ) );
-			$parts[]  = $css_prop . ':' . $value;
+			$css_prop  = self::sanitize_property_name( $prop );
+			$css_value = self::sanitize_property_value( $value );
+			if ( '' === $css_prop || '' === $css_value ) {
+				continue;
+			}
+			$parts[] = $css_prop . ':' . $css_value;
 		}
 		return implode( ';', $parts );
+	}
+
+	/**
+	 * Sanitize a camelCase CSS property name from block attributes.
+	 *
+	 * @param mixed $prop Raw property name.
+	 * @return string
+	 */
+	private static function sanitize_property_name( $prop ) {
+		if ( ! is_scalar( $prop ) ) {
+			return '';
+		}
+
+		$css_prop = strtolower( preg_replace( '/([A-Z])/', '-$1', (string) $prop ) );
+		$css_prop = trim( $css_prop );
+
+		if ( ! preg_match( '/^(?:-?[a-z][a-z0-9-]*|--[a-z0-9-]+)$/', $css_prop ) ) {
+			return '';
+		}
+
+		return $css_prop;
+	}
+
+	/**
+	 * Sanitize a CSS value before inserting it into a raw <style> tag.
+	 *
+	 * @param mixed $value Raw property value.
+	 * @return string
+	 */
+	private static function sanitize_property_value( $value ) {
+		if ( ! is_scalar( $value ) ) {
+			return '';
+		}
+
+		$value = trim( preg_replace( '/[\x00-\x1F\x7F]/', '', (string) $value ) );
+		if ( '' === $value ) {
+			return '';
+		}
+
+		if ( preg_match( '/[<>{};]/', $value ) ) {
+			return '';
+		}
+
+		return $value;
 	}
 
 	/**
