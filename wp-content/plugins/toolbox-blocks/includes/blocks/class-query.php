@@ -53,15 +53,7 @@ class Toolbox_Block_Query extends Toolbox_Block_Base {
 		while ( $the_query->have_posts() ) {
 			$the_query->the_post();
 
-			// Render inner blocks with the current post context.
-			$block_content = ( new WP_Block(
-				$block->parsed_block,
-				array(
-					'postId'   => get_the_ID(),
-					'postType' => $post_type,
-				)
-			) )->render();
-			$loop_html    .= $block_content;
+			$loop_html .= self::render_inner_blocks_for_current_post( $block, get_the_ID(), $post_type );
 		}
 		wp_reset_postdata();
 
@@ -72,5 +64,38 @@ class Toolbox_Block_Query extends Toolbox_Block_Base {
 			$meta['anchor'],
 			$loop_html
 		);
+	}
+
+	/**
+	 * Render the query template for the current post without re-entering this dynamic block.
+	 *
+	 * @param WP_Block $block     Parent query block.
+	 * @param int      $post_id   Current post ID.
+	 * @param string   $post_type Current post type.
+	 * @return string
+	 */
+	protected static function render_inner_blocks_for_current_post( $block, $post_id, $post_type ) {
+		if ( empty( $block->inner_blocks ) || ! is_array( $block->inner_blocks ) ) {
+			return '';
+		}
+
+		$context = array(
+			'postId'   => $post_id,
+			'postType' => $post_type,
+		);
+		if ( isset( $block->context ) && is_array( $block->context ) ) {
+			$context = array_merge( $block->context, $context );
+		}
+
+		$html = '';
+		foreach ( $block->inner_blocks as $inner_block ) {
+			if ( ! $inner_block instanceof WP_Block ) {
+				continue;
+			}
+
+			$html .= ( new WP_Block( $inner_block->parsed_block, $context ) )->render();
+		}
+
+		return $html;
 	}
 }

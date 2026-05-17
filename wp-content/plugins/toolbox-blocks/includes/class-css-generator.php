@@ -129,13 +129,52 @@ class Toolbox_Blocks_CSS_Generator {
 		$props = self::merge_background_image_layers( $props );
 		$parts = array();
 		foreach ( $props as $prop => $value ) {
-			if ( $value === '' || $value === null ) {
+			$css_prop  = self::sanitize_property_name( $prop );
+			$css_value = self::sanitize_property_value( $value );
+			if ( '' === $css_prop || null === $css_value ) {
 				continue;
 			}
-			$css_prop = strtolower( preg_replace( '/([A-Z])/', '-$1', $prop ) );
-			$parts[]  = $css_prop . ':' . $value;
+			$parts[] = $css_prop . ':' . $css_value;
 		}
 		return implode( ';', $parts );
+	}
+
+	/**
+	 * Convert a camelCase property to a safe CSS property name.
+	 *
+	 * @param mixed $prop Raw property name.
+	 * @return string Empty string when invalid.
+	 */
+	private static function sanitize_property_name( $prop ) {
+		if ( ! is_scalar( $prop ) ) {
+			return '';
+		}
+
+		$css_prop = strtolower( preg_replace( '/([A-Z])/', '-$1', (string) $prop ) );
+		return preg_match( '/^(?:--[a-z0-9-]+|-?[a-z][a-z0-9-]*)$/', $css_prop ) ? $css_prop : '';
+	}
+
+	/**
+	 * Sanitize a CSS property value for use inside an inline <style> tag.
+	 *
+	 * @param mixed $value Raw CSS value.
+	 * @return string|null Null when invalid or empty.
+	 */
+	private static function sanitize_property_value( $value ) {
+		if ( ! is_scalar( $value ) ) {
+			return null;
+		}
+
+		$value = trim( (string) $value );
+		if ( '' === $value ) {
+			return null;
+		}
+
+		if ( preg_match( '/[;<>{}\x00-\x1F\x7F]/', $value ) ) {
+			return null;
+		}
+
+		return $value;
 	}
 
 	/**
