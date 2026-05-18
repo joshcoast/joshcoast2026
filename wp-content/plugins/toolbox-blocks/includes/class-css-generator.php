@@ -93,8 +93,8 @@ class Toolbox_Blocks_CSS_Generator {
 	 * @return array
 	 */
 	private static function merge_background_image_layers( array $props ) {
-		$bg  = isset( $props['background'] ) ? trim( (string) $props['background'] ) : '';
-		$img = isset( $props['backgroundImage'] ) ? trim( (string) $props['backgroundImage'] ) : '';
+		$bg  = isset( $props['background'] ) && is_scalar( $props['background'] ) ? trim( (string) $props['background'] ) : '';
+		$img = isset( $props['backgroundImage'] ) && is_scalar( $props['backgroundImage'] ) ? trim( (string) $props['backgroundImage'] ) : '';
 		if ( '' === $bg || '' === $img ) {
 			return $props;
 		}
@@ -129,13 +129,56 @@ class Toolbox_Blocks_CSS_Generator {
 		$props = self::merge_background_image_layers( $props );
 		$parts = array();
 		foreach ( $props as $prop => $value ) {
-			if ( $value === '' || $value === null ) {
+			$css_prop = self::sanitize_property_name( $prop );
+			$value    = self::sanitize_property_value( $value );
+			if ( '' === $css_prop || null === $value ) {
 				continue;
 			}
-			$css_prop = strtolower( preg_replace( '/([A-Z])/', '-$1', $prop ) );
 			$parts[]  = $css_prop . ':' . $value;
 		}
 		return implode( ';', $parts );
+	}
+
+	/**
+	 * Convert a camelCase CSS property to a safe kebab-case property name.
+	 *
+	 * @param mixed $prop Raw property name.
+	 * @return string Empty string when invalid.
+	 */
+	protected static function sanitize_property_name( $prop ) {
+		if ( ! is_scalar( $prop ) ) {
+			return '';
+		}
+
+		$css_prop = strtolower( preg_replace( '/([A-Z])/', '-$1', (string) $prop ) );
+		return preg_match( '/^[a-z][a-z0-9-]*$/', $css_prop ) ? $css_prop : '';
+	}
+
+	/**
+	 * Sanitize a CSS declaration value before it is embedded in a <style> tag.
+	 *
+	 * @param mixed $value Raw property value.
+	 * @return string|null Sanitized value, or null when invalid.
+	 */
+	protected static function sanitize_property_value( $value ) {
+		if ( ! is_scalar( $value ) ) {
+			return null;
+		}
+
+		$value = trim( (string) $value );
+		if ( '' === $value ) {
+			return null;
+		}
+
+		if ( preg_match( '/[<>{}]/', $value ) ) {
+			return null;
+		}
+
+		if ( preg_match( '/url\s*\(\s*[\'"]?\s*javascript\s*:/i', $value ) ) {
+			return null;
+		}
+
+		return $value;
 	}
 
 	/**
