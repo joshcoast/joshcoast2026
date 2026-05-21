@@ -132,10 +132,55 @@ class Toolbox_Blocks_CSS_Generator {
 			if ( $value === '' || $value === null ) {
 				continue;
 			}
-			$css_prop = strtolower( preg_replace( '/([A-Z])/', '-$1', $prop ) );
-			$parts[]  = $css_prop . ':' . $value;
+			$css_prop  = self::sanitize_property_name( $prop );
+			$css_value = self::sanitize_property_value( $value );
+			if ( '' === $css_prop || '' === $css_value ) {
+				continue;
+			}
+			$parts[] = $css_prop . ':' . $css_value;
 		}
 		return implode( ';', $parts );
+	}
+
+	/**
+	 * Convert and validate a style property name before emitting CSS.
+	 *
+	 * @param string $prop CamelCase CSS property name.
+	 * @return string Empty string when unsafe.
+	 */
+	private static function sanitize_property_name( $prop ) {
+		$css_prop = strtolower( preg_replace( '/([A-Z])/', '-$1', (string) $prop ) );
+		$css_prop = trim( $css_prop );
+
+		return preg_match( '/^[a-z][a-z0-9-]*$/', $css_prop ) ? $css_prop : '';
+	}
+
+	/**
+	 * Validate a CSS value so block attributes cannot break out of a declaration
+	 * or the surrounding inline <style> tag.
+	 *
+	 * @param mixed $value CSS property value.
+	 * @return string Empty string when unsafe.
+	 */
+	private static function sanitize_property_value( $value ) {
+		if ( is_array( $value ) || is_object( $value ) ) {
+			return '';
+		}
+
+		$value = trim( (string) $value );
+		if ( '' === $value || strlen( $value ) > 1000 ) {
+			return '';
+		}
+
+		if ( preg_match( '/[\x00-\x1F\x7F<>{};]/', $value ) ) {
+			return '';
+		}
+
+		if ( preg_match( '/(?:expression\s*\(|javascript\s*:|vbscript\s*:|data\s*:\s*text\/html)/i', $value ) ) {
+			return '';
+		}
+
+		return $value;
 	}
 
 	/**
