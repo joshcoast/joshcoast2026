@@ -129,13 +129,42 @@ class Toolbox_Blocks_CSS_Generator {
 		$props = self::merge_background_image_layers( $props );
 		$parts = array();
 		foreach ( $props as $prop => $value ) {
-			if ( $value === '' || $value === null ) {
+			$declaration = self::sanitize_declaration( $prop, $value );
+			if ( '' === $declaration ) {
 				continue;
 			}
-			$css_prop = strtolower( preg_replace( '/([A-Z])/', '-$1', $prop ) );
-			$parts[]  = $css_prop . ':' . $value;
+			$parts[] = $declaration;
 		}
 		return implode( ';', $parts );
+	}
+
+	/**
+	 * Sanitize one CSS declaration before it is emitted in a <style> tag.
+	 *
+	 * @param string $prop  CamelCase CSS property.
+	 * @param mixed  $value CSS value.
+	 * @return string Safe `property:value` declaration, or empty string.
+	 */
+	private static function sanitize_declaration( $prop, $value ) {
+		if ( is_array( $value ) || is_object( $value ) || null === $value ) {
+			return '';
+		}
+
+		$value = trim( (string) $value );
+		if ( '' === $value ) {
+			return '';
+		}
+
+		$css_prop = strtolower( preg_replace( '/([A-Z])/', '-$1', (string) $prop ) );
+		if ( ! preg_match( '/^(?:-?[a-z][a-z0-9-]*|--[a-z0-9_-]+)$/i', $css_prop ) ) {
+			return '';
+		}
+
+		if ( preg_match( '/[<>{}]/', $value ) || preg_match( '/(?:expression\s*\(|javascript\s*:)/i', $value ) ) {
+			return '';
+		}
+
+		return $css_prop . ':' . $value;
 	}
 
 	/**

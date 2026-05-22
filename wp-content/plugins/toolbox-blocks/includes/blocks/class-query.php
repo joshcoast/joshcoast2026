@@ -50,18 +50,22 @@ class Toolbox_Block_Query extends Toolbox_Block_Base {
 		}
 
 		$loop_html = '';
+		$template_blocks = isset( $block->parsed_block['innerBlocks'] ) && is_array( $block->parsed_block['innerBlocks'] )
+			? $block->parsed_block['innerBlocks']
+			: array();
+
 		while ( $the_query->have_posts() ) {
 			$the_query->the_post();
+			$post_id   = get_the_ID();
+			$post_type = get_post_type( $post_id ) ?: $post_type;
+			$context   = array(
+				'postId'   => $post_id,
+				'postType' => $post_type,
+			);
 
-			// Render inner blocks with the current post context.
-			$block_content = ( new WP_Block(
-				$block->parsed_block,
-				array(
-					'postId'   => get_the_ID(),
-					'postType' => $post_type,
-				)
-			) )->render();
-			$loop_html    .= $block_content;
+			foreach ( $template_blocks as $template_block ) {
+				$loop_html .= ( new WP_Block( $template_block, $context ) )->render();
+			}
 		}
 		wp_reset_postdata();
 
