@@ -133,9 +133,42 @@ class Toolbox_Blocks_CSS_Generator {
 				continue;
 			}
 			$css_prop = strtolower( preg_replace( '/([A-Z])/', '-$1', $prop ) );
+			$value    = (string) $value;
+			if ( ! self::is_safe_css_property( $css_prop ) || ! self::is_safe_css_value( $value ) ) {
+				continue;
+			}
 			$parts[]  = $css_prop . ':' . $value;
 		}
 		return implode( ';', $parts );
+	}
+
+	/**
+	 * Validate a generated CSS property name before emitting it in a rule.
+	 *
+	 * @param string $property Kebab-case CSS property name.
+	 * @return bool
+	 */
+	private static function is_safe_css_property( $property ) {
+		return 1 === preg_match( '/^(?:--[a-z0-9-]+|-?[a-z][a-z0-9-]*)$/', $property );
+	}
+
+	/**
+	 * Validate a CSS declaration value before placing it inside an inline style tag.
+	 *
+	 * Block style values are persisted attributes, so reject characters that can
+	 * terminate the declaration, rule, or raw-text <style> element.
+	 *
+	 * @param string $value CSS declaration value.
+	 * @return bool
+	 */
+	private static function is_safe_css_value( $value ) {
+		if ( preg_match( '/[<>{};]/', $value ) ) {
+			return false;
+		}
+		if ( preg_match( '/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', $value ) ) {
+			return false;
+		}
+		return true;
 	}
 
 	/**
