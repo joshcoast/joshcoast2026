@@ -132,10 +132,51 @@ class Toolbox_Blocks_CSS_Generator {
 			if ( $value === '' || $value === null ) {
 				continue;
 			}
-			$css_prop = strtolower( preg_replace( '/([A-Z])/', '-$1', $prop ) );
-			$parts[]  = $css_prop . ':' . $value;
+			$css_prop  = self::sanitize_property_name( $prop );
+			$css_value = self::sanitize_declaration_value( $value );
+			if ( '' === $css_prop || '' === $css_value ) {
+				continue;
+			}
+			$parts[] = $css_prop . ':' . $css_value;
 		}
 		return implode( ';', $parts );
+	}
+
+	/**
+	 * Convert and validate a camelCase style property before placing it in a style rule.
+	 *
+	 * @param mixed $prop Style property name.
+	 * @return string Safe kebab-case property name, or empty string.
+	 */
+	private static function sanitize_property_name( $prop ) {
+		$css_prop = strtolower( preg_replace( '/([A-Z])/', '-$1', (string) $prop ) );
+		return preg_match( '/^(?:-?[a-z][a-z0-9-]*|--[a-z0-9-]+)$/', $css_prop )
+			? $css_prop
+			: '';
+	}
+
+	/**
+	 * Validate a CSS value before placing it in an inline <style> tag.
+	 *
+	 * @param mixed $value Style value.
+	 * @return string Safe declaration value, or empty string.
+	 */
+	private static function sanitize_declaration_value( $value ) {
+		if ( is_array( $value ) || is_object( $value ) ) {
+			return '';
+		}
+
+		$css_value = trim( (string) $value );
+		if ( '' === $css_value ) {
+			return '';
+		}
+
+		// Prevent tag, declaration, and rule breakouts from persisted block attributes.
+		if ( preg_match( '/[<>{};]/', $css_value ) || preg_match( '/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', $css_value ) ) {
+			return '';
+		}
+
+		return $css_value;
 	}
 
 	/**

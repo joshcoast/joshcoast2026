@@ -20,6 +20,20 @@ function camelToKebab( str ) {
 	return str.replace( /([A-Z])/g, ( m ) => '-' + m.toLowerCase() );
 }
 
+/** Validate a CSS property name before it is interpolated into a rule. */
+function safePropertyName( prop ) {
+	const cssProp = camelToKebab( String( prop ) ).toLowerCase();
+	return /^(?:-?[a-z][a-z0-9-]*|--[a-z0-9-]+)$/.test( cssProp ) ? cssProp : '';
+}
+
+/** Reject values that can break out of a declaration, rule, or style tag. */
+function safeDeclarationValue( value ) {
+	if ( Array.isArray( value ) || ( value && typeof value === 'object' ) ) return '';
+	const cssValue = String( value ).trim();
+	if ( ! cssValue ) return '';
+	return /[<>{};\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/.test( cssValue ) ? '' : cssValue;
+}
+
 /**
  * True when `background` holds only a gradient image (comma-free shorthand not supported here).
  *
@@ -63,7 +77,12 @@ export function objectToDeclarations( obj ) {
 	const merged = omitUndefined( mergeBackgroundImageLayers( { ...obj } ) );
 	return Object.entries( merged )
 		.filter( ( [ , v ] ) => v !== '' && v !== null && v !== undefined )
-		.map( ( [ prop, value ] ) => `${ camelToKebab( prop ) }:${ value }` )
+		.map( ( [ prop, value ] ) => {
+			const safeProp = safePropertyName( prop );
+			const safeValue = safeDeclarationValue( value );
+			return safeProp && safeValue ? `${ safeProp }:${ safeValue }` : '';
+		} )
+		.filter( Boolean )
 		.join( ';' );
 }
 

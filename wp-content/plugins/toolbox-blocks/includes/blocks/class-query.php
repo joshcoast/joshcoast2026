@@ -54,14 +54,13 @@ class Toolbox_Block_Query extends Toolbox_Block_Base {
 			$the_query->the_post();
 
 			// Render inner blocks with the current post context.
-			$block_content = ( new WP_Block(
-				$block->parsed_block,
-				array(
-					'postId'   => get_the_ID(),
-					'postType' => $post_type,
-				)
-			) )->render();
-			$loop_html    .= $block_content;
+			$post_context = array(
+				'postId'   => get_the_ID(),
+				'postType' => get_post_type(),
+			);
+			foreach ( $block->parsed_block['innerBlocks'] ?? array() as $inner_block ) {
+				$loop_html .= ( new WP_Block( $inner_block, $post_context ) )->render();
+			}
 		}
 		wp_reset_postdata();
 
