@@ -20,6 +20,20 @@ function camelToKebab( str ) {
 	return str.replace( /([A-Z])/g, ( m ) => '-' + m.toLowerCase() );
 }
 
+const UNSAFE_DECLARATION_VALUE = /[<>{};\u0000-\u001F\u007F]/;
+
+function sanitizePropertyName( prop ) {
+	const cssProp = camelToKebab( String( prop ) ).toLowerCase();
+	return /^-?[a-z][a-z0-9-]*$/.test( cssProp ) ? cssProp : '';
+}
+
+function sanitizeDeclarationValue( value ) {
+	if ( ! [ 'string', 'number' ].includes( typeof value ) ) return '';
+	const cssValue = String( value ).trim();
+	if ( ! cssValue || UNSAFE_DECLARATION_VALUE.test( cssValue ) ) return '';
+	return cssValue;
+}
+
 /**
  * True when `background` holds only a gradient image (comma-free shorthand not supported here).
  *
@@ -62,8 +76,12 @@ export function objectToDeclarations( obj ) {
 	if ( ! obj || typeof obj !== 'object' ) return '';
 	const merged = omitUndefined( mergeBackgroundImageLayers( { ...obj } ) );
 	return Object.entries( merged )
-		.filter( ( [ , v ] ) => v !== '' && v !== null && v !== undefined )
-		.map( ( [ prop, value ] ) => `${ camelToKebab( prop ) }:${ value }` )
+		.map( ( [ prop, value ] ) => {
+			const cssProp = sanitizePropertyName( prop );
+			const cssValue = sanitizeDeclarationValue( value );
+			return cssProp && cssValue ? `${ cssProp }:${ cssValue }` : '';
+		} )
+		.filter( Boolean )
 		.join( ';' );
 }
 

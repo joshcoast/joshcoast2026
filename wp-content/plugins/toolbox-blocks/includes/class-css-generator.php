@@ -129,13 +129,45 @@ class Toolbox_Blocks_CSS_Generator {
 		$props = self::merge_background_image_layers( $props );
 		$parts = array();
 		foreach ( $props as $prop => $value ) {
-			if ( $value === '' || $value === null ) {
+			$css_prop  = self::sanitize_property_name( $prop );
+			$css_value = self::sanitize_declaration_value( $value );
+			if ( '' === $css_prop || '' === $css_value ) {
 				continue;
 			}
-			$css_prop = strtolower( preg_replace( '/([A-Z])/', '-$1', $prop ) );
-			$parts[]  = $css_prop . ':' . $value;
+			$parts[] = $css_prop . ':' . $css_value;
 		}
 		return implode( ';', $parts );
+	}
+
+	/**
+	 * Convert and validate a style property name.
+	 *
+	 * @param mixed $prop Style property name.
+	 * @return string Safe kebab-case property name, or empty string.
+	 */
+	private static function sanitize_property_name( $prop ) {
+		if ( ! is_scalar( $prop ) ) {
+			return '';
+		}
+		$css_prop = strtolower( preg_replace( '/([A-Z])/', '-$1', (string) $prop ) );
+		return preg_match( '/^-?[a-z][a-z0-9-]*$/', $css_prop ) ? $css_prop : '';
+	}
+
+	/**
+	 * Validate a declaration value before placing it in a <style> tag.
+	 *
+	 * @param mixed $value Style value.
+	 * @return string Safe value, or empty string.
+	 */
+	private static function sanitize_declaration_value( $value ) {
+		if ( ! is_scalar( $value ) ) {
+			return '';
+		}
+		$css_value = trim( (string) $value );
+		if ( '' === $css_value ) {
+			return '';
+		}
+		return preg_match( '/[<>{};\x00-\x1F\x7F]/', $css_value ) ? '' : $css_value;
 	}
 
 	/**
