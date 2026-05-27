@@ -21,6 +21,101 @@ class Toolbox_Blocks_CSS_Generator {
 
 	const TABLET_BREAKPOINT = 1024;
 	const MOBILE_BREAKPOINT = 767;
+	const ALLOWED_PROPERTIES = array(
+		'align-items',
+		'backdrop-filter',
+		'background',
+		'background-attachment',
+		'background-blend-mode',
+		'background-color',
+		'background-image',
+		'background-position',
+		'background-repeat',
+		'background-size',
+		'border-bottom-color',
+		'border-bottom-left-radius',
+		'border-bottom-right-radius',
+		'border-bottom-style',
+		'border-bottom-width',
+		'border-color',
+		'border-left-color',
+		'border-left-style',
+		'border-left-width',
+		'border-radius',
+		'border-right-color',
+		'border-right-style',
+		'border-right-width',
+		'border-style',
+		'border-top-color',
+		'border-top-left-radius',
+		'border-top-right-radius',
+		'border-top-style',
+		'border-top-width',
+		'border-width',
+		'bottom',
+		'box-shadow',
+		'color',
+		'column-gap',
+		'cursor',
+		'display',
+		'fill',
+		'filter',
+		'flex-direction',
+		'flex-wrap',
+		'float',
+		'font-family',
+		'font-size',
+		'font-style',
+		'font-weight',
+		'gap',
+		'height',
+		'justify-content',
+		'left',
+		'letter-spacing',
+		'line-height',
+		'list-style-position',
+		'list-style-type',
+		'margin',
+		'margin-bottom',
+		'margin-left',
+		'margin-right',
+		'margin-top',
+		'max-height',
+		'max-width',
+		'min-height',
+		'min-width',
+		'mix-blend-mode',
+		'object-fit',
+		'object-position',
+		'opacity',
+		'outline-color',
+		'outline-offset',
+		'outline-style',
+		'outline-width',
+		'overflow-x',
+		'overflow-y',
+		'padding',
+		'padding-bottom',
+		'padding-left',
+		'padding-right',
+		'padding-top',
+		'pointer-events',
+		'position',
+		'right',
+		'row-gap',
+		'stroke',
+		'stroke-width',
+		'text-align',
+		'text-decoration',
+		'text-transform',
+		'top',
+		'transform',
+		'transition',
+		'white-space',
+		'width',
+		'word-break',
+		'z-index',
+	);
 
 	/**
 	 * Generate full CSS for a block.
@@ -132,10 +227,65 @@ class Toolbox_Blocks_CSS_Generator {
 			if ( $value === '' || $value === null ) {
 				continue;
 			}
-			$css_prop = strtolower( preg_replace( '/([A-Z])/', '-$1', $prop ) );
-			$parts[]  = $css_prop . ':' . $value;
+			$css_prop = self::css_property_name( $prop );
+			if ( ! $css_prop ) {
+				continue;
+			}
+			$value = self::css_declaration_value( $value );
+			if ( null === $value ) {
+				continue;
+			}
+			$parts[] = $css_prop . ':' . $value;
 		}
 		return implode( ';', $parts );
+	}
+
+	/**
+	 * Convert a stored style key to a safe CSS property name.
+	 *
+	 * @param mixed $prop Stored property key.
+	 * @return string Empty string when unsupported.
+	 */
+	private static function css_property_name( $prop ) {
+		$css_prop = strtolower( preg_replace( '/([A-Z])/', '-$1', (string) $prop ) );
+		$css_prop = trim( $css_prop );
+		if ( ! preg_match( '/^[a-z][a-z0-9-]*$/', $css_prop ) ) {
+			return '';
+		}
+		return in_array( $css_prop, self::ALLOWED_PROPERTIES, true ) ? $css_prop : '';
+	}
+
+	/**
+	 * Sanitize a CSS declaration value for inline <style> output.
+	 *
+	 * Values that can terminate declarations/rules or break out of the style tag
+	 * are dropped instead of escaped so stored block attributes cannot inject CSS
+	 * rules or HTML.
+	 *
+	 * @param mixed $value Stored CSS declaration value.
+	 * @return string|null Safe value, or null when unsafe.
+	 */
+	private static function css_declaration_value( $value ) {
+		if ( is_array( $value ) || is_object( $value ) ) {
+			return null;
+		}
+		$value = trim( (string) $value );
+		if ( '' === $value ) {
+			return null;
+		}
+		if ( preg_match( '/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', $value ) ) {
+			return null;
+		}
+		if ( preg_match( '/[{};<>]/', $value ) ) {
+			return null;
+		}
+		if ( preg_match( '#/\*|\*/#', $value ) ) {
+			return null;
+		}
+		if ( preg_match( '/(?:@import|expression\s*\(|javascript\s*:|data\s*:)/i', $value ) ) {
+			return null;
+		}
+		return $value;
 	}
 
 	/**

@@ -15,7 +15,7 @@ class Toolbox_Block_Query extends Toolbox_Block_Base {
 
 	public static function render( $attributes, $content, $block ) {
 		$meta            = self::block_meta( $attributes, 'tb-query' );
-		$post_type       = sanitize_key( $attributes['postType'] ?? 'post' );
+		$post_type       = self::viewable_post_type( $attributes['postType'] ?? 'post' );
 		$per_page        = absint( $attributes['postsPerPage'] ?? 10 );
 		$per_page        = min( 100, max( 1, $per_page ) );
 		$order_raw       = strtoupper( (string) ( $attributes['order'] ?? 'DESC' ) );
@@ -50,18 +50,25 @@ class Toolbox_Block_Query extends Toolbox_Block_Base {
 		}
 
 		$loop_html = '';
+		$inner_blocks = is_array( $block->parsed_block['innerBlocks'] ?? null )
+			? $block->parsed_block['innerBlocks']
+			: array();
+		$base_context = is_array( $block->context ?? null ) ? $block->context : array();
+
 		while ( $the_query->have_posts() ) {
 			$the_query->the_post();
 
-			// Render inner blocks with the current post context.
-			$block_content = ( new WP_Block(
-				$block->parsed_block,
+			// Render only the template children; rendering this Query block again recurses.
+			$post_context = array_merge(
+				$base_context,
 				array(
 					'postId'   => get_the_ID(),
 					'postType' => $post_type,
 				)
-			) )->render();
-			$loop_html    .= $block_content;
+			);
+			foreach ( $inner_blocks as $inner_block ) {
+				$loop_html .= ( new WP_Block( $inner_block, $post_context ) )->render();
+			}
 		}
 		wp_reset_postdata();
 
@@ -72,5 +79,31 @@ class Toolbox_Block_Query extends Toolbox_Block_Base {
 			$meta['anchor'],
 			$loop_html
 		);
+	}
+
+	/**
+	 * Match the editor's viewable post type restrictions on the server.
+	 *
+	 * @param string $post_type Raw post type attribute.
+	 * @return string Safe post type slug.
+	 */
+	private static function viewable_post_type( $post_type ) {
+		$post_type = sanitize_key( $post_type );
+		if ( ! $post_type || 'attachment' === $post_type ) {
+			return 'post';
+		}
+
+		$post_type_object = get_post_type_object( $post_type );
+		if ( ! $post_type_object ) {
+			return 'post';
+		}
+
+		if ( function_exists( 'is_post_type_viewable' ) ) {
+			return is_post_type_viewable( $post_type_object ) ? $post_type : 'post';
+		}
+
+		return ! empty( $post_type_object->publicly_queryable ) || ! empty( $post_type_object->public )
+			? $post_type
+			: 'post';
 	}
 }
