@@ -129,13 +129,60 @@ class Toolbox_Blocks_CSS_Generator {
 		$props = self::merge_background_image_layers( $props );
 		$parts = array();
 		foreach ( $props as $prop => $value ) {
-			if ( $value === '' || $value === null ) {
+			$css_prop = self::css_property_name( $prop );
+			$value    = self::sanitize_declaration_value( $value );
+			if ( '' === $css_prop || '' === $value ) {
 				continue;
 			}
-			$css_prop = strtolower( preg_replace( '/([A-Z])/', '-$1', $prop ) );
 			$parts[]  = $css_prop . ':' . $value;
 		}
 		return implode( ';', $parts );
+	}
+
+	/**
+	 * Convert a camelCase attribute key to a safe kebab-case CSS property.
+	 *
+	 * @param mixed $prop Style property key.
+	 * @return string Empty string when unsafe.
+	 */
+	private static function css_property_name( $prop ) {
+		if ( ! is_string( $prop ) && ! is_numeric( $prop ) ) {
+			return '';
+		}
+
+		$css_prop = strtolower( preg_replace( '/([A-Z])/', '-$1', (string) $prop ) );
+		return preg_match( '/^[a-z][a-z0-9-]*$/', $css_prop ) ? $css_prop : '';
+	}
+
+	/**
+	 * Sanitize a CSS declaration value before placing it inside a style tag.
+	 *
+	 * @param mixed $value Style value.
+	 * @return string Empty string when unsafe.
+	 */
+	private static function sanitize_declaration_value( $value ) {
+		if ( is_bool( $value ) || is_array( $value ) || is_object( $value ) ) {
+			return '';
+		}
+
+		$value = trim( (string) $value );
+		if ( '' === $value ) {
+			return '';
+		}
+
+		if ( preg_match( '/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', $value ) ) {
+			return '';
+		}
+
+		if ( preg_match( '/[<>{};]/', $value ) ) {
+			return '';
+		}
+
+		if ( preg_match( '/(?:expression\s*\(|url\s*\(\s*[\'"]?\s*javascript\s*:)/i', $value ) ) {
+			return '';
+		}
+
+		return wp_strip_all_tags( $value );
 	}
 
 	/**

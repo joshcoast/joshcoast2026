@@ -13,6 +13,26 @@ class Toolbox_Block_Query extends Toolbox_Block_Base {
 
 	const BLOCK_NAME = 'toolbox-blocks/query';
 
+	/**
+	 * Register this block type.
+	 */
+	public static function register() {
+		register_block_type( static::BLOCK_NAME, array(
+			'title'             => __( 'Query', 'toolbox-blocks' ),
+			'category'          => 'toolbox-blocks',
+			'keywords'          => array( 'toolbox', 'toolboxblocks', 'query' ),
+			'editor_script'     => 'toolbox-blocks-editor',
+			'editor_style'      => 'toolbox-blocks-editor',
+			'supports'          => array(
+				'anchor'          => true,
+				'customClassName' => true,
+			),
+			'api_version'       => 3,
+			'skip_inner_blocks' => true,
+			'render_callback'   => array( static::class, 'render' ),
+		) );
+	}
+
 	public static function render( $attributes, $content, $block ) {
 		$meta            = self::block_meta( $attributes, 'tb-query' );
 		$post_type       = sanitize_key( $attributes['postType'] ?? 'post' );
@@ -53,15 +73,17 @@ class Toolbox_Block_Query extends Toolbox_Block_Base {
 		while ( $the_query->have_posts() ) {
 			$the_query->the_post();
 
-			// Render inner blocks with the current post context.
-			$block_content = ( new WP_Block(
-				$block->parsed_block,
+			$context = array_merge(
+				is_array( $block->context ?? null ) ? $block->context : array(),
 				array(
 					'postId'   => get_the_ID(),
-					'postType' => $post_type,
+					'postType' => get_post_type(),
 				)
-			) )->render();
-			$loop_html    .= $block_content;
+			);
+
+			foreach ( $block->parsed_block['innerBlocks'] ?? array() as $inner_block ) {
+				$loop_html .= ( new WP_Block( $inner_block, $context ) )->render();
+			}
 		}
 		wp_reset_postdata();
 
