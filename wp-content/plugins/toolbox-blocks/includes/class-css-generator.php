@@ -132,10 +132,53 @@ class Toolbox_Blocks_CSS_Generator {
 			if ( $value === '' || $value === null ) {
 				continue;
 			}
-			$css_prop = strtolower( preg_replace( '/([A-Z])/', '-$1', $prop ) );
-			$parts[]  = $css_prop . ':' . $value;
+			$css_prop  = self::sanitize_property_name( $prop );
+			$css_value = self::sanitize_property_value( $value );
+			if ( '' === $css_prop || null === $css_value ) {
+				continue;
+			}
+			$parts[] = $css_prop . ':' . $css_value;
 		}
 		return implode( ';', $parts );
+	}
+
+	/**
+	 * Convert a JS-side camelCase property to a safe CSS property name.
+	 *
+	 * @param mixed $prop Style property key.
+	 * @return string
+	 */
+	private static function sanitize_property_name( $prop ) {
+		$prop = (string) $prop;
+		if ( ! preg_match( '/^[A-Za-z][A-Za-z0-9]*$/', $prop ) ) {
+			return '';
+		}
+
+		$css_prop = strtolower( preg_replace( '/([A-Z])/', '-$1', $prop ) );
+		return preg_match( '/^-?[a-z][a-z0-9-]*$/', $css_prop ) ? $css_prop : '';
+	}
+
+	/**
+	 * Sanitize a CSS value for inline <style> output.
+	 *
+	 * @param mixed $value Style property value.
+	 * @return string|null
+	 */
+	private static function sanitize_property_value( $value ) {
+		if ( ! is_scalar( $value ) ) {
+			return null;
+		}
+
+		$value = trim( (string) $value );
+		if ( '' === $value ) {
+			return null;
+		}
+
+		if ( preg_match( '/[<>{};]|\/\*|\*\//', $value ) ) {
+			return null;
+		}
+
+		return $value;
 	}
 
 	/**

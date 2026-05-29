@@ -49,19 +49,24 @@ class Toolbox_Block_Query extends Toolbox_Block_Base {
 			);
 		}
 
+		$inner_blocks = $block->parsed_block['innerBlocks'] ?? array();
 		$loop_html = '';
 		while ( $the_query->have_posts() ) {
 			$the_query->the_post();
 
-			// Render inner blocks with the current post context.
-			$block_content = ( new WP_Block(
-				$block->parsed_block,
-				array(
-					'postId'   => get_the_ID(),
-					'postType' => $post_type,
-				)
-			) )->render();
-			$loop_html    .= $block_content;
+			// Render only the query template blocks; rendering the query block itself recurses.
+			foreach ( $inner_blocks as $inner_block ) {
+				if ( ! is_array( $inner_block ) ) {
+					continue;
+				}
+				$loop_html .= ( new WP_Block(
+					$inner_block,
+					array(
+						'postId'   => get_the_ID(),
+						'postType' => $post_type,
+					)
+				) )->render();
+			}
 		}
 		wp_reset_postdata();
 
