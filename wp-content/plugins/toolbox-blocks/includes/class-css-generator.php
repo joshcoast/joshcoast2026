@@ -133,9 +133,53 @@ class Toolbox_Blocks_CSS_Generator {
 				continue;
 			}
 			$css_prop = strtolower( preg_replace( '/([A-Z])/', '-$1', $prop ) );
-			$parts[]  = $css_prop . ':' . $value;
+			if ( ! self::is_safe_property( $css_prop ) || ! self::is_safe_value( $value ) ) {
+				continue;
+			}
+			$parts[] = $css_prop . ':' . trim( (string) $value );
 		}
 		return implode( ';', $parts );
+	}
+
+	/**
+	 * Verify a generated CSS property cannot break out of its declaration.
+	 *
+	 * @param string $property Kebab-case CSS property.
+	 * @return bool
+	 */
+	private static function is_safe_property( $property ) {
+		return is_string( $property ) && 1 === preg_match( '/^-?[a-z][a-z0-9-]*$/', $property );
+	}
+
+	/**
+	 * Verify a CSS value cannot break out of the style tag/rule/declaration.
+	 *
+	 * @param mixed $value CSS declaration value.
+	 * @return bool
+	 */
+	private static function is_safe_value( $value ) {
+		if ( ! is_scalar( $value ) ) {
+			return false;
+		}
+
+		$value = trim( (string) $value );
+		if ( '' === $value ) {
+			return false;
+		}
+
+		if ( preg_match( '/[<>{};]/', $value ) ) {
+			return false;
+		}
+
+		if ( preg_match( '#/\*|\*/#', $value ) ) {
+			return false;
+		}
+
+		if ( preg_match( '/url\s*\(\s*[\'"]?\s*(?:javascript|vbscript|data):/i', $value ) ) {
+			return false;
+		}
+
+		return ! preg_match( '/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', $value );
 	}
 
 	/**
@@ -162,7 +206,8 @@ class Toolbox_Blocks_CSS_Generator {
 	 * @return string Empty string if no CSS.
 	 */
 	public static function style_tag( $unique_id, $styles ) {
-		$css = self::generate( $unique_id, $styles );
+		$unique_id = sanitize_html_class( $unique_id );
+		$css       = self::generate( $unique_id, $styles );
 		if ( ! $css ) {
 			return '';
 		}

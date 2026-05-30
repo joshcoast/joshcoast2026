@@ -53,14 +53,14 @@ class Toolbox_Block_Query extends Toolbox_Block_Base {
 		while ( $the_query->have_posts() ) {
 			$the_query->the_post();
 
-			// Render inner blocks with the current post context.
-			$block_content = ( new WP_Block(
-				$block->parsed_block,
-				array(
-					'postId'   => get_the_ID(),
-					'postType' => $post_type,
-				)
-			) )->render();
+			$context = array(
+				'postId'   => get_the_ID(),
+				'postType' => get_post_type( get_the_ID() ) ?: $post_type,
+			);
+
+			// Render the template children only. Rendering this query block again
+			// would recursively invoke this render callback for every result.
+			$block_content = self::render_inner_blocks( $block->parsed_block, $context );
 			$loop_html    .= $block_content;
 		}
 		wp_reset_postdata();
@@ -72,5 +72,27 @@ class Toolbox_Block_Query extends Toolbox_Block_Base {
 			$meta['anchor'],
 			$loop_html
 		);
+	}
+
+	/**
+	 * Render a parsed block's inner template blocks with the queried post context.
+	 *
+	 * @param array $parsed_block Parsed query block.
+	 * @param array $context      Block context for the current queried post.
+	 * @return string
+	 */
+	private static function render_inner_blocks( $parsed_block, $context ) {
+		$inner_blocks = is_array( $parsed_block['innerBlocks'] ?? null ) ? $parsed_block['innerBlocks'] : array();
+
+		if ( empty( $inner_blocks ) ) {
+			return '';
+		}
+
+		$output = '';
+		foreach ( $inner_blocks as $inner_block ) {
+			$output .= ( new WP_Block( $inner_block, $context ) )->render();
+		}
+
+		return $output;
 	}
 }

@@ -90,4 +90,17 @@ abstract class Toolbox_Block_Base {
 			'anchor'    => $anchor ? ' id="' . esc_attr( $anchor ) . '"' : '',
 		);
 	}
+
+	/**
+	 * Sanitize an HTML tag name against a block-specific allow list.
+	 *
+	 * @param mixed  $raw     Raw tag attribute.
+	 * @param string $default Default tag.
+	 * @param array  $allowed Allowed tag names.
+	 * @return string
+	 */
+	protected static function allowed_tag( $raw, $default, array $allowed ) {
+		$tag = tag_escape( $raw ?: $default );
+		return in_array( $tag, $allowed, true ) ? $tag : $default;
+	}
 }
