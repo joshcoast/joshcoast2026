@@ -133,9 +133,36 @@ class Toolbox_Blocks_CSS_Generator {
 				continue;
 			}
 			$css_prop = strtolower( preg_replace( '/([A-Z])/', '-$1', $prop ) );
-			$parts[]  = $css_prop . ':' . $value;
+			if ( ! self::is_safe_property_name( $css_prop ) || ! self::is_safe_property_value( $value ) ) {
+				continue;
+			}
+			$parts[] = $css_prop . ':' . trim( (string) $value );
 		}
 		return implode( ';', $parts );
+	}
+
+	/**
+	 * Validate generated CSS property names before emitting inline CSS.
+	 *
+	 * @param string $prop CSS property name.
+	 * @return bool
+	 */
+	private static function is_safe_property_name( $prop ) {
+		return 1 === preg_match( '/^(?:-?[a-z][a-z0-9-]*|--[a-z0-9-]+)$/', (string) $prop );
+	}
+
+	/**
+	 * Reject values that can break out of a declaration, rule, or style tag.
+	 *
+	 * @param mixed $value CSS property value.
+	 * @return bool
+	 */
+	private static function is_safe_property_value( $value ) {
+		if ( is_array( $value ) || is_object( $value ) ) {
+			return false;
+		}
+
+		return ! preg_match( '/[<>{};]/', (string) $value );
 	}
 
 	/**

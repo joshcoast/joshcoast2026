@@ -14,7 +14,7 @@ class Toolbox_Block_Text extends Toolbox_Block_Base {
 	const BLOCK_NAME = 'toolbox-blocks/text';
 
 	public static function render( $attributes, $content, $block ) {
-		$tag      = tag_escape( $attributes['tagName'] ?? 'p' );
+		$tag      = self::allowed_tag( $attributes['tagName'] ?? 'p', array( 'p', 'div', 'span', 'li' ), 'p' );
 		$meta     = self::block_meta( $attributes, 'tb-text' );
 		$inner    = wp_kses_post( $attributes['content'] ?? '' );
 

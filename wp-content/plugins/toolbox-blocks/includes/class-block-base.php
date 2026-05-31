@@ -57,6 +57,19 @@ abstract class Toolbox_Block_Base {
 	abstract public static function render( $attributes, $content, $block );
 
 	/**
+	 * Return a safe HTML tag from a block attribute allow-list.
+	 *
+	 * @param mixed  $tag_name    Requested tag name.
+	 * @param array  $allowed     Allowed tag names.
+	 * @param string $default_tag Fallback tag.
+	 * @return string
+	 */
+	protected static function allowed_tag( $tag_name, array $allowed, $default_tag ) {
+		$tag = strtolower( tag_escape( (string) $tag_name ) );
+		return in_array( $tag, $allowed, true ) ? $tag : $default_tag;
+	}
+
+	/**
 	 * Helper: build the CSS class string and inline style tag.
 	 *
 	 * Sanitizes uniqueId, extraClasses, and htmlAnchor per AGENTS.md security standards.

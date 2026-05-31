@@ -14,7 +14,7 @@ class Toolbox_Block_Container extends Toolbox_Block_Base {
 	const BLOCK_NAME = 'toolbox-blocks/container';
 
 	public static function render( $attributes, $content, $block ) {
-		$tag      = tag_escape( $attributes['tagName'] ?? 'div' );
+		$tag      = self::allowed_tag( $attributes['tagName'] ?? 'div', array( 'div', 'section', 'article', 'aside', 'header', 'footer', 'main', 'nav', 'span' ), 'div' );
 		$meta     = self::block_meta( $attributes, 'tb-container', true );
 		$unique_id = sanitize_html_class( $attributes['uniqueId'] ?? '' );
 
