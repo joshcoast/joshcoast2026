@@ -21,23 +21,27 @@ define( 'WP_BLOG_FILTER_URL', plugin_dir_url( __FILE__ ) );
 require_once WP_BLOG_FILTER_PATH . 'includes/settings.php';
 
 /**
- * Enqueue scripts and styles
+ * Determine whether filter features should run on the current view.
+ *
+ * @return bool
+ */
+function wp_blog_filter_is_blog_view() {
+	return is_home() || ( is_front_page() && is_home() ) || is_page( 'blog' );
+}
+
+/**
+ * Register plugin scripts/styles. They are enqueued only when shortcode/block renders.
  */
 function wp_blog_filter_enqueue_scripts() {
-	// Only load on blog/home page
-	if ( ! is_home() && ! ( is_front_page() && is_home() ) ) {
-		return;
-	}
-
-	wp_enqueue_script(
+	wp_register_script(
 		'wp-blog-filter-js',
 		WP_BLOG_FILTER_URL . 'assets/js/filter.js',
 		array( 'jquery' ),
 		WP_BLOG_FILTER_VERSION,
-		false
+		true
 	);
 
-	wp_enqueue_style(
+	wp_register_style(
 		'wp-blog-filter-css',
 		WP_BLOG_FILTER_URL . 'assets/css/filter.css',
 		array(),
@@ -45,24 +49,206 @@ function wp_blog_filter_enqueue_scripts() {
 	);
 
 	// Localize script with AJAX data
+	$current_cat = isset( $_GET['wpbf_cat'] ) ? absint( $_GET['wpbf_cat'] ) : ( get_query_var( 'cat' ) ?: 0 );
+
 	wp_localize_script(
 		'wp-blog-filter-js',
 		'wpBlogFilterAjax',
 		array(
 			'ajaxurl'         => admin_url( 'admin-ajax.php' ),
 			'nonce'           => wp_create_nonce( 'wp_blog_filter_nonce' ),
-			'currentCategory' => get_query_var( 'cat' ) ?: 0,
+			'currentCategory' => $current_cat,
 		)
 	);
 }
 add_action( 'wp_enqueue_scripts', 'wp_blog_filter_enqueue_scripts' );
 
 /**
+ * Resolve the current filter state from URL parameters.
+ *
+ * @return array<string,int>
+ */
+function wp_blog_filter_get_request_state() {
+	$current_cat = isset( $_GET['wpbf_cat'] ) ? absint( $_GET['wpbf_cat'] ) : absint( get_query_var( 'cat' ) ?: 0 );
+	$current_page = isset( $_GET['wpbf_page'] ) ? max( 1, absint( $_GET['wpbf_page'] ) ) : 1;
+
+	return array(
+		'category' => $current_cat,
+		'page'     => $current_page,
+	);
+}
+
+/**
+ * Build the base post query arguments used by both initial render and AJAX calls.
+ *
+ * @param int $category_id Category ID.
+ * @param int $page        Page number.
+ * @return array<string,mixed>
+ */
+function wp_blog_filter_build_query_args( $category_id, $page ) {
+	$options = wp_blog_filter_get_options();
+
+	$query_args = array(
+		'post_type'      => 'post',
+		'post_status'    => 'publish',
+		'posts_per_page' => (int) get_option( 'posts_per_page' ),
+		'paged'          => max( 1, (int) $page ),
+		'orderby'        => $options['post_orderby'],
+		'order'          => $options['post_order'],
+	);
+
+	if ( (int) $category_id > 0 ) {
+		$query_args['cat'] = (int) $category_id;
+	}
+
+	return $query_args;
+}
+
+/**
+ * Render filter controls.
+ *
+ * @param int $current_cat Active category ID.
+ * @return string
+ */
+function wp_blog_filter_render_controls_html( $current_cat ) {
+	$options = wp_blog_filter_get_options();
+
+	$categories = get_categories(
+		array(
+			'hide_empty' => $options['hide_empty_categories'],
+			'orderby'    => $options['category_orderby'],
+			'order'      => $options['category_order'],
+		)
+	);
+
+	if ( empty( $categories ) ) {
+		return '';
+	}
+
+	$container_classes = array( 'wp-blog-filter__container' );
+	if ( $options['layout'] === 'vertical' ) {
+		$container_classes[] = 'wp-blog-filter__container--vertical';
+	}
+
+	ob_start();
+	?>
+	<div class="<?php echo esc_attr( implode( ' ', $container_classes ) ); ?>">
+		<div class="wp-blog-filter__buttons">
+			<button type="button"
+					class="wp-blog-filter__button <?php echo (int) $current_cat === 0 ? 'wp-blog-filter__button--active' : ''; ?>"
+					data-category="0">
+				<?php echo esc_html( $options['all_text'] ); ?>
+			</button>
+
+			<?php foreach ( $categories as $category ) : ?>
+				<button type="button"
+						class="wp-blog-filter__button <?php echo (int) $current_cat === (int) $category->term_id ? 'wp-blog-filter__button--active' : ''; ?>"
+						data-category="<?php echo esc_attr( $category->term_id ); ?>">
+					<?php echo esc_html( $category->name ); ?>
+					<?php if ( $options['show_counts'] ) : ?>
+						<span class="wp-blog-filter__count">(<?php echo esc_html( $category->count ); ?>)</span>
+					<?php endif; ?>
+				</button>
+			<?php endforeach; ?>
+		</div>
+
+		<div class="wp-blog-filter__loading" style="display: none;">
+			<?php echo esc_html( $options['loading_text'] ); ?>
+		</div>
+	</div>
+	<?php
+	return ob_get_clean();
+}
+
+/**
+ * Render the filter UI and initial post results.
+ *
+ * @return string
+ */
+function wp_blog_filter_render_instance() {
+	wp_enqueue_script( 'wp-blog-filter-js' );
+	wp_enqueue_style( 'wp-blog-filter-css' );
+
+	$state = wp_blog_filter_get_request_state();
+	$query = new WP_Query( wp_blog_filter_build_query_args( $state['category'], $state['page'] ) );
+	$options = wp_blog_filter_get_options();
+
+	ob_start();
+	?>
+	<div class="wp-blog-filter__instance" data-current-category="<?php echo esc_attr( $state['category'] ); ?>">
+		<?php echo wp_blog_filter_render_controls_html( $state['category'] ); ?>
+		<div class="wp-blog-filter__loop-scope">
+			<div class="wp-blog-filter__posts-grid">
+				<?php if ( $query->have_posts() ) : ?>
+					<?php while ( $query->have_posts() ) : $query->the_post(); ?>
+						<?php wp_blog_filter_render_post(); ?>
+					<?php endwhile; ?>
+				<?php else : ?>
+					<div class="wp-blog-filter__no-posts"><?php echo esc_html( $options['no_posts_text'] ); ?></div>
+				<?php endif; ?>
+			</div>
+			<?php
+			if ( $query->max_num_pages > 1 ) {
+				echo wp_blog_filter_generate_pagination( $query->max_num_pages, $state['page'], $state['category'] );
+			}
+			?>
+		</div>
+	</div>
+	<?php
+
+	wp_reset_postdata();
+
+	return ob_get_clean();
+}
+
+/**
+ * Shortcode renderer.
+ *
+ * @return string
+ */
+function wp_blog_filter_shortcode() {
+	return wp_blog_filter_render_instance();
+}
+
+/**
+ * Dynamic block renderer.
+ *
+ * @return string
+ */
+function wp_blog_filter_block_render_callback() {
+	return wp_blog_filter_render_instance();
+}
+
+/**
+ * Register shortcode and block-based render entry points.
+ */
+function wp_blog_filter_register_render_points() {
+	add_shortcode( 'wp_blog_filter', 'wp_blog_filter_shortcode' );
+
+	wp_register_script(
+		'wp-blog-filter-block-editor',
+		WP_BLOG_FILTER_URL . 'assets/js/block.js',
+		array( 'wp-blocks', 'wp-element', 'wp-i18n', 'wp-block-editor' ),
+		WP_BLOG_FILTER_VERSION,
+		true
+	);
+
+	register_block_type(
+		'wp-blog-category-filter/posts-filter',
+		array(
+			'editor_script'   => 'wp-blog-filter-block-editor',
+			'render_callback' => 'wp_blog_filter_block_render_callback',
+		)
+	);
+}
+add_action( 'init', 'wp_blog_filter_register_render_points' );
+
+/**
  * Add filter buttons before the main loop
  */
 function wp_blog_filter_add_filters() {
 	// Only show on blog/home page
-	if ( ! is_home() && ! ( is_front_page() && is_home() ) ) {
+	if ( ! wp_blog_filter_is_blog_view() ) {
 		return;
 	}
 
@@ -115,28 +301,40 @@ function wp_blog_filter_add_filters() {
 	</div>
 	<?php
 }
-add_action( 'loop_start', 'wp_blog_filter_add_filters', 20 );
+// add_action( 'loop_start', 'wp_blog_filter_add_filters', 20 );
+
+/**
+ * Open a plugin-owned wrapper around the loop output.
+ */
+function wp_blog_filter_open_loop_scope() {
+	if ( ! wp_blog_filter_is_blog_view() ) {
+		return;
+	}
+
+	echo '<div class="wp-blog-filter__loop-scope">';
+}
+// add_action( 'loop_start', 'wp_blog_filter_open_loop_scope', 24 );
 
 /**
  * Add grid wrapper around posts
  */
 function wp_blog_filter_add_grid_wrapper() {
 	// Only on blog/home page
-	if ( ! is_home() && ! ( is_front_page() && is_home() ) && ! is_page( 'blog' ) ) {
+	if ( ! wp_blog_filter_is_blog_view() ) {
 		return;
 	}
 
 	do_action( 'wp_blog_filter_grid_start' );
 	echo '<div class="wp-blog-filter__posts-grid">';
 }
-add_action( 'loop_start', 'wp_blog_filter_add_grid_wrapper', 25 );
+// add_action( 'loop_start', 'wp_blog_filter_add_grid_wrapper', 25 );
 
 /**
  * Close grid wrapper after posts
  */
 function wp_blog_filter_close_grid_wrapper() {
 	// Only on blog/home page
-	if ( ! is_home() && ! ( is_front_page() && is_home() ) && ! is_page( 'blog' ) ) {
+	if ( ! wp_blog_filter_is_blog_view() ) {
 		return;
 	}
 
@@ -146,7 +344,19 @@ function wp_blog_filter_close_grid_wrapper() {
 	// Add pagination after the grid on initial page load
 	wp_blog_filter_add_initial_pagination();
 }
-add_action( 'loop_end', 'wp_blog_filter_close_grid_wrapper', 25 );
+// add_action( 'loop_end', 'wp_blog_filter_close_grid_wrapper', 25 );
+
+/**
+ * Close plugin-owned loop wrapper.
+ */
+function wp_blog_filter_close_loop_scope() {
+	if ( ! wp_blog_filter_is_blog_view() ) {
+		return;
+	}
+
+	echo '</div>';
+}
+// add_action( 'loop_end', 'wp_blog_filter_close_loop_scope', 26 );
 
 /**
  * Replace post content with custom layout when inside our grid
@@ -159,7 +369,7 @@ function wp_blog_filter_replace_grid_content( $content ) {
 	}
 
 	// Only on blog/home page and in main query
-	if ( ! is_home() && ! ( is_front_page() && is_home() ) && ! is_page( 'blog' ) ) {
+	if ( ! wp_blog_filter_is_blog_view() ) {
 		return $content;
 	}
 
@@ -269,7 +479,7 @@ function wp_blog_filter_override_post_display( $post ) {
 	}
 
 	// Only on blog/home page and in main query
-	if ( ! is_home() && ! ( is_front_page() && is_home() ) && ! is_page( 'blog' ) ) {
+	if ( ! wp_blog_filter_is_blog_view() ) {
 		return;
 	}
 
@@ -297,22 +507,7 @@ function wp_blog_filter_ajax_handler() {
 	$category_id = intval( $_POST['category_id'] ?? 0 );
 	$page        = intval( $_POST['page'] ?? 1 );
 	$options     = wp_blog_filter_get_options();
-
-	// Build query arguments
-	$query_args = array(
-		'post_type'      => 'post',
-		'post_status'    => 'publish',
-		'posts_per_page' => get_option( 'posts_per_page' ),
-		'paged'          => $page,
-		'orderby'        => $options['post_orderby'],
-		'order'          => $options['post_order'],
-	);
-
-	if ( $category_id > 0 ) {
-		$query_args['cat'] = $category_id;
-	}
-
-	$query = new WP_Query( $query_args );
+	$query = new WP_Query( wp_blog_filter_build_query_args( $category_id, $page ) );
 
 	ob_start();
 
@@ -399,7 +594,7 @@ function wp_blog_filter_render_post() {
  */
 function wp_blog_filter_hide_theme_pagination_css() {
 	// Only on blog/home page
-	if ( ! is_home() && ! ( is_front_page() && is_home() ) && ! is_page( 'blog' ) ) {
+	if ( ! wp_blog_filter_is_blog_view() ) {
 		return;
 	}
 
@@ -417,7 +612,7 @@ function wp_blog_filter_hide_theme_pagination_css() {
 	</style>
 	<?php
 }
-add_action( 'wp_head', 'wp_blog_filter_hide_theme_pagination_css' );
+// add_action( 'wp_head', 'wp_blog_filter_hide_theme_pagination_css' );
 
 /**
  * Generate pagination HTML

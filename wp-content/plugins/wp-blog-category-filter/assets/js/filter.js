@@ -7,10 +7,13 @@
 
 	var WPBlogFilter = {
 		init: function () {
+			this.$instance = $(".wp-blog-filter__instance").first();
+			if (!this.$instance.length) {
+				return;
+			}
+
+			this.$container = this.$instance.find(".wp-blog-filter__container").first();
 			this.bindEvents();
-			this.$container = $(".wp-blog-filter__container");
-			// Better detection for GP and other themes
-			this.$postsContainer = this.findPostsContainer();
 			this.currentCategory = wpBlogFilterAjax.currentCategory || 0;
 			this.currentPage = 1;
 			this.isLoading = false;
@@ -56,16 +59,26 @@
 
 			// Filter button clicks
 			$(document).on("click", ".wp-blog-filter__button", function (e) {
+				if (!self.$instance.length) return;
+
+				var $instance = $(this).closest(".wp-blog-filter__instance");
+				if (!$instance.length || !$instance.is(self.$instance)) return;
+
 				e.preventDefault();
 				var categoryId = $(this).data("category");
 
 				if (self.isLoading) return;
 
-				self.filterPosts(categoryId, 1);
+				self.filterPosts(categoryId, 1, $instance);
 			});
 
 			// Pagination clicks
 			$(document).on("click", ".wp-blog-filter__page-btn", function (e) {
+				if (!self.$instance.length) return;
+
+				var $instance = $(this).closest(".wp-blog-filter__instance");
+				if (!$instance.length || !$instance.is(self.$instance)) return;
+
 				e.preventDefault();
 				var page = $(this).data("page");
 				var categoryId =
@@ -73,12 +86,13 @@
 
 				if (self.isLoading) return;
 
-				self.filterPosts(categoryId, page);
+				self.filterPosts(categoryId, page, $instance);
 			});
 		},
 
-		filterPosts: function (categoryId, page) {
+		filterPosts: function (categoryId, page, $instance) {
 			var self = this;
+			var $activeInstance = $instance && $instance.length ? $instance : self.$instance;
 
 			// Don't filter if already loading
 			if (self.isLoading) return;
@@ -88,15 +102,15 @@
 			self.currentPage = page;
 
 			// Update active button
-			$(".wp-blog-filter__button").removeClass(
+			$activeInstance.find(".wp-blog-filter__button").removeClass(
 				"wp-blog-filter__button--active"
 			);
-			$(
+			$activeInstance.find(
 				'.wp-blog-filter__button[data-category="' + categoryId + '"]'
 			).addClass("wp-blog-filter__button--active");
 
 			// Show loading
-			$(".wp-blog-filter__loading").show();
+			$activeInstance.find(".wp-blog-filter__loading").show();
 
 			// Make AJAX request
 			$.ajax({
@@ -111,10 +125,10 @@
 				success: function (response) {
 					if (response.success) {
 						// Update posts
-						self.updatePosts(response.data.posts);
+							self.updatePosts(response.data.posts, $activeInstance);
 
 						// Update pagination
-						self.updatePagination(response.data.pagination);
+							self.updatePagination(response.data.pagination, $activeInstance);
 
 						// Update URL without page reload
 						self.updateURL(categoryId, page);
@@ -134,20 +148,22 @@
 				},
 				complete: function () {
 					self.isLoading = false;
-					$(".wp-blog-filter__loading").hide();
+					$activeInstance.find(".wp-blog-filter__loading").hide();
 				},
 			});
 		},
 
-		updatePosts: function (postsHtml) {
+		updatePosts: function (postsHtml, $instance) {
 			// Find the posts container
-			var $postsContainer = this.findPostsContainer();
+			var $postsContainer = this.findPostsContainer($instance);
 
 			if ($postsContainer.length) {
 				// Find our custom grid wrapper
-				var $gridWrapper = $postsContainer.find(
-					".wp-blog-filter__posts-grid"
-				);
+				var $gridWrapper = $postsContainer.hasClass(
+					"wp-blog-filter__posts-grid"
+				)
+					? $postsContainer
+					: $postsContainer.find(".wp-blog-filter__posts-grid").first();
 
 				if ($gridWrapper.length) {
 					// Clear existing posts and add new ones
@@ -160,51 +176,54 @@
 							postsHtml +
 							"</div>"
 					);
+					$gridWrapper = $postsContainer.find(".wp-blog-filter__posts-grid").first();
 				}
 
-				// Remove ALL pagination elements - both plugin and theme pagination
+				// Remove only plugin pagination near this posts container
+				if ($gridWrapper.length) {
+					$gridWrapper.siblings(".wp-blog-filter__pagination").remove();
+				}
 				$postsContainer.find(".wp-blog-filter__pagination").remove();
-				$(".wp-blog-filter__pagination").remove();
-				// Remove common theme pagination classes
-				$(
-					".paging-navigation, .pagination, .nav-links, .page-numbers"
-				).remove();
-				// Remove GeneratePress specific pagination
-				$(".generate-pagination, .generate-page-numbers").remove();
 
 				// Ensure problematic classes are removed after content update
 				this.removeProblematicClasses();
 			} else {
-				// Fallback: replace the entire content area
+				// Fallback: use plugin-owned insertion near the filter controls
 				console.warn(
-					"Could not find posts container, using fallback method"
+					"Could not find posts container, using plugin fallback"
 				);
-				$(".site-main").html(
-					'<div class="wp-blog-filter__container">' +
-						$(".wp-blog-filter__container").html() +
-						"</div>" +
+				var $scope = $instance.find(".wp-blog-filter__loop-scope").first();
+				if ($scope.length) {
+					$scope.find(".wp-blog-filter__posts-grid").remove();
+					$scope.append(
 						'<div class="wp-blog-filter__posts-grid">' +
-						postsHtml +
-						"</div>"
-				);
+							postsHtml +
+							"</div>"
+					);
+				} else if (this.$container.length) {
+					$instance.find(".wp-blog-filter__posts-grid").remove();
+					this.$container.after(
+						'<div class="wp-blog-filter__posts-grid">' +
+							postsHtml +
+							"</div>"
+					);
+				}
 			}
 		},
 
-		updatePagination: function (paginationHtml) {
-			// Remove ALL existing pagination elements first
-			$(".wp-blog-filter__pagination").remove();
-			$(
-				".paging-navigation, .pagination, .nav-links, .page-numbers"
-			).remove();
-			$(".generate-pagination, .generate-page-numbers").remove();
+		updatePagination: function (paginationHtml, $instance) {
+			// Remove existing plugin pagination before adding updated controls
+			$instance.find(".wp-blog-filter__pagination").remove();
 
 			// Add new pagination after the posts grid - ensure it's outside the grid container
 			if (paginationHtml) {
-				var $postsContainer = this.findPostsContainer();
+				var $postsContainer = this.findPostsContainer($instance);
 				if ($postsContainer.length) {
-					var $gridWrapper = $postsContainer.find(
-						".wp-blog-filter__posts-grid"
-					);
+					var $gridWrapper = $postsContainer.hasClass(
+						"wp-blog-filter__posts-grid"
+					)
+						? $postsContainer
+						: $postsContainer.find(".wp-blog-filter__posts-grid").first();
 					if ($gridWrapper.length) {
 						// Place pagination directly after the grid wrapper
 						$gridWrapper.after(paginationHtml);
@@ -213,33 +232,56 @@
 						$postsContainer.after(paginationHtml);
 					}
 				} else {
-					// Last resort: add after site-main
-					$(".site-main").after(paginationHtml);
+					// Last resort: add after plugin grid if present, then after filter controls
+					var $grid = $instance.find(".wp-blog-filter__posts-grid").first();
+					if ($grid.length) {
+						$grid.after(paginationHtml);
+					} else if (this.$container.length) {
+						this.$container.after(paginationHtml);
+					}
 				}
 			}
 		},
 
-		findPostsContainer: function () {
+		findPostsContainer: function ($instance) {
+			var $scopeRoot = $instance && $instance.length ? $instance : this.$instance;
+
+			// Prefer plugin-owned loop scope when available
+			var $loopScope = $scopeRoot.find(".wp-blog-filter__loop-scope").first();
+			if ($loopScope.length > 0) {
+				return $loopScope;
+			}
+
+			// If our grid wrapper already exists, use its parent container first
+			var $existingGrid = $scopeRoot.find(".wp-blog-filter__posts-grid").first();
+			if ($existingGrid.length > 0) {
+				return $existingGrid.parent();
+			}
+
 			// Standard WordPress containers - exclude our grid wrapper
 			var standardSelectors = [
 				".wp-blog-filter-posts",
 				".posts-container",
 				".blog-posts",
 				".archive-posts",
+				".entry-content",
+				".site-content",
+				".content-area",
 				".main-content",
 				".content",
 				"#main",
+				"main",
 			];
 
 			for (var i = 0; i < standardSelectors.length; i++) {
-				var $container = $(standardSelectors[i]);
+				var $container = $scopeRoot.find(standardSelectors[i]).first();
 				if ($container.length > 0) {
 					return $container;
 				}
 			}
 
 			// Fallback: find any container with posts (but not our grid wrapper)
-			var $fallback = $(".post").first().parent();
+			var $fallback = $scopeRoot.find(".post").first().parent();
 			if (
 				$fallback.length > 0 &&
 				!$fallback.hasClass("wp-blog-filter__posts-grid")
@@ -247,8 +289,7 @@
 				return $fallback;
 			}
 
-			// Last resort: main content area
-			return $(".site-main, .content, #content, #main").first();
+			return $scopeRoot;
 		},
 
 		updateURL: function (categoryId, page) {
@@ -256,15 +297,15 @@
 			var url = new URL(window.location);
 
 			if (categoryId > 0) {
-				url.searchParams.set("cat", categoryId);
+				url.searchParams.set("wpbf_cat", categoryId);
 			} else {
-				url.searchParams.delete("cat");
+				url.searchParams.delete("wpbf_cat");
 			}
 
 			if (page > 1) {
-				url.searchParams.set("paged", page);
+				url.searchParams.set("wpbf_page", page);
 			} else {
-				url.searchParams.delete("paged");
+				url.searchParams.delete("wpbf_page");
 			}
 
 			// Update URL without page reload
@@ -273,7 +314,7 @@
 
 		scrollToPosts: function () {
 			// Smooth scroll to the posts container
-			var $container = $(".wp-blog-filter__container");
+			var $container = this.$instance.find(".wp-blog-filter__container").first();
 			if ($container.length) {
 				$("html, body").animate(
 					{
