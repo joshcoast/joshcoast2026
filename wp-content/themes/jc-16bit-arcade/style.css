@@ -16,8 +16,13 @@ Tags: portfolio, blog, custom-logo, custom-menu, featured-images, full-site-edit
   --bg-0: #0a0f2f;
   --bg-1: #11194a;
   --bg-2: #1b2a6a;
+  --sunset-orange: #e89644;
+  --sunset-band: clamp(12rem, 18vw, 32rem);
+  --bottom-scene-height: clamp(22rem, 56vw, 52rem);
+  --bottom-scene-anchor: bottom;
+  --bottom-scene-image: url("assets/img/background.webp");
   --grid: rgba(88, 212, 255, 0.2);
-  --panel: rgba(13, 21, 68, 0.92);
+  --panel: rgba(13, 21, 68, 0.78);
   --ink: #e8f5ff;
   --cyan: #5af2ff;
   --pink: #ff4fd8;
@@ -43,10 +48,17 @@ body {
   font-family: "VT323", monospace;
   font-size: 24px;
   line-height: 1.2;
+  position: relative;
   background:
     radial-gradient(circle at 25% 15%, rgba(255, 79, 216, 0.22), transparent 40%),
     radial-gradient(circle at 80% 10%, rgba(90, 242, 255, 0.2), transparent 38%),
-    linear-gradient(180deg, var(--bg-2), var(--bg-1) 35%, var(--bg-0));
+    linear-gradient(
+      180deg,
+      var(--bg-2) 0%,
+      var(--bg-1) 35%,
+      var(--bg-0) 68%,
+      var(--bg-0) 100%
+    );
   min-height: 100vh;
   overflow-x: hidden;
 }
@@ -124,6 +136,47 @@ a:focus-visible {
   padding: 0.9rem 0;
 }
 
+.arcade-topbar .hud-quarter {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  justify-self: auto;
+  align-self: center;
+  width: auto;
+  aspect-ratio: auto;
+  margin-left: auto;
+  flex: 0 0 auto;
+  line-height: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+  border: 0;
+  cursor: pointer;
+}
+
+.hud-quarter-label {
+  display: inline-block;
+  font-family: "Press Start 2P", monospace;
+  font-size: clamp(11px, 1.35vw, 14px);
+  line-height: 1;
+  color: #f2fbff;
+  text-shadow: 0 0 8px rgba(90, 242, 255, 0.35);
+  white-space: nowrap;
+}
+
+.arcade-topbar .hud-quarter-face {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: clamp(52px, 5vw, 68px);
+  aspect-ratio: 1;
+  flex: 0 0 auto;
+  overflow: hidden;
+}
+
 .site-branding {
   font-family: "Press Start 2P", monospace;
   font-size: clamp(12px, 2vw, 18px);
@@ -166,7 +219,42 @@ a:focus-visible {
 }
 
 main {
-  padding-block: 1.2rem 3rem;
+  padding-block: 1.2rem clamp(14rem, 52vh, 34rem);
+  position: relative;
+  z-index: 1;
+}
+
+.arcade-bottom-scene {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--bottom-scene-height);
+  pointer-events: none;
+  z-index: -4;
+  isolation: isolate;
+}
+
+.arcade-bottom-scene {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  background-image: var(--bottom-scene-image);
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: 100% auto;
+  z-index: 1;
+}
+
+.arcade-bottom-scene::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -600px;
+  height: 600px;
+  background: linear-gradient(180deg,rgba(232, 150, 68, 0) 25%, rgba(232, 150, 68, 1) 100%);
+  z-index: 0;
 }
 
 .arcade-panel {
@@ -190,10 +278,128 @@ main {
 .hero {
   margin-top: 0.6rem;
   display: grid;
+  grid-template-columns: 1fr;
   gap: 1rem;
+  align-items: center;
+}
+
+.hero .hud-quarter {
+  position: relative;
+  align-self: center;
+  width: clamp(60px, 8.25vw, 87px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.hud-quarter:hover,
+.hud-quarter:focus-visible {
+  animation: coin-hop 260ms cubic-bezier(0.2, 0.75, 0.2, 1);
+}
+
+.hud-quarter:focus-visible {
+  outline: 3px dashed var(--cyan);
+  outline-offset: 4px;
+}
+
+.hud-coin-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  opacity: 0;
+  image-rendering: pixelated;
+  user-select: none;
+  pointer-events: none;
+}
+
+.hud-coin-4 {
+  opacity: 1;
+}
+
+.hud-quarter.is-spinning .hud-coin-5 {
+  animation: coin-frame-5 420ms linear;
+}
+
+.hud-quarter.is-spinning .hud-coin-6 {
+  animation: coin-frame-6 420ms linear;
+}
+
+.hud-quarter.is-spinning .hud-coin-1 {
+  animation: coin-frame-1 420ms linear;
+}
+
+.hud-quarter.is-spinning .hud-coin-2 {
+  animation: coin-frame-2 420ms linear;
+}
+
+.hud-quarter.is-spinning .hud-coin-3 {
+  animation: coin-frame-3 420ms linear;
+}
+
+.hud-quarter.is-spinning .hud-coin-4 {
+  animation: coin-frame-4 420ms linear;
+}
+
+@keyframes coin-hop {
+  0% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-6px) scale(1.03, 0.97);
+  }
+  75% {
+    transform: translateY(1px) scale(0.99, 1.01);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes coin-frame-5 {
+  0%, 16.66% { opacity: 1; }
+  16.67%, 100% { opacity: 0; }
+}
+
+@keyframes coin-frame-6 {
+  0%, 16.66% { opacity: 0; }
+  16.67%, 33.33% { opacity: 1; }
+  33.34%, 100% { opacity: 0; }
+}
+
+@keyframes coin-frame-1 {
+  0%, 33.33% { opacity: 0; }
+  33.34%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+
+@keyframes coin-frame-2 {
+  0%, 50% { opacity: 0; }
+  50.01%, 66.66% { opacity: 1; }
+  66.67%, 100% { opacity: 0; }
+}
+
+@keyframes coin-frame-3 {
+  0%, 66.66% { opacity: 0; }
+  66.67%, 83.33% { opacity: 1; }
+  83.34%, 100% { opacity: 0; }
+}
+
+@keyframes coin-frame-4 {
+  0%, 83.33% { opacity: 0; }
+  83.34%, 100% { opacity: 1; }
 }
 
 .hud-title {
+  align-self: center;
   margin: 0;
   font-family: "Press Start 2P", monospace;
   color: var(--pink);
@@ -260,7 +466,7 @@ main {
 }
 
 .stat {
-  background: rgba(9, 18, 53, 0.95);
+  background: rgba(9, 18, 53, 0.74);
   border: 2px solid var(--pink);
   border-radius: 10px;
   padding: 0.8rem;
@@ -277,6 +483,45 @@ main {
 .stat-value {
   font-size: 1.2em;
   color: var(--lime);
+}
+
+.stat-progress-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.stat-level {
+  font-family: "Press Start 2P", monospace;
+  font-size: 8px;
+  color: #b9cfff;
+  text-align: right;
+}
+
+.stat-meter {
+  margin-top: 0.45rem;
+  height: 12px;
+  border: 2px solid var(--cyan);
+  border-radius: 999px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(8, 18, 52, 0.95) 0 8px,
+      rgba(11, 24, 64, 0.95) 8px 16px
+    );
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.stat-fill {
+  display: block;
+  height: 100%;
+  background:
+    linear-gradient(90deg, #66ffe1 0%, #7dff89 45%, #ffe768 100%);
+  box-shadow:
+    0 0 12px rgba(136, 255, 128, 0.48),
+    inset 0 -2px 0 rgba(5, 40, 10, 0.35);
 }
 
 .cta-row {
@@ -338,6 +583,15 @@ main {
   outline-offset: 3px;
 }
 
+/* Content buttons (e.g. "View Project ->" from block content) */
+.wp-block-button__link,
+a.gb-button,
+.gb-button {
+  font-size: clamp(14px, 1.15vw, 18px);
+  padding: 0.9rem 1.25rem;
+  min-height: 44px;
+}
+
 .external-site-icon {
   display: inline-flex;
   width: 0.85rem;
@@ -356,7 +610,7 @@ main {
   border: 2px dashed var(--lime);
   border-radius: 10px;
   padding: 0.7rem 0.9rem;
-  background: rgba(4, 13, 40, 0.7);
+  background: rgba(4, 13, 40, 0.52);
 }
 
 .dev-heroes {
@@ -379,7 +633,7 @@ main {
   margin: 0;
   border: 2px solid var(--pink);
   border-radius: 12px;
-  background: rgba(7, 14, 43, 0.85);
+  background: rgba(7, 14, 43, 0.7);
   padding: 0.7rem;
   text-align: center;
   cursor: pointer;
@@ -413,10 +667,14 @@ main {
   margin: 0;
   border: 2px solid #2a4ea4;
   border-radius: 12px;
-  background: rgba(10, 18, 56, 0.92);
-  padding: 0.6rem;
+  background: rgba(10, 18, 56, 0.74);
+  padding: 0.5rem 0.5rem 0.6rem;
   text-align: center;
   transition: box-shadow 120ms ease, border-color 120ms ease;
+  cursor: pointer;
+  display: grid;
+  grid-template-rows: auto minmax(2.4rem, auto);
+  gap: 0.45rem;
 }
 
 .face-card:hover,
@@ -428,8 +686,15 @@ main {
 .face-swap {
   position: relative;
   width: 100%;
-  max-width: 120px;
+  max-width: 84px;
+  aspect-ratio: 1 / 1;
   margin-inline: auto;
+  border-radius: 8px;
+  background: var(--face-bg, #d1e2aa);
+  border: 2px solid rgba(6, 15, 45, 0.38);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
 }
 
 .face-svg {
@@ -437,6 +702,33 @@ main {
   width: 100%;
   height: auto;
   image-rendering: pixelated;
+}
+
+.face-avatar {
+  display: block;
+  width: 70%;
+  height: auto;
+  image-rendering: pixelated;
+}
+
+.face-card:hover .face-avatar,
+.face-card:focus-visible .face-avatar {
+  animation: face-hop 360ms cubic-bezier(0.2, 0.75, 0.2, 1);
+}
+
+@keyframes face-hop {
+  0% {
+    transform: translateY(0);
+  }
+  35% {
+    transform: translateY(-8px) scale(1.03, 0.97);
+  }
+  70% {
+    transform: translateY(1px) scale(0.99, 1.01);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
 .face-hover {
@@ -456,11 +748,14 @@ main {
 }
 
 .face-card figcaption {
-  margin-top: 0.4rem;
+  margin: 0;
   font-family: "Press Start 2P", monospace;
   font-size: 9px;
   color: var(--yellow);
   line-height: 1.4;
+  min-height: 2.4rem;
+  display: grid;
+  align-content: start;
 }
 
 /* Reference speech bubbles — fixed tooltip style */
@@ -656,7 +951,7 @@ main {
 .card-item {
   border: 2px solid #2b4fa2;
   border-radius: 10px;
-  background: rgba(9, 16, 49, 0.9);
+  background: rgba(9, 16, 49, 0.7);
   padding: 0.8rem;
 }
 
@@ -736,6 +1031,8 @@ main {
   padding: 1rem 0 1.6rem;
   margin-top: 2rem;
   background: rgba(9, 12, 35, 0.7);
+  position: relative;
+  z-index: 2;
 }
 
 .ticker {
@@ -754,6 +1051,68 @@ main {
   animation: marquee 18s linear infinite;
 }
 
+.ticker:hover span,
+.ticker:focus-within span {
+  animation-play-state: paused;
+}
+
+.ticker a,
+.ticker a:visited {
+  color: var(--yellow);
+  text-decoration: none;
+}
+
+.ticker-coin-trigger {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--yellow);
+  font: inherit;
+  text-shadow: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+}
+
+.ticker-coin-trigger:hover,
+.ticker-coin-trigger:focus-visible {
+  color: #ffffff;
+}
+
+.ticker-coin-trigger:focus-visible {
+  outline: 2px dashed var(--cyan);
+  outline-offset: 3px;
+}
+
+.ticker a:hover,
+.ticker a:focus-visible {
+  color: #ffffff;
+}
+
+@media (max-width: 760px) {
+  .hero {
+    column-gap: 0.8rem;
+  }
+
+  main {
+    padding-bottom: clamp(10rem, 42vh, 18rem);
+  }
+}
+
+@media (min-width: 1600px) {
+  :root {
+    --sunset-band: clamp(18rem, 24vw, 48rem);
+    --bottom-scene-height: clamp(28rem, 62vw, 82rem);
+    --bottom-scene-anchor: top;
+  }
+
+  main {
+    padding-bottom: clamp(18rem, 56vh, 42rem);
+  }
+}
+
 @keyframes marquee {
   0% { transform: translateX(0); }
   100% { transform: translateX(-100%); }
@@ -763,7 +1122,142 @@ main {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: -3;
+  z-index: -6;
+}
+
+.arcade-aliens {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 4;
+}
+
+.arcade-alien {
+  position: absolute;
+  width: clamp(42px, 4.8vw, 70px);
+  aspect-ratio: 1;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+  animation: alien-wander var(--alien-wander-duration, 18s) ease-in-out infinite alternate;
+  animation-delay: var(--alien-wander-delay, 0s);
+  transform: translate3d(0, var(--alien-parallax, 0px), 0) scale(var(--alien-scale, 1));
+  transform-origin: center;
+  will-change: transform, opacity, left, top;
+}
+
+.arcade-alien:focus-visible {
+  outline: 3px dashed var(--cyan);
+  outline-offset: 4px;
+}
+
+.arcade-alien__art {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  animation: alien-bob var(--alien-bob-duration, 3.2s) ease-in-out infinite;
+  animation-delay: var(--alien-bob-delay, 0s);
+}
+
+@keyframes alien-bob {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes alien-wander {
+  0% {
+    left: var(--alien-start-x);
+    top: var(--alien-start-y);
+  }
+  50% {
+    left: var(--alien-mid-x);
+    top: var(--alien-mid-y);
+  }
+  100% {
+    left: var(--alien-end-x);
+    top: var(--alien-end-y);
+  }
+}
+
+.arcade-alien__sprite,
+.arcade-alien__bomb {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.arcade-alien__bomb {
+  opacity: 0;
+}
+
+.arcade-alien.is-exploding .arcade-alien__sprite {
+  opacity: 0;
+}
+
+.arcade-alien.is-exploding .arcade-alien__bomb-1 {
+  animation: alien-bomb-1 560ms linear forwards;
+}
+
+.arcade-alien.is-exploding .arcade-alien__bomb-2 {
+  animation: alien-bomb-2 560ms linear forwards;
+}
+
+.arcade-alien.is-exploding .arcade-alien__bomb-3 {
+  animation: alien-bomb-3 560ms linear forwards;
+}
+
+@keyframes alien-bomb-1 {
+  0%, 33.33% {
+    opacity: 1;
+    transform: scale(0.88);
+  }
+  33.34%, 100% {
+    opacity: 0;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes alien-bomb-2 {
+  0%, 33.33% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  33.34%, 66.66% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  66.67%, 100% {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes alien-bomb-3 {
+  0%, 66.66% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  66.67% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.16);
+  }
 }
 
 .star {

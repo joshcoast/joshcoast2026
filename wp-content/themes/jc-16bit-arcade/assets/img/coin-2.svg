@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 84 156">
+  <!-- Generator: Adobe Illustrator 30.6.0, SVG Export Plug-In . SVG Version: 2.1.4 Build 109)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #fffed2;
+      }
+
+      .st1 {
+        fill: #fde632;
+      }
+
+      .st2 {
+        fill: #ffff73;
+      }
+
+      .st3 {
+        fill: #d07409;
+      }
+
+      .st4 {
+        fill: #f8a80a;
+      }
+
+      .st5 {
+        fill: #fac914;
+      }
+    </style>
+  </defs>
+  <g id="Coin_Animation_2">
+    <polygon class="st3" points="72 12 60 12 60 0 24 0 24 12 12 12 12 36 0 36 0 120 12 120 12 144 24 144 24 156 60 156 60 144 72 144 72 120 84 120 84 36 72 36 72 12"/>
+    <path class="st2" d="M0,48v24h24v-24H0ZM60,108h12v-12h-12v12Z"/>
+    <path class="st5" d="M12,120v12h24v-12H12ZM60,24h-12v12h12v-12ZM48,132h12v-12h-12v12ZM60,60h12v-12h-12v12ZM48,36h-12v84h12V36Z"/>
+    <path class="st4" d="M48,0h-24v12h24V0ZM24,156h24v-12h-24v12ZM60,24v-12h-12v12h12ZM48,144h12v-12h-12v12ZM60,48h12v-12h-12v12ZM48,108h12v-60h-12v60ZM72,120v-12h-12v12h12Z"/>
+    <path class="st1" d="M12,36h24v-12H12v12ZM24,72H0v48h24v-48ZM12,144h24v-12H12v12ZM60,96h12v-36h-12v36ZM48,120h12v-12h-12v12Z"/>
+    <path class="st0" d="M12,12v12h24v-12H12ZM0,36v12h24v-12H0Z"/>
+  </g>
+</svg>

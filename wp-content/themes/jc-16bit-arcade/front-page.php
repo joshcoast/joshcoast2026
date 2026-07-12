@@ -7,27 +7,42 @@
 
 get_header();
 
-$post_count = jc_16bit_arcade_post_count( 'post' );
-$page_count = jc_16bit_arcade_post_count( 'page' );
-$project_count = post_type_exists( 'project' ) ? jc_16bit_arcade_post_count( 'project' ) : 0;
 $linkedin_url = apply_filters( 'jc_16bit_arcade_linkedin_url', 'https://www.linkedin.com/' );
+
+$skill_stats = array(
+	array(
+		'label'   => 'WORDPRESS DEVELOPMENT',
+		'percent' => 96,
+		'level'   => 'PLUGIN + THEME XP',
+	),
+	array(
+		'label'   => 'UI/UX DESIGN',
+		'percent' => 93,
+		'level'   => 'PIXEL-PERFECT CRAFT',
+	),
+	array(
+		'label'   => 'JAVASCRIPT',
+		'percent' => 90,
+		'level'   => 'INTERACTION COMBOS',
+	),
+);
 ?>
 <section class="arcade-panel hero">
 	<h1 class="hud-title"><button id="player-one-trigger" class="hud-firework-trigger" type="button">PLAYER ONE: <?php bloginfo( 'name' ); ?></button></h1>
 	<p class="hud-sub"><?php bloginfo( 'description' ); ?></p>
-	<div class="stat-grid" role="list" aria-label="Portfolio stats">
+	<div class="stat-grid" role="list" aria-label="Top skills">
+		<?php foreach ( $skill_stats as $skill ) : ?>
 		<div class="stat" role="listitem">
-			<span class="stat-label">POSTS UNLOCKED</span>
-			<span class="stat-value"><?php echo esc_html( $post_count ); ?></span>
+			<span class="stat-label"><?php echo esc_html( $skill['label'] ); ?></span>
+			<div class="stat-progress-row">
+				<span class="stat-value"><?php echo esc_html( $skill['percent'] ); ?>%</span>
+				<span class="stat-level"><?php echo esc_html( $skill['level'] ); ?></span>
+			</div>
+			<div class="stat-meter" role="presentation" aria-hidden="true">
+				<span class="stat-fill" style="width: <?php echo esc_attr( (int) $skill['percent'] ); ?>%;"></span>
+			</div>
 		</div>
-		<div class="stat" role="listitem">
-			<span class="stat-label">PAGES CLEARED</span>
-			<span class="stat-value"><?php echo esc_html( $page_count ); ?></span>
-		</div>
-		<div class="stat" role="listitem">
-			<span class="stat-label">PROJECT BOSSES</span>
-			<span class="stat-value"><?php echo esc_html( $project_count ); ?></span>
-		</div>
+		<?php endforeach; ?>
 	</div>
 	<div class="cta-row">
 		<a class="btn-arcade btn-primary" href="<?php echo esc_url( $linkedin_url ); ?>" target="_blank" rel="noopener noreferrer">START CONVERSATION <span class="external-site-icon" aria-hidden="true"><svg viewBox="0 0 14 14" focusable="false"><path d="M3 11h8V7h2v6H1V1h6v2H3z" fill="currentColor"/><path d="M8 1h5v5h-2V4.4L6.7 8.7 5.3 7.3 9.6 3H8z" fill="currentColor"/></svg></span><span class="screen-reader-text"> Opens LinkedIn in a new tab</span></a>
@@ -49,51 +64,32 @@ $linkedin_url = apply_filters( 'jc_16bit_arcade_linkedin_url', 'https://www.link
 			'title'        => 'Chief Technology Officer · Culture Foundry',
 			'quote'        => 'Josh was exceptional at Claremont. Although he was only tasked with design maintenance of our corporate website, he quickly learned HAML, SASS, and Ruby on Rails to allow our development team to utilize his talents in all of our applications. He\'s a quick learner, has a top-notch work ethic, and pays attention to detail. It\'d be a pleasure to work with Josh again.',
 			'linkedin_url' => 'https://www.linkedin.com/in/aaronlongwell/',
-			'avatar'       => 'beard-byte',
+			'avatar_file'  => 'assets/img/person-1.svg',
+			'avatar_bg'    => '#c6db9d',
 		),
 		array(
 			'name'         => 'Stacey Rice',
 			'title'        => 'UX/UI Designer and Developer',
 			'quote'        => 'Josh has an impeccable eye for design, and his style is clean and modern, with great attention to detail. Along with his excellent design ability, Josh is a welcome teammate and is always willing to help, whether it be perfecting a design, teaching co-workers new techniques, or helping to improve department processes. Josh always goes above and beyond to give clients their perfect website and always puts in the extra time to do so.',
 			'linkedin_url' => 'https://www.linkedin.com/in/staceycrice/',
-			'avatar'       => 'clip-commit',
+			'avatar_file'  => 'assets/img/person-2.svg',
+			'avatar_bg'    => '#d1e2aa',
 		),
 		array(
 			'name'         => 'Erica Pidor',
 			'title'        => 'Content & Social Media Expert',
 			'quote'        => 'Josh is an incredibly talented designer – working with Josh, I always knew his designs would be high-quality and that his finished product would be flawless. He is always conscious of the usability of a website, as well as the look and brand. Josh was a pleasure to work with!',
 			'linkedin_url' => 'https://www.linkedin.com/in/erica-pidor/',
-			'avatar'       => 'mohawk-merge',
+			'avatar_file'  => 'assets/img/person-5.svg',
+			'avatar_bg'    => '#f58fbc',
 		),
 		array(
 			'name'         => 'Tammy Smith',
 			'title'        => 'SEO Manager · Digible, Inc',
 			'quote'        => 'Josh is an extremely dedicated and talented web designer and programmer. I enjoyed working with him at Page 1 immensely. Josh is loyal and hard working, with an excellent eye for detail. He is always kind and helpful and will go out of his way to help a co-worker. There are several times when he jumped in to help on projects that needed working on. He strives for perfection in everything he does. I would highly recommend Josh Coast for any position, he is an asset for any company he works for.',
 			'linkedin_url' => 'https://www.linkedin.com/in/tammymsmith/',
-			'avatar'       => 'neon-dot',
-		),
-	);
-
-	$avatar_svgs = array(
-		'beard-byte' => array(
-			'neutral' => '<rect width="96" height="96" fill="#d9e9bf"/><rect x="26" y="12" width="42" height="20" fill="#181a21"/><rect x="30" y="26" width="34" height="28" fill="#f1e8db"/><rect x="28" y="34" width="15" height="9" fill="#1c202c"/><rect x="49" y="34" width="15" height="9" fill="#1c202c"/><rect x="43" y="37" width="6" height="3" fill="#1c202c"/><rect x="31" y="37" width="5" height="3" fill="#a6ebff"/><rect x="52" y="37" width="5" height="3" fill="#a6ebff"/><rect x="48" y="44" width="8" height="2" fill="#8f6d56"/><rect x="42" y="46" width="24" height="16" fill="#25232d"/><rect x="24" y="62" width="48" height="20" fill="#c6db9d"/>',
-			'hover'   => '<rect width="96" height="96" fill="#d9e9bf"/><rect x="26" y="12" width="42" height="20" fill="#181a21"/><rect x="30" y="26" width="34" height="28" fill="#f1e8db"/><rect x="28" y="34" width="15" height="9" fill="#1c202c"/><rect x="49" y="34" width="15" height="9" fill="#1c202c"/><rect x="43" y="37" width="6" height="3" fill="#1c202c"/><rect x="33" y="37" width="5" height="3" fill="#a6ebff"/><rect x="54" y="37" width="5" height="3" fill="#a6ebff"/><rect x="45" y="44" width="11" height="3" fill="#e95d6a"/><rect x="42" y="46" width="24" height="16" fill="#25232d"/><rect x="24" y="62" width="48" height="20" fill="#c6db9d"/>',
-		),
-		'clip-commit' => array(
-			'neutral' => '<rect width="96" height="96" fill="#d9e9bf"/><rect x="24" y="14" width="48" height="38" fill="#1e222f"/><rect x="26" y="26" width="44" height="30" fill="#eaded1"/><rect x="23" y="24" width="6" height="12" fill="#f06aad"/><rect x="34" y="38" width="7" height="3" fill="#181b24"/><rect x="54" y="38" width="7" height="3" fill="#181b24"/><rect x="42" y="45" width="8" height="2" fill="#7d5a4b"/><rect x="30" y="46" width="6" height="3" fill="#f79cc0"/><rect x="58" y="46" width="6" height="3" fill="#f79cc0"/><rect x="24" y="58" width="48" height="22" fill="#d1e2aa"/>',
-			'hover'   => '<rect width="96" height="96" fill="#d9e9bf"/><rect x="24" y="14" width="48" height="38" fill="#1e222f"/><rect x="26" y="26" width="44" height="30" fill="#eaded1"/><rect x="23" y="24" width="6" height="12" fill="#f06aad"/><rect x="34" y="38" width="7" height="3" fill="#181b24"/><rect x="54" y="38" width="7" height="3" fill="#181b24"/><rect x="40" y="45" width="11" height="3" fill="#e75d6a"/><rect x="30" y="46" width="6" height="3" fill="#f79cc0"/><rect x="58" y="46" width="6" height="3" fill="#f79cc0"/><rect x="24" y="58" width="48" height="22" fill="#d1e2aa"/>',
-		),
-		'mohawk-merge' => array(
-			'neutral' => '<rect width="96" height="96" fill="#eddba7"/><rect x="32" y="12" width="32" height="16" fill="#ef5ea9"/><rect x="28" y="28" width="40" height="30" fill="#f2e4d6"/><rect x="28" y="36" width="14" height="9" fill="#1c202b"/><rect x="54" y="36" width="14" height="9" fill="#1c202b"/><rect x="42" y="39" width="12" height="3" fill="#1c202b"/><rect x="32" y="39" width="4" height="3" fill="#a7ebff"/><rect x="58" y="39" width="4" height="3" fill="#a7ebff"/><rect x="42" y="47" width="11" height="3" fill="#db6178"/><rect x="24" y="58" width="48" height="22" fill="#f58fbc"/>',
-			'hover'   => '<rect width="96" height="96" fill="#eddba7"/><rect x="32" y="12" width="32" height="16" fill="#ef5ea9"/><rect x="28" y="28" width="40" height="30" fill="#f2e4d6"/><rect x="28" y="36" width="14" height="9" fill="#1c202b"/><rect x="54" y="36" width="14" height="9" fill="#1c202b"/><rect x="42" y="39" width="12" height="3" fill="#1c202b"/><rect x="34" y="39" width="4" height="3" fill="#a7ebff"/><rect x="60" y="39" width="4" height="3" fill="#a7ebff"/><rect x="40" y="47" width="14" height="4" fill="#ec6074"/><rect x="24" y="58" width="48" height="22" fill="#f58fbc"/>',
-		),
-		'neon-dot' => array(
-			'neutral' => '<rect width="96" height="96" fill="#eddba7"/><rect x="22" y="12" width="52" height="40" fill="#f089ca"/><rect x="30" y="28" width="36" height="30" fill="#6d3d32"/><rect x="35" y="38" width="7" height="3" fill="#121623"/><rect x="54" y="38" width="7" height="3" fill="#121623"/><rect x="42" y="45" width="9" height="3" fill="#0e111c"/><rect x="30" y="46" width="5" height="3" fill="#e96ca5"/><rect x="60" y="46" width="5" height="3" fill="#e96ca5"/><rect x="24" y="58" width="48" height="22" fill="#5d3ab5"/>',
-			'hover'   => '<rect width="96" height="96" fill="#eddba7"/><rect x="22" y="12" width="52" height="40" fill="#f089ca"/><rect x="30" y="28" width="36" height="30" fill="#6d3d32"/><rect x="37" y="38" width="7" height="3" fill="#121623"/><rect x="56" y="38" width="7" height="3" fill="#121623"/><rect x="40" y="45" width="12" height="3" fill="#db6075"/><rect x="30" y="46" width="5" height="3" fill="#e96ca5"/><rect x="60" y="46" width="5" height="3" fill="#e96ca5"/><rect x="24" y="58" width="48" height="22" fill="#5d3ab5"/>',
-		),
-		'pixel-beard-2' => array(
-			'neutral' => '<rect width="96" height="96" fill="#d9e9bf"/><rect x="26" y="12" width="42" height="20" fill="#181a21"/><rect x="30" y="26" width="34" height="28" fill="#f1e8db"/><rect x="28" y="34" width="15" height="9" fill="#1c202c"/><rect x="49" y="34" width="15" height="9" fill="#1c202c"/><rect x="43" y="37" width="6" height="3" fill="#1c202c"/><rect x="31" y="37" width="5" height="3" fill="#a6ebff"/><rect x="52" y="37" width="5" height="3" fill="#a6ebff"/><rect x="47" y="44" width="8" height="2" fill="#8f6d56"/><rect x="40" y="46" width="26" height="16" fill="#25232d"/><rect x="24" y="62" width="48" height="20" fill="#c6db9d"/>',
-			'hover'   => '<rect width="96" height="96" fill="#d9e9bf"/><rect x="26" y="12" width="42" height="20" fill="#181a21"/><rect x="30" y="26" width="34" height="28" fill="#f1e8db"/><rect x="28" y="34" width="15" height="9" fill="#1c202c"/><rect x="49" y="34" width="15" height="9" fill="#1c202c"/><rect x="43" y="37" width="6" height="3" fill="#1c202c"/><rect x="33" y="37" width="5" height="3" fill="#a6ebff"/><rect x="54" y="37" width="5" height="3" fill="#a6ebff"/><rect x="44" y="44" width="11" height="3" fill="#e95d6a"/><rect x="40" y="46" width="26" height="16" fill="#25232d"/><rect x="24" y="62" width="48" height="20" fill="#c6db9d"/>',
+			'avatar_file'  => 'assets/img/person-4.svg',
+			'avatar_bg'    => '#5d3ab5',
 		),
 	);
 	?>
@@ -101,11 +97,12 @@ $linkedin_url = apply_filters( 'jc_16bit_arcade_linkedin_url', 'https://www.link
 		<p class="sprite-mode">REFERENCE PACK: 4 HEROES</p>
 
 		<?php foreach ( $references as $i => $ref ) :
-			$svgs   = $avatar_svgs[ $ref['avatar'] ];
+			$avatar_url = get_theme_file_uri( $ref['avatar_file'] );
 			$bub_id = 'ref-bubble-' . ( $i + 1 );
 		?>
 		<figure
 			class="face-card"
+			style="--face-bg: <?php echo esc_attr( $ref['avatar_bg'] ); ?>;"
 			tabindex="0"
 			role="button"
 			aria-expanded="false"
@@ -113,12 +110,7 @@ $linkedin_url = apply_filters( 'jc_16bit_arcade_linkedin_url', 'https://www.link
 			aria-label="<?php echo esc_attr( $ref['name'] ) . ' — click to read reference'; ?>"
 		>
 			<div class="face-swap" aria-hidden="true">
-				<svg class="face-svg face-neutral" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" focusable="false">
-					<?php echo $svgs['neutral']; ?>
-				</svg>
-				<svg class="face-svg face-hover" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" focusable="false">
-					<?php echo $svgs['hover']; ?>
-				</svg>
+				<img class="face-avatar" src="<?php echo esc_url( $avatar_url ); ?>" alt="" loading="lazy" decoding="async" />
 			</div>
 			<figcaption><?php echo esc_html( $ref['name'] ); ?></figcaption>
 

@@ -1,6 +1,10 @@
 (function () {
   const starsContainer = document.querySelector('.arcade-stars');
+  const themeBase = (document.body.dataset.themeUri || '').replace(/\/?$/, '/');
   const reduceMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const isHomepage = document.body.classList.contains('home') || document.body.classList.contains('front-page');
+
+  const assetUrl = (fileName) => themeBase + 'assets/img/' + fileName;
 
   if (starsContainer) {
     const count = window.innerWidth < 800 ? 40 : 80;
@@ -15,6 +19,126 @@
       starsContainer.appendChild(star);
     }
   }
+
+  const alienSprites = [
+    'alian-1.svg',
+    'alian-2.svg',
+    'alian-3.svg',
+    'alian-4.svg',
+  ];
+
+  const rand = (min, max) => min + Math.random() * (max - min);
+  const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+  const alienNodes = [];
+  const alienRespawnDelay = 240;
+  const aliensContainer = document.createElement('div');
+  aliensContainer.className = 'arcade-aliens';
+  aliensContainer.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(aliensContainer);
+
+  const createAliens = () => {
+    aliensContainer.replaceChildren();
+    alienNodes.length = 0;
+
+    alienSprites.forEach((spriteFile, index) => {
+      const alien = document.createElement('button');
+      alien.type = 'button';
+      alien.className = 'arcade-alien';
+      alien.setAttribute('aria-label', 'Destroy alien ' + (index + 1));
+
+      const parallax = rand(0.06, 0.16);
+      const scale = rand(0.82, 1.1);
+      const left = rand(5, 88);
+      const top = rand(8, 72);
+      const wanderX = rand(5, 14) * (Math.random() > 0.5 ? 1 : -1);
+      const wanderY = rand(4, 10) * (Math.random() > 0.5 ? 1 : -1);
+      const wanderMidX = clamp(left + wanderX, 4, 92);
+      const wanderMidY = clamp(top + wanderY, 6, 88);
+      const wanderEndX = clamp(left + wanderX * -0.65, 4, 92);
+      const wanderEndY = clamp(top + wanderY * -0.65, 6, 88);
+      const bobDelay = rand(0, 5).toFixed(2);
+      const bobDuration = rand(2.8, 4.8).toFixed(2);
+      const wanderDuration = rand(14, 26).toFixed(2);
+      const wanderDelay = rand(0, 6).toFixed(2);
+
+      alien.style.left = left + '%';
+      alien.style.top = top + '%';
+      alien.style.setProperty('--alien-scale', scale.toFixed(2));
+      alien.style.setProperty('--alien-parallax', '0px');
+      alien.style.setProperty('--alien-bob-duration', bobDuration + 's');
+      alien.style.setProperty('--alien-wander-duration', wanderDuration + 's');
+      alien.style.setProperty('--alien-wander-delay', wanderDelay + 's');
+      alien.style.setProperty('--alien-start-x', left.toFixed(2) + '%');
+      alien.style.setProperty('--alien-start-y', top.toFixed(2) + '%');
+      alien.style.setProperty('--alien-mid-x', wanderMidX.toFixed(2) + '%');
+      alien.style.setProperty('--alien-mid-y', wanderMidY.toFixed(2) + '%');
+      alien.style.setProperty('--alien-end-x', wanderEndX.toFixed(2) + '%');
+      alien.style.setProperty('--alien-end-y', wanderEndY.toFixed(2) + '%');
+      alien.dataset.parallax = String(parallax);
+      alien.dataset.state = 'idle';
+
+      alien.innerHTML = [
+        '<span class="arcade-alien__art">',
+        '<img class="arcade-alien__sprite" src="' + assetUrl(spriteFile) + '" alt="" loading="lazy" decoding="async" />',
+        '<img class="arcade-alien__bomb arcade-alien__bomb-1" src="' + assetUrl('bomb-1.svg') + '" alt="" loading="lazy" decoding="async" />',
+        '<img class="arcade-alien__bomb arcade-alien__bomb-2" src="' + assetUrl('bomb-2.svg') + '" alt="" loading="lazy" decoding="async" />',
+        '<img class="arcade-alien__bomb arcade-alien__bomb-3" src="' + assetUrl('bomb-3.svg') + '" alt="" loading="lazy" decoding="async" />',
+        '</span>',
+      ].join('');
+
+      alien.style.setProperty('--alien-bob-delay', bobDelay + 's');
+
+      aliensContainer.appendChild(alien);
+      alienNodes.push(alien);
+
+      alien.addEventListener('click', (event) => {
+        event.preventDefault();
+        explodeAlien(alien);
+      });
+    });
+  };
+
+  if (isHomepage) {
+    createAliens();
+  }
+
+  const updateAlienParallax = () => {
+    if (reduceMotionQuery.matches) {
+      return;
+    }
+
+    const scrollY = window.scrollY || window.pageYOffset || 0;
+    alienNodes.forEach((alien) => {
+      if (alien.dataset.state === 'hidden') {
+        return;
+      }
+
+      const parallax = Number.parseFloat(alien.dataset.parallax || '0');
+      alien.style.setProperty('--alien-parallax', `${scrollY * parallax}px`);
+    });
+  };
+
+  updateAlienParallax();
+
+  const regenerateAliens = () => {
+    createAliens();
+    updateAlienParallax();
+  };
+
+  const explodeAlien = (alien) => {
+    if (!alien || alien.dataset.state !== 'idle') {
+      return;
+    }
+
+    alien.dataset.state = 'exploding';
+    alien.disabled = true;
+    alien.classList.add('is-exploding');
+
+    window.setTimeout(() => {
+      alien.dataset.state = 'hidden';
+      alien.hidden = true;
+    }, 560);
+  };
 
   const setupAmbientFlicker = () => {
     if (reduceMotionQuery.matches) {
@@ -61,6 +185,40 @@
 
   setupAmbientFlicker();
 
+  const hudQuarter = document.querySelector('.hud-quarter');
+  const tickerCoinTrigger = document.querySelector('.ticker-coin-trigger');
+  let spinTimer = null;
+  const spinDuration = 420;
+
+  const triggerCoinAndAliens = () => {
+    if (hudQuarter) {
+      hudQuarter.classList.remove('is-spinning');
+      void hudQuarter.offsetWidth;
+      hudQuarter.classList.add('is-spinning');
+
+      if (spinTimer) {
+        window.clearTimeout(spinTimer);
+      }
+
+      spinTimer = window.setTimeout(() => {
+        hudQuarter.classList.remove('is-spinning');
+        spinTimer = null;
+      }, spinDuration);
+    }
+
+    window.setTimeout(() => {
+      regenerateAliens();
+    }, alienRespawnDelay);
+  };
+
+  if (hudQuarter) {
+    hudQuarter.addEventListener('click', triggerCoinAndAliens);
+  }
+
+  if (tickerCoinTrigger) {
+    tickerCoinTrigger.addEventListener('click', triggerCoinAndAliens);
+  }
+
   const trigger = document.getElementById('player-one-trigger');
 
   if (trigger) {
@@ -71,7 +229,7 @@
 
     const ctx = canvas.getContext('2d');
     const particles = [];
-    const palette = ['#ffe768', '#ff4fd8', '#5af2ff', '#88ff80', '#ff7d63'];
+    const palette = ['#fff18a', '#ff7fe7', '#8af6ff', '#b2ff8a', '#ffb18f'];
     let rafId = null;
 
     const resize = () => {
@@ -91,7 +249,7 @@
           vx: Math.cos(angle) * velocity,
           vy: Math.sin(angle) * velocity,
           life: 38 + Math.random() * 24,
-          size: 2 + Math.random() * 2,
+          size: 3 + Math.random() * 3,
           color: palette[Math.floor(Math.random() * palette.length)],
         });
       }
@@ -121,12 +279,15 @@
           continue;
         }
 
-        ctx.globalAlpha = Math.max(0, p.life / 60);
+        ctx.globalAlpha = Math.max(0, Math.min(1, p.life / 48));
         ctx.fillStyle = p.color;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = p.color;
         ctx.fillRect(p.x, p.y, p.size, p.size);
       }
 
       ctx.globalAlpha = 1;
+      ctx.shadowBlur = 0;
 
       if (particles.length > 0) {
         rafId = requestAnimationFrame(tick);
@@ -156,6 +317,9 @@
 
     window.addEventListener('resize', resize);
     resize();
+
+    window.addEventListener('scroll', updateAlienParallax, { passive: true });
+    window.addEventListener('resize', updateAlienParallax);
   }
 
   // Reference speech bubbles — fixed tooltip with dynamic positioning
