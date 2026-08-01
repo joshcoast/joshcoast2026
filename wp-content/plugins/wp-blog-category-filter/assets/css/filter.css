@@ -91,7 +91,7 @@
 /* Post Cards */
 .wp-blog-filter__post-card {
     position: relative;
-    background: var(--contrast);
+    background: rgba(0, 0, 0, 0.25);
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -112,7 +112,7 @@
     left: 0;
     transition: inherit;
     pointer-events: none;
-    opacity: 0.16;
+    opacity: 0.07;
 }
 
 .wp-blog-filter__post-card:hover {
@@ -128,19 +128,20 @@
 /* Post Image */
 .wp-blog-filter__post-image {
     width: 100%;
-    height: 200px;
+    aspect-ratio: 500 / 247;
     overflow: hidden;
+}
+
+.wp-blog-filter__post-image a {
+    display: block;
+    width: 100%;
+    height: 100%;
 }
 
 .wp-blog-filter__post-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.wp-blog-filter__post-image:hover img {
-    transform: scale(1.05);
 }
 
 /* Post Header */
@@ -174,6 +175,10 @@
     margin: 0;
     font-size: 0.9rem;
     color: var(--contrast-3);
+}
+
+.wp-blog-filter__post-card .cat-row {
+    margin: 0.75rem 0 0;
 }
 
 /* Post Excerpt */
@@ -300,10 +305,6 @@ body.blog .paging-navigation {
 
     .wp-blog-filter__post-card {
         border-radius: 12px;
-    }
-
-    .wp-blog-filter__post-image {
-        height: 200px;
     }
 
     .wp-blog-filter__post-title {

@@ -29,18 +29,122 @@
 
   const rand = (min, max) => min + Math.random() * (max - min);
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+  const isNearCenterZone = (x, y) => x >= 32 && x <= 68 && y >= 28 && y <= 76;
+  const pickOuterSafePoint = () => {
+    for (let attempt = 0; attempt < 30; attempt += 1) {
+      const x = rand(6, 92);
+      const y = rand(8, 88);
+
+      if (!isNearCenterZone(x, y)) {
+        return { x, y };
+      }
+    }
+
+    // Fallback to edge-biased points if random picks keep landing near center.
+    const edgeBand = Math.random() > 0.5 ? rand(6, 24) : rand(76, 92);
+    return {
+      x: edgeBand,
+      y: rand(8, 88),
+    };
+  };
+  const pickOffscreenStart = (anchorX, anchorY) => {
+    const side = Math.floor(rand(0, 4));
+    const offset = rand(10, 20);
+
+    if (side === 0) {
+      return {
+        x: -offset,
+        y: clamp(anchorY + rand(-12, 12), -8, 108),
+      };
+    }
+
+    if (side === 1) {
+      return {
+        x: 100 + offset,
+        y: clamp(anchorY + rand(-12, 12), -8, 108),
+      };
+    }
+
+    if (side === 2) {
+      return {
+        x: clamp(anchorX + rand(-12, 12), -8, 108),
+        y: -offset,
+      };
+    }
+
+    return {
+      x: clamp(anchorX + rand(-12, 12), -8, 108),
+      y: 100 + offset,
+    };
+  };
+  const getAlienPeekSide = (alien) => {
+    if (alien.dataset.peekSide) {
+      return alien.dataset.peekSide;
+    }
+
+    if (alien.classList.contains('is-peek-left')) {
+      return 'left';
+    }
+
+    if (alien.classList.contains('is-peek-right')) {
+      return 'right';
+    }
+
+    return '';
+  };
+  const canUsePeekTop = (activePeekAliens, side, topValue, minGap) => {
+    return activePeekAliens.every((activeAlien) => {
+      if (getAlienPeekSide(activeAlien) !== side) {
+        return true;
+      }
+
+      const activeTop = Number.parseFloat(activeAlien.style.top || '0');
+      return Math.abs(activeTop - topValue) >= minGap;
+    });
+  };
+  const pickPeekPosition = (activePeekAliens = [], minGap = 14) => {
+    const sideOrder = Math.random() > 0.5 ? ['left', 'right'] : ['right', 'left'];
+
+    for (let sideIndex = 0; sideIndex < sideOrder.length; sideIndex += 1) {
+      const side = sideOrder[sideIndex];
+
+      for (let attempt = 0; attempt < 30; attempt += 1) {
+        const topValue = rand(8, 86);
+
+        if (!canUsePeekTop(activePeekAliens, side, topValue, minGap)) {
+          continue;
+        }
+
+        return {
+          left: side === 'left' ? '-2.2%' : '97.2%',
+          top: topValue.toFixed(2) + '%',
+          side,
+        };
+      }
+    }
+
+    return null;
+  };
   const alienNodes = [];
   const alienRespawnDelay = 240;
+  const alienPeekIntervalDelay = 5000;
+  const alienPeekVisibleDuration = 90000;
+  const alienPeekMaxVisible = 5;
+  const alienPeekMinVerticalGap = 14;
   const aliensContainer = document.createElement('div');
   aliensContainer.className = 'arcade-aliens';
   aliensContainer.setAttribute('aria-hidden', 'true');
   document.body.appendChild(aliensContainer);
+  const alienPeekHideTimers = new Map();
+  let alienPeekIntervalId = null;
+  let alienMode = isHomepage ? 'roam' : 'peek';
 
-  const createAliens = () => {
+  const createAliens = (count = alienSprites.length) => {
     aliensContainer.replaceChildren();
     alienNodes.length = 0;
 
-    alienSprites.forEach((spriteFile, index) => {
+    for (let index = 0; index < count; index += 1) {
+      const spriteFile = alienSprites[index % alienSprites.length];
       const alien = document.createElement('button');
       alien.type = 'button';
       alien.className = 'arcade-alien';
@@ -48,32 +152,30 @@
 
       const parallax = rand(0.06, 0.16);
       const scale = rand(0.82, 1.1);
-      const left = rand(5, 88);
-      const top = rand(8, 72);
-      const wanderX = rand(5, 14) * (Math.random() > 0.5 ? 1 : -1);
-      const wanderY = rand(4, 10) * (Math.random() > 0.5 ? 1 : -1);
-      const wanderMidX = clamp(left + wanderX, 4, 92);
-      const wanderMidY = clamp(top + wanderY, 6, 88);
-      const wanderEndX = clamp(left + wanderX * -0.65, 4, 92);
-      const wanderEndY = clamp(top + wanderY * -0.65, 6, 88);
+      const entryPoint = pickOuterSafePoint();
+      const midPoint = pickOuterSafePoint();
+      const endPoint = pickOuterSafePoint();
+      const startPoint = pickOffscreenStart(entryPoint.x, entryPoint.y);
       const bobDelay = rand(0, 5).toFixed(2);
       const bobDuration = rand(2.8, 4.8).toFixed(2);
       const wanderDuration = rand(14, 26).toFixed(2);
-      const wanderDelay = rand(0, 6).toFixed(2);
+      const wanderDelay = rand(0, 1.2).toFixed(2);
 
-      alien.style.left = left + '%';
-      alien.style.top = top + '%';
+      alien.style.left = startPoint.x + '%';
+      alien.style.top = startPoint.y + '%';
       alien.style.setProperty('--alien-scale', scale.toFixed(2));
       alien.style.setProperty('--alien-parallax', '0px');
       alien.style.setProperty('--alien-bob-duration', bobDuration + 's');
       alien.style.setProperty('--alien-wander-duration', wanderDuration + 's');
       alien.style.setProperty('--alien-wander-delay', wanderDelay + 's');
-      alien.style.setProperty('--alien-start-x', left.toFixed(2) + '%');
-      alien.style.setProperty('--alien-start-y', top.toFixed(2) + '%');
-      alien.style.setProperty('--alien-mid-x', wanderMidX.toFixed(2) + '%');
-      alien.style.setProperty('--alien-mid-y', wanderMidY.toFixed(2) + '%');
-      alien.style.setProperty('--alien-end-x', wanderEndX.toFixed(2) + '%');
-      alien.style.setProperty('--alien-end-y', wanderEndY.toFixed(2) + '%');
+      alien.style.setProperty('--alien-start-x', startPoint.x.toFixed(2) + '%');
+      alien.style.setProperty('--alien-start-y', startPoint.y.toFixed(2) + '%');
+      alien.style.setProperty('--alien-entry-x', entryPoint.x.toFixed(2) + '%');
+      alien.style.setProperty('--alien-entry-y', entryPoint.y.toFixed(2) + '%');
+      alien.style.setProperty('--alien-mid-x', midPoint.x.toFixed(2) + '%');
+      alien.style.setProperty('--alien-mid-y', midPoint.y.toFixed(2) + '%');
+      alien.style.setProperty('--alien-end-x', endPoint.x.toFixed(2) + '%');
+      alien.style.setProperty('--alien-end-y', endPoint.y.toFixed(2) + '%');
       alien.dataset.parallax = String(parallax);
       alien.dataset.state = 'idle';
 
@@ -95,11 +197,72 @@
         event.preventDefault();
         explodeAlien(alien);
       });
+    }
+  };
+
+  const animateHomepageStats = () => {
+    const stats = Array.from(document.querySelectorAll('.hero .stat'));
+
+    if (!stats.length) {
+      return;
+    }
+
+    const parsePercent = (value) => {
+      const parsed = Number.parseInt(String(value).replace(/[^\d]/g, ''), 10);
+      return Number.isFinite(parsed) ? clamp(parsed, 0, 100) : 0;
+    };
+
+    stats.forEach((stat, index) => {
+      const valueNode = stat.querySelector('.stat-value');
+      const fillNode = stat.querySelector('.stat-fill');
+
+      if (!valueNode || !fillNode) {
+        return;
+      }
+
+      const labelTarget = parsePercent(valueNode.textContent || '0');
+      const fillTarget = parsePercent(fillNode.style.width || '0');
+      const target = Math.max(labelTarget, fillTarget);
+
+      if (reduceMotionQuery.matches) {
+        valueNode.textContent = target + '%';
+        fillNode.style.width = target + '%';
+        return;
+      }
+
+      const duration = 1450;
+      const delay = index * 220;
+      const startTime = performance.now() + delay;
+
+      valueNode.textContent = '0%';
+      fillNode.style.width = '0%';
+
+      const tick = (now) => {
+        if (now < startTime) {
+          requestAnimationFrame(tick);
+          return;
+        }
+
+        const elapsed = now - startTime;
+        const progress = Math.min(1, elapsed / duration);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = Math.round(target * eased);
+
+        valueNode.textContent = current + '%';
+        fillNode.style.width = current + '%';
+
+        if (progress < 1) {
+          requestAnimationFrame(tick);
+        }
+      };
+
+      requestAnimationFrame(tick);
     });
   };
 
   if (isHomepage) {
     createAliens();
+    animateHomepageStats();
   }
 
   const updateAlienParallax = () => {
@@ -109,7 +272,7 @@
 
     const scrollY = window.scrollY || window.pageYOffset || 0;
     alienNodes.forEach((alien) => {
-      if (alien.dataset.state === 'hidden') {
+      if (alien.dataset.state === 'hidden' || alien.classList.contains('is-peeking')) {
         return;
       }
 
@@ -125,6 +288,134 @@
     updateAlienParallax();
   };
 
+  const clearPeekHideTimer = (alien) => {
+    const timerId = alienPeekHideTimers.get(alien);
+    if (!timerId) {
+      return;
+    }
+
+    window.clearTimeout(timerId);
+    alienPeekHideTimers.delete(alien);
+  };
+
+  const hidePeekAlien = (alien) => {
+    if (!alien) {
+      return;
+    }
+
+    clearPeekHideTimer(alien);
+    alien.dataset.state = 'hidden';
+    alien.hidden = true;
+    alien.disabled = false;
+    alien.classList.remove('is-peeking');
+    alien.classList.remove('is-peek-left');
+    alien.classList.remove('is-peek-right');
+    alien.classList.remove('is-peek-entering');
+    delete alien.dataset.peekSide;
+    alien.style.removeProperty('--alien-peek-rotation');
+    alien.style.removeProperty('--alien-peek-slide-x');
+    alien.classList.remove('is-exploding');
+  };
+
+  const showPeekAlien = (alien, activePeekAliens = []) => {
+    if (!alien) {
+      return;
+    }
+
+    const position = pickPeekPosition(activePeekAliens, alienPeekMinVerticalGap);
+
+    if (!position) {
+      return;
+    }
+
+    clearPeekHideTimer(alien);
+    alien.hidden = false;
+    alien.disabled = false;
+    alien.dataset.state = 'idle';
+    alien.classList.remove('is-exploding');
+    alien.classList.add('is-peeking');
+    alien.classList.remove('is-peek-left');
+    alien.classList.remove('is-peek-right');
+    alien.classList.remove('is-peek-entering');
+    alien.style.left = position.left;
+    alien.style.top = position.top;
+    alien.dataset.peekSide = position.side;
+
+    if (position.side === 'left') {
+      alien.classList.add('is-peek-left');
+      alien.style.setProperty('--alien-peek-rotation', '12deg');
+      alien.style.setProperty('--alien-peek-slide-x', '-22px');
+    } else {
+      alien.classList.add('is-peek-right');
+      alien.style.setProperty('--alien-peek-rotation', '-12deg');
+      alien.style.setProperty('--alien-peek-slide-x', '22px');
+    }
+
+    alien.classList.add('is-peek-entering');
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        alien.style.setProperty('--alien-peek-slide-x', '0px');
+        alien.classList.remove('is-peek-entering');
+      });
+    });
+
+    const hideTimer = window.setTimeout(() => {
+      hidePeekAlien(alien);
+    }, alienPeekVisibleDuration);
+
+    alienPeekHideTimers.set(alien, hideTimer);
+  };
+
+  const spawnPeekAlien = () => {
+    if (alienMode !== 'peek') {
+      return;
+    }
+
+    const activePeekAliens = alienNodes.filter((alien) => alien.classList.contains('is-peeking') && !alien.hidden);
+
+    if (activePeekAliens.length >= alienPeekMaxVisible) {
+      return;
+    }
+
+    const hiddenAliens = alienNodes.filter((alien) => alien.hidden || alien.dataset.state === 'hidden');
+
+    if (!hiddenAliens.length) {
+      return;
+    }
+
+    const alien = hiddenAliens[Math.floor(Math.random() * hiddenAliens.length)];
+    showPeekAlien(alien, activePeekAliens);
+  };
+
+  const clearPeekCycle = () => {
+    if (alienPeekIntervalId) {
+      window.clearInterval(alienPeekIntervalId);
+      alienPeekIntervalId = null;
+    }
+
+    alienNodes.forEach((alien) => {
+      clearPeekHideTimer(alien);
+    });
+  };
+
+  const startPeekCycle = () => {
+    alienMode = 'peek';
+    createAliens(22);
+    alienNodes.forEach((alien) => {
+      hidePeekAlien(alien);
+    });
+
+    clearPeekCycle();
+    alienPeekIntervalId = window.setInterval(spawnPeekAlien, alienPeekIntervalDelay);
+    spawnPeekAlien();
+  };
+
+  const switchToRoamMode = () => {
+    clearPeekCycle();
+    alienMode = 'roam';
+    regenerateAliens();
+  };
+
   const explodeAlien = (alien) => {
     if (!alien || alien.dataset.state !== 'idle') {
       return;
@@ -133,6 +424,8 @@
     alien.dataset.state = 'exploding';
     alien.disabled = true;
     alien.classList.add('is-exploding');
+    alien.classList.remove('is-peeking');
+    clearPeekHideTimer(alien);
 
     window.setTimeout(() => {
       alien.dataset.state = 'hidden';
@@ -206,6 +499,11 @@
       }, spinDuration);
     }
 
+    if (!isHomepage && alienMode === 'peek') {
+      switchToRoamMode();
+      return;
+    }
+
     window.setTimeout(() => {
       regenerateAliens();
     }, alienRespawnDelay);
@@ -217,6 +515,10 @@
 
   if (tickerCoinTrigger) {
     tickerCoinTrigger.addEventListener('click', triggerCoinAndAliens);
+  }
+
+  if (!isHomepage) {
+    startPeekCycle();
   }
 
   const trigger = document.getElementById('player-one-trigger');

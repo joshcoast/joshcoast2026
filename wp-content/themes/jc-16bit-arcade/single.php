@@ -13,6 +13,7 @@ get_header();
 			<article <?php post_class(); ?>>
 				<h1 class="section-title"><?php the_title(); ?></h1>
 				<p class="meta"><?php echo esc_html( get_the_date() ); ?> · <?php the_author(); ?></p>
+				<?php jc_16bit_arcade_render_category_icons(); ?>
 				<div class="entry-content"><?php the_content(); ?></div>
 			</article>
 		<?php endwhile; ?>
