@@ -9,6 +9,24 @@ get_header();
 
 $linkedin_url = apply_filters( 'jc_16bit_arcade_linkedin_url', 'https://www.linkedin.com/' );
 
+$projects_page = get_page_by_path( 'projects' );
+$projects_url  = $projects_page ? get_permalink( $projects_page ) : home_url( '/projects/' );
+$clients_url   = post_type_exists( 'client' ) ? get_post_type_archive_link( 'client' ) : $projects_url;
+
+$featured_projects_query = null;
+
+if ( post_type_exists( 'client' ) ) {
+	$featured_projects_query = new WP_Query(
+		array(
+			'post_type'      => 'client',
+			'posts_per_page' => 3,
+			'post_status'    => 'publish',
+			'orderby'        => 'menu_order title',
+			'order'          => 'ASC',
+		)
+	);
+}
+
 $skill_stats = array(
 	array(
 		'label'   => 'WORDPRESS DEVELOPMENT',
@@ -46,12 +64,60 @@ $skill_stats = array(
 	</div>
 	<div class="cta-row">
 		<a class="btn-arcade btn-primary" href="<?php echo esc_url( $linkedin_url ); ?>" target="_blank" rel="noopener noreferrer">START CONVERSATION <span class="external-site-icon" aria-hidden="true"><svg viewBox="0 0 14 14" focusable="false"><path d="M3 11h8V7h2v6H1V1h6v2H3z" fill="currentColor"/><path d="M8 1h5v5h-2V4.4L6.7 8.7 5.3 7.3 9.6 3H8z" fill="currentColor"/></svg></span><span class="screen-reader-text"> Opens LinkedIn in a new tab</span></a>
-		<a class="btn-arcade btn-secondary" href="<?php echo esc_url( get_post_type_archive_link( 'post' ) ?: home_url( '/' ) ); ?>">VIEW ALL JOURNALS</a>
+		<a class="btn-arcade btn-secondary" href="<?php echo esc_url( $clients_url ); ?>">VIEW FEATURED CLIENTS</a>
 	</div>
 	<div class="humor-box">
 		<strong>NPC Tip:</strong>
 		<?php echo esc_html( jc_16bit_arcade_humor_line() ); ?>
 	</div>
+
+	<section class="project-priority" aria-labelledby="featured-projects-title">
+		<div class="project-priority-head">
+			<p class="sprite-mode">HIRING MODE: CLIENT WORK SHOWCASE</p>
+			<h2 class="section-title project-priority-title" id="featured-projects-title">FEATURED CLIENT PROJECTS</h2>
+			<p class="project-priority-lead">The fastest way to evaluate fit is to review shipped client work. These highlights spotlight implementation quality, UX thinking, and production-ready details.</p>
+		</div>
+
+		<?php if ( $featured_projects_query && $featured_projects_query->have_posts() ) : ?>
+		<div class="project-priority-grid">
+			<?php
+			while ( $featured_projects_query->have_posts() ) :
+				$featured_projects_query->the_post();
+				$project_type_obj = get_post_type_object( get_post_type() );
+				$project_type     = $project_type_obj && ! empty( $project_type_obj->labels->singular_name )
+					? $project_type_obj->labels->singular_name
+					: ucfirst( (string) get_post_type() );
+				?>
+				<article <?php post_class( 'project-priority-card' ); ?>>
+					<?php if ( 'client' === get_post_type() && has_post_thumbnail() ) : ?>
+						<div class="card-thumb card-thumb--featured">
+							<?php the_post_thumbnail( 'large', array( 'loading' => 'lazy', 'decoding' => 'async' ) ); ?>
+						</div>
+					<?php else : ?>
+						<?php jc_16bit_arcade_render_post_card_image(); ?>
+					<?php endif; ?>
+					<h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+					<p class="meta"><?php echo esc_html( $project_type ); ?> · Updated <?php echo esc_html( get_the_modified_date() ); ?></p>
+					<?php if ( 'post' === get_post_type() ) : ?>
+						<?php jc_16bit_arcade_render_category_icons(); ?>
+					<?php endif; ?>
+					<p><?php echo esc_html( wp_trim_words( wp_strip_all_tags( get_the_excerpt() ?: get_the_content() ), 24 ) ); ?></p>
+					<a class="project-priority-link" href="<?php the_permalink(); ?>">OPEN BUILD</a>
+				</article>
+				<?php
+			endwhile;
+			wp_reset_postdata();
+			?>
+		</div>
+		<?php else : ?>
+		<p class="project-priority-empty">Client entries will appear here automatically from the Client post type.</p>
+		<?php endif; ?>
+
+		<div class="project-priority-actions">
+			<a class="btn-arcade btn-primary" href="<?php echo esc_url( $clients_url ); ?>">BROWSE ALL CLIENTS</a>
+			<a class="btn-arcade btn-secondary" href="<?php echo esc_url( $linkedin_url ); ?>" target="_blank" rel="noopener noreferrer">REQUEST WALKTHROUGH</a>
+		</div>
+	</section>
 
 	<?php
 	/*
@@ -137,7 +203,7 @@ $skill_stats = array(
 
 <div class="content-grid">
 	<section class="arcade-panel">
-		<h2 class="section-title">LATEST QUEST LOGS</h2>
+		<h2 class="section-title">DEV JOURNAL</h2>
 		<div class="card-list">
 			<?php
 			$recent_posts = new WP_Query(
@@ -171,7 +237,7 @@ $skill_stats = array(
 	</section>
 
 	<section class="arcade-panel">
-		<h2 class="section-title">SIDE QUESTS (PAGES)</h2>
+		<h2 class="section-title">SUPPORTING PAGES</h2>
 		<div class="card-list">
 			<?php
 			$recent_pages = new WP_Query(

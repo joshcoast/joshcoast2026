@@ -115,6 +115,69 @@ a:focus-visible {
   outline-offset: 3px;
 }
 
+a.gb-button,
+.gb-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  min-height: 2.9rem;
+  padding: 0.8rem 1.15rem;
+  border: 2px solid var(--cyan);
+  border-radius: 9px;
+  background: linear-gradient(180deg, rgba(25, 42, 110, 0.96), rgba(18, 32, 89, 0.96));
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 0 0 1px rgba(90, 242, 255, 0.12), 0 10px 22px rgba(3, 10, 34, 0.22);
+  color: #f5fbff;
+  font-family: "Press Start 2P", monospace;
+  font-size: 10px;
+  line-height: 1.2;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.14);
+  transition: background-color 120ms ease, box-shadow 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+
+a.gb-button:visited,
+.gb-button:visited {
+  color: var(--ink);
+}
+
+a.gb-button:hover,
+a.gb-button:focus-visible,
+.gb-button:hover,
+.gb-button:focus-visible {
+  color: #ffffff;
+  border-color: #7ef6ff;
+  background: linear-gradient(180deg, rgba(30, 50, 126, 0.98), rgba(20, 37, 102, 0.98));
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12), 0 0 0 1px rgba(90, 242, 255, 0.24), 0 0 18px rgba(90, 242, 255, 0.18);
+}
+
+a.gb-button:active,
+.gb-button:active {
+  background: linear-gradient(180deg, rgba(16, 28, 81, 0.98), rgba(14, 24, 69, 0.98));
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06), 0 0 0 1px rgba(90, 242, 255, 0.16);
+}
+
+.gb-button .gb-button-text {
+  display: inline-block;
+}
+
+.gb-button .gb-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  line-height: 0;
+}
+
+.gb-button .gb-icon svg {
+  width: 1rem;
+  height: 1rem;
+  display: block;
+  fill: currentColor;
+}
+
 .has-base-3-color {
   color: var(--wp--preset--color--base-3) !important;
 }
@@ -609,6 +672,84 @@ main {
   background: rgba(4, 13, 40, 0.52);
 }
 
+.project-priority {
+  margin-top: 0.8rem;
+  border: 2px solid var(--yellow);
+  border-radius: 12px;
+  background:
+    linear-gradient(155deg, rgba(255, 231, 104, 0.12), rgba(9, 16, 47, 0.9) 30%),
+    rgba(6, 12, 38, 0.84);
+  padding: clamp(0.9rem, 2.8vw, 1.4rem);
+  box-shadow: 0 0 0 3px rgba(255, 231, 104, 0.12), 0 12px 26px rgba(0, 0, 0, 0.35);
+}
+
+.project-priority-head {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.project-priority-title {
+  color: var(--yellow);
+  margin-bottom: 0;
+}
+
+.project-priority-lead {
+  margin: 0;
+  color: #f2fbff;
+  max-width: 68ch;
+}
+
+.project-priority-grid {
+  margin-top: 0.8rem;
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: 1fr;
+}
+
+.project-priority-card {
+  border: 2px solid #efc54f;
+  border-radius: 10px;
+  background: rgba(8, 15, 43, 0.86);
+  padding: 0.8rem;
+}
+
+.project-priority-card .card-thumb {
+  margin: -0.8rem -0.8rem 0.7rem;
+  border-bottom-color: #efc54f;
+}
+
+.project-priority-card h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1.14em;
+}
+
+.project-priority-link {
+  display: inline-block;
+  margin-top: 0.35rem;
+  font-family: "Press Start 2P", monospace;
+  font-size: 9px;
+  letter-spacing: 0.4px;
+  color: var(--yellow);
+  text-decoration: none;
+}
+
+.project-priority-link:hover,
+.project-priority-link:focus-visible {
+  color: var(--cyan);
+}
+
+.project-priority-empty {
+  margin: 0.8rem 0 0;
+  color: #ecf7ff;
+}
+
+.project-priority-actions {
+  margin-top: 0.9rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
 .dev-heroes {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
@@ -934,6 +1075,10 @@ main {
 }
 
 @media (min-width: 860px) {
+  .project-priority-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   .content-grid {
     grid-template-columns: 1.2fr 0.8fr;
   }
@@ -1028,30 +1173,30 @@ main {
   border-radius: 8px;
 }
 
-/* Single post reading mode: keep arcade shell, improve long-form readability. */
-.single-post .arcade-content article {
+/* Single content reading mode: keep arcade shell, improve long-form readability. */
+:is(.single-post, .single-client) .arcade-content article {
   max-width: min(74ch, 100%);
   margin-inline: auto;
 }
 
-.single-post .arcade-content .section-title {
+:is(.single-post, .single-client) .arcade-content .section-title {
   margin-bottom: 0.55rem;
   line-height: 1.45;
   font-size: clamp(16px, 2.1vw, 24px);
 }
 
-.single-post .arcade-content .meta {
+:is(.single-post, .single-client) .arcade-content .meta {
   margin: 0 0 0.45rem;
   font-size: 0.72em;
   letter-spacing: 0.02em;
   color: #cfe5ff;
 }
 
-.single-post .arcade-content .cat-row {
+:is(.single-post, .single-client) .arcade-content .cat-row {
   margin-bottom: 1.1rem;
 }
 
-.single-post .arcade-content .entry-content {
+:is(.single-post, .single-client) .arcade-content .entry-content {
   font-family: "Trebuchet MS", "Segoe UI", Tahoma, sans-serif;
   font-size: clamp(1.03rem, 1.15vw, 1.2rem);
   line-height: 1.7;
@@ -1059,14 +1204,14 @@ main {
   text-wrap: pretty;
 }
 
-.single-post .arcade-content .entry-content > * {
+:is(.single-post, .single-client) .arcade-content .entry-content > * {
   margin-top: 0;
   margin-bottom: 1rem;
 }
 
-.single-post .arcade-content .entry-content h2,
-.single-post .arcade-content .entry-content h3,
-.single-post .arcade-content .entry-content h4 {
+:is(.single-post, .single-client) .arcade-content .entry-content h2,
+:is(.single-post, .single-client) .arcade-content .entry-content h3,
+:is(.single-post, .single-client) .arcade-content .entry-content h4 {
   margin-top: 1.45em;
   margin-bottom: 0.55em;
   font-family: "Press Start 2P", monospace;
@@ -1074,42 +1219,42 @@ main {
   color: #9bf6ff;
 }
 
-.single-post .arcade-content .entry-content h2 {
+:is(.single-post, .single-client) .arcade-content .entry-content h2 {
   font-size: clamp(13px, 1.45vw, 16px);
 }
 
-.single-post .arcade-content .entry-content h3,
-.single-post .arcade-content .entry-content h4 {
+:is(.single-post, .single-client) .arcade-content .entry-content h3,
+:is(.single-post, .single-client) .arcade-content .entry-content h4 {
   font-size: clamp(11px, 1.2vw, 13px);
 }
 
-.single-post .arcade-content .entry-content p,
-.single-post .arcade-content .entry-content li,
-.single-post .arcade-content .entry-content blockquote {
+:is(.single-post, .single-client) .arcade-content .entry-content p,
+:is(.single-post, .single-client) .arcade-content .entry-content li,
+:is(.single-post, .single-client) .arcade-content .entry-content blockquote {
   max-width: 72ch;
 }
 
-.single-post .arcade-content .entry-content ul,
-.single-post .arcade-content .entry-content ol {
+:is(.single-post, .single-client) .arcade-content .entry-content ul,
+:is(.single-post, .single-client) .arcade-content .entry-content ol {
   padding-left: 1.25em;
 }
 
-.single-post .arcade-content .entry-content li + li {
+:is(.single-post, .single-client) .arcade-content .entry-content li + li {
   margin-top: 0.35em;
 }
 
-.single-post .arcade-content .entry-content a {
+:is(.single-post, .single-client) .arcade-content .entry-content a {
   color: #8df9ff;
   text-decoration-thickness: 1.5px;
   text-underline-offset: 3px;
 }
 
-.single-post .arcade-content .entry-content a:hover,
-.single-post .arcade-content .entry-content a:focus-visible {
+:is(.single-post, .single-client) .arcade-content .entry-content a:hover,
+:is(.single-post, .single-client) .arcade-content .entry-content a:focus-visible {
   color: #ffe768;
 }
 
-.single-post .arcade-content .entry-content blockquote {
+:is(.single-post, .single-client) .arcade-content .entry-content blockquote {
   margin-left: 0;
   padding: 0.65rem 0.95rem;
   border-left: 3px solid var(--cyan);
@@ -1117,19 +1262,19 @@ main {
   border-radius: 0 8px 8px 0;
 }
 
-.single-post .arcade-content .entry-content pre {
+:is(.single-post, .single-client) .arcade-content .entry-content pre {
   font-family: "VT323", monospace;
   letter-spacing: 0.01em;
 }
 
-.single-post .arcade-content .entry-content pre {
+:is(.single-post, .single-client) .arcade-content .entry-content pre {
   padding: 0.65rem 0.8rem;
   border-radius: 8px;
   background: rgba(5, 12, 37, 0.92);
   overflow-x: auto;
 }
 
-.single-post .arcade-content .entry-content :not(pre) > code {
+:is(.single-post, .single-client) .arcade-content .entry-content :not(pre) > code {
   display: inline;
   font-family: "IBM Plex Mono", "Fira Code", "JetBrains Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", monospace;
   font-size: 0.82em;
@@ -1145,7 +1290,7 @@ main {
   -webkit-box-decoration-break: clone;
 }
 
-.single-post .arcade-content .entry-content .wp-block-kevinbatdorf-code-block-pro {
+:is(.single-post, .single-client) .arcade-content .entry-content .wp-block-kevinbatdorf-code-block-pro {
   border-radius: 12px;
   overflow: hidden;
   font-size: 1rem !important;
@@ -1153,13 +1298,13 @@ main {
   font-family: "Fira Code", "JetBrains Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", monospace !important;
 }
 
-.single-post .arcade-content .entry-content .wp-block-kevinbatdorf-code-block-pro > span:first-child {
+:is(.single-post, .single-client) .arcade-content .entry-content .wp-block-kevinbatdorf-code-block-pro > span:first-child {
   margin: 0 !important;
   border-radius: 12px 12px 0 0;
 }
 
-.single-post .arcade-content .entry-content .wp-block-kevinbatdorf-code-block-pro pre,
-.single-post .arcade-content .entry-content .wp-block-kevinbatdorf-code-block-pro pre.shiki {
+:is(.single-post, .single-client) .arcade-content .entry-content .wp-block-kevinbatdorf-code-block-pro pre,
+:is(.single-post, .single-client) .arcade-content .entry-content .wp-block-kevinbatdorf-code-block-pro pre.shiki {
   margin: 0 !important;
   border-radius: 0 0 12px 12px;
   overflow-x: auto;
@@ -1168,18 +1313,60 @@ main {
   font-family: inherit !important;
 }
 
-.single-post .arcade-content .entry-content .wp-block-kevinbatdorf-code-block-pro code {
+:is(.single-post, .single-client) .arcade-content .entry-content .wp-block-kevinbatdorf-code-block-pro code {
   font-size: inherit !important;
   line-height: inherit !important;
   font-family: inherit !important;
 }
 
+.single-client .arcade-content .client-meta {
+  margin-bottom: 0.9rem;
+}
+
+.single-client .arcade-content.client-single-layout {
+  padding: 0;
+}
+
+.single-client .arcade-content.client-single-layout .client-case {
+  padding: clamp(1rem, 3vw, 2rem);
+}
+
+.single-client .arcade-content .client-hero-media {
+  margin: 0;
+  padding: clamp(1rem, 3vw, 2rem);
+  overflow: visible;
+}
+
+.single-client .arcade-content .client-hero-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 2px solid #2b4fa2;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.single-client .arcade-content .client-meta-divider {
+  margin-inline: 0.4rem;
+}
+
+.single-client .arcade-content .client-deck {
+  margin: 0 0 1.1rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid rgba(90, 242, 255, 0.35);
+  border-radius: 8px;
+  background: rgba(7, 17, 48, 0.78);
+  color: #f2fbff;
+  font-size: clamp(1.04rem, 1.25vw, 1.22rem);
+  line-height: 1.6;
+}
+
 @media (max-width: 760px) {
-  .single-post .arcade-content article {
+  :is(.single-post, .single-client) .arcade-content article {
     max-width: 100%;
   }
 
-  .single-post .arcade-content .entry-content {
+  :is(.single-post, .single-client) .arcade-content .entry-content {
     font-size: 1.05rem;
     line-height: 1.65;
   }

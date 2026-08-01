@@ -21,6 +21,51 @@ if ( ! function_exists( 'jc_16bit_arcade_setup' ) ) {
 }
 add_action( 'after_setup_theme', 'jc_16bit_arcade_setup' );
 
+/**
+ * Register a lightweight Client post type used by legacy portfolio content.
+ */
+function jc_16bit_arcade_register_client_post_type() {
+	$labels = array(
+		'name'                  => __( 'Clients', 'jc-16bit-arcade' ),
+		'singular_name'         => __( 'Client', 'jc-16bit-arcade' ),
+		'menu_name'             => __( 'Clients', 'jc-16bit-arcade' ),
+		'name_admin_bar'        => __( 'Client', 'jc-16bit-arcade' ),
+		'add_new'               => __( 'Add New', 'jc-16bit-arcade' ),
+		'add_new_item'          => __( 'Add New Client', 'jc-16bit-arcade' ),
+		'new_item'              => __( 'New Client', 'jc-16bit-arcade' ),
+		'edit_item'             => __( 'Edit Client', 'jc-16bit-arcade' ),
+		'view_item'             => __( 'View Client', 'jc-16bit-arcade' ),
+		'all_items'             => __( 'All Clients', 'jc-16bit-arcade' ),
+		'search_items'          => __( 'Search Clients', 'jc-16bit-arcade' ),
+		'not_found'             => __( 'No clients found.', 'jc-16bit-arcade' ),
+		'not_found_in_trash'    => __( 'No clients found in Trash.', 'jc-16bit-arcade' ),
+		'archives'              => __( 'Client Archives', 'jc-16bit-arcade' ),
+		'attributes'            => __( 'Client Attributes', 'jc-16bit-arcade' ),
+		'insert_into_item'      => __( 'Insert into client', 'jc-16bit-arcade' ),
+		'uploaded_to_this_item' => __( 'Uploaded to this client', 'jc-16bit-arcade' ),
+	);
+
+	$args = array(
+		'labels'             => $labels,
+		'public'             => true,
+		'show_ui'            => true,
+		'show_in_menu'       => true,
+		'has_archive'        => 'clients',
+		'rewrite'            => array(
+			'slug'       => 'clients',
+			'with_front' => false,
+		),
+		'show_in_rest'       => true,
+		'menu_icon'          => 'dashicons-groups',
+		'supports'           => array( 'title', 'editor', 'excerpt', 'thumbnail', 'revisions' ),
+		'publicly_queryable' => true,
+		'exclude_from_search'=> false,
+	);
+
+	register_post_type( 'client', $args );
+}
+add_action( 'init', 'jc_16bit_arcade_register_client_post_type' );
+
 function jc_16bit_arcade_assets() {
 	wp_enqueue_style( 'jc-16bit-google-fonts', 'https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap', array(), null );
 	wp_enqueue_style( 'jc-16bit-style', get_stylesheet_uri(), array( 'jc-16bit-google-fonts' ), wp_get_theme()->get( 'Version' ) );
