@@ -28,6 +28,15 @@ function jc_16bit_arcade_assets() {
 }
 add_action( 'wp_enqueue_scripts', 'jc_16bit_arcade_assets' );
 
+/**
+ * Keep WP preset text colors readable against the dark arcade theme in the editor.
+ */
+function jc_16bit_arcade_editor_palette_fixes() {
+	$editor_css = '.editor-styles-wrapper{--wp--preset--color--base-3:#ff4fd8;}.editor-styles-wrapper .has-base-3-color{color:var(--wp--preset--color--base-3)!important;}';
+	wp_add_inline_style( 'wp-edit-blocks', $editor_css );
+}
+add_action( 'enqueue_block_editor_assets', 'jc_16bit_arcade_editor_palette_fixes' );
+
 function jc_16bit_arcade_body_classes( $classes ) {
 	$classes[] = 'jc-16bit-theme';
 
@@ -131,4 +140,60 @@ function jc_16bit_arcade_render_category_icons( $post_id = 0 ) {
 		echo '</li>';
 	}
 	echo '</ul>';
+}
+
+/**
+ * Get the category image for a post based on its first category.
+ *
+ * Falls back to tools.jpg when the category is uncategorized or has no image.
+ *
+ * @param int $post_id Post ID.
+ * @return array{slug:string,label:string,url:string}
+ */
+function jc_16bit_arcade_get_post_category_image( $post_id = 0 ) {
+	$post_id      = $post_id ? (int) $post_id : get_the_ID();
+	$categories   = get_the_category( $post_id );
+	$fallback_slug = 'tools';
+	$fallback     = array(
+		'slug'  => $fallback_slug,
+		'label' => __( 'Tools', 'jc-16bit-arcade' ),
+		'url'   => get_theme_file_uri( 'assets/img/catagories/tools.jpg' ),
+	);
+
+	if ( empty( $categories ) || is_wp_error( $categories ) ) {
+		return $fallback;
+	}
+
+	$primary = $categories[0];
+	$slug    = sanitize_title( $primary->slug );
+
+	if ( 'uncategorized' === $slug ) {
+		return $fallback;
+	}
+
+	$relative_path = 'assets/img/catagories/' . $slug . '.jpg';
+	$absolute_path = get_theme_file_path( $relative_path );
+
+	if ( ! file_exists( $absolute_path ) ) {
+		return $fallback;
+	}
+
+	return array(
+		'slug'  => $slug,
+		'label' => $primary->name,
+		'url'   => get_theme_file_uri( $relative_path ),
+	);
+}
+
+/**
+ * Render the category image for a post card.
+ *
+ * @param int $post_id Post ID.
+ */
+function jc_16bit_arcade_render_post_card_image( $post_id = 0 ) {
+	$image = jc_16bit_arcade_get_post_category_image( $post_id );
+
+	echo '<div class="card-thumb card-thumb--' . esc_attr( $image['slug'] ) . '">';
+	echo '<img src="' . esc_url( $image['url'] ) . '" alt="' . esc_attr( $image['label'] ) . '" loading="lazy" decoding="async" />';
+	echo '</div>';
 }

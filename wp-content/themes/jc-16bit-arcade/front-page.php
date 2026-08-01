@@ -13,7 +13,7 @@ $skill_stats = array(
 	array(
 		'label'   => 'WORDPRESS DEVELOPMENT',
 		'percent' => 96,
-		'level'   => 'PLUGIN + THEME XP',
+		'level'   => 'CUSTOM BLOCKS + THEME XP',
 	),
 	array(
 		'label'   => 'UI/UX DESIGN',
@@ -152,6 +152,7 @@ $skill_stats = array(
 					$recent_posts->the_post();
 					?>
 					<article <?php post_class( 'card-item' ); ?>>
+						<?php jc_16bit_arcade_render_post_card_image(); ?>
 						<h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
 						<p class="meta"><?php echo esc_html( get_the_date() ); ?> · <?php the_author(); ?></p>
 						<?php jc_16bit_arcade_render_category_icons(); ?>

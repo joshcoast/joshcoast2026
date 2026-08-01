@@ -543,21 +543,95 @@ add_action( 'wp_ajax_filter_posts', 'wp_blog_filter_ajax_handler' );
 add_action( 'wp_ajax_nopriv_filter_posts', 'wp_blog_filter_ajax_handler' );
 
 /**
+ * Resolve the category image for blog filter cards.
+ *
+ * Uses the first category image from the active theme and falls back to tools.jpg.
+ *
+ * @param int $post_id Post ID.
+ * @return array{slug:string,label:string,url:string}
+ */
+function wp_blog_filter_get_post_category_image( $post_id = 0 ) {
+	$post_id = $post_id ? (int) $post_id : get_the_ID();
+
+	if ( function_exists( 'jc_16bit_arcade_get_post_category_image' ) ) {
+		return jc_16bit_arcade_get_post_category_image( $post_id );
+	}
+
+	$categories    = get_the_category( $post_id );
+	$fallback_slug = 'tools';
+	$fallback      = array(
+		'slug'  => $fallback_slug,
+		'label' => __( 'Tools', 'wp-blog-category-filter' ),
+		'url'   => get_stylesheet_directory_uri() . '/assets/img/catagories/tools.jpg',
+	);
+
+	if ( empty( $categories ) || is_wp_error( $categories ) ) {
+		return $fallback;
+	}
+
+	$primary = $categories[0];
+	$slug    = sanitize_title( $primary->slug );
+
+	if ( 'uncategorized' === $slug ) {
+		return $fallback;
+	}
+
+	$relative_path = '/assets/img/catagories/' . $slug . '.jpg';
+	$absolute_path = get_stylesheet_directory() . $relative_path;
+
+	if ( ! file_exists( $absolute_path ) ) {
+		return $fallback;
+	}
+
+	return array(
+		'slug'  => $slug,
+		'label' => $primary->name,
+		'url'   => get_stylesheet_directory_uri() . $relative_path,
+	);
+}
+
+/**
+ * Render category chips for a filter post card.
+ *
+ * @param int $post_id Post ID.
+ */
+function wp_blog_filter_render_post_categories( $post_id = 0 ) {
+	$post_id    = $post_id ? (int) $post_id : get_the_ID();
+	$categories = get_the_category( $post_id );
+
+	if ( empty( $categories ) || is_wp_error( $categories ) ) {
+		return;
+	}
+
+	if ( function_exists( 'jc_16bit_arcade_render_category_icons' ) ) {
+		jc_16bit_arcade_render_category_icons( $post_id );
+		return;
+	}
+
+	echo '<ul class="cat-row" aria-label="Post categories">';
+	foreach ( $categories as $category ) {
+		echo '<li class="cat-chip">';
+		echo '<span class="cat-name">' . esc_html( $category->name ) . '</span>';
+		echo '</li>';
+	}
+	echo '</ul>';
+}
+
+/**
  * Render a single post with custom layout
  */
 function wp_blog_filter_render_post() {
 	$options = wp_blog_filter_get_options();
+	$image   = wp_blog_filter_get_post_category_image();
 
 	// Custom post format with modern layout
 	?>
 	<article class="wp-blog-filter__post-card">
-		<?php if ( has_post_thumbnail() ) : ?>
-			<div class="wp-blog-filter__post-image">
-				<a href="<?php the_permalink(); ?>">
-					<?php the_post_thumbnail( 'medium_large' ); ?>
-				</a>
-			</div>
-		<?php endif; ?>
+		<div class="wp-blog-filter__post-image wp-blog-filter__post-image--<?php echo esc_attr( $image['slug'] ); ?>">
+			<a href="<?php the_permalink(); ?>">
+				<img src="<?php echo esc_url( $image['url'] ); ?>" alt="<?php echo esc_attr( $image['label'] ); ?>" loading="lazy" decoding="async" />
+			</a>
+		</div>
 
 		<header class="wp-blog-filter__post-header">
 			<h2 class="wp-blog-filter__post-title">
@@ -569,6 +643,8 @@ function wp_blog_filter_render_post() {
 					<?php echo get_the_date(); ?>
 				</time>
 			</div>
+
+			<?php wp_blog_filter_render_post_categories(); ?>
 		</header>
 
 		<div class="wp-blog-filter__post-excerpt">

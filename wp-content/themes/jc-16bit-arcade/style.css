@@ -32,6 +32,7 @@ Tags: portfolio, blog, custom-logo, custom-menu, featured-images, full-site-edit
   --maxw: 1120px;
   --radius: 14px;
   --shadow: 0 8px 0 #07102f, 0 18px 40px rgba(0, 0, 0, 0.45);
+  --wp--preset--color--base-3: #ff4fd8;
 }
 
 * {
@@ -112,6 +113,10 @@ a:focus {
 a:focus-visible {
   outline: 3px dashed var(--cyan);
   outline-offset: 3px;
+}
+
+.has-base-3-color {
+  color: var(--wp--preset--color--base-3) !important;
 }
 
 .site-wrap {
@@ -583,15 +588,6 @@ main {
   outline-offset: 3px;
 }
 
-/* Content buttons (e.g. "View Project ->" from block content) */
-.wp-block-button__link,
-a.gb-button,
-.gb-button {
-  font-size: clamp(14px, 1.15vw, 18px);
-  padding: 0.9rem 1.25rem;
-  min-height: 44px;
-}
-
 .external-site-icon {
   display: inline-flex;
   width: 0.85rem;
@@ -955,6 +951,22 @@ a.gb-button,
   padding: 0.8rem;
 }
 
+.card-thumb {
+  margin: -0.8rem -0.8rem 0.75rem;
+  border-bottom: 2px solid #2b4fa2;
+  background: rgba(5, 12, 37, 0.9);
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+}
+
+.card-thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: auto;
+}
+
 .card-item h3,
 .card-item h2 {
   margin: 0 0 0.3rem;
@@ -1014,6 +1026,163 @@ a.gb-button,
   max-width: 100%;
   height: auto;
   border-radius: 8px;
+}
+
+/* Single post reading mode: keep arcade shell, improve long-form readability. */
+.single-post .arcade-content article {
+  max-width: min(74ch, 100%);
+  margin-inline: auto;
+}
+
+.single-post .arcade-content .section-title {
+  margin-bottom: 0.55rem;
+  line-height: 1.45;
+  font-size: clamp(16px, 2.1vw, 24px);
+}
+
+.single-post .arcade-content .meta {
+  margin: 0 0 0.45rem;
+  font-size: 0.72em;
+  letter-spacing: 0.02em;
+  color: #cfe5ff;
+}
+
+.single-post .arcade-content .cat-row {
+  margin-bottom: 1.1rem;
+}
+
+.single-post .arcade-content .entry-content {
+  font-family: "Trebuchet MS", "Segoe UI", Tahoma, sans-serif;
+  font-size: clamp(1.03rem, 1.15vw, 1.2rem);
+  line-height: 1.7;
+  color: #ecf6ff;
+  text-wrap: pretty;
+}
+
+.single-post .arcade-content .entry-content > * {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.single-post .arcade-content .entry-content h2,
+.single-post .arcade-content .entry-content h3,
+.single-post .arcade-content .entry-content h4 {
+  margin-top: 1.45em;
+  margin-bottom: 0.55em;
+  font-family: "Press Start 2P", monospace;
+  line-height: 1.55;
+  color: #9bf6ff;
+}
+
+.single-post .arcade-content .entry-content h2 {
+  font-size: clamp(13px, 1.45vw, 16px);
+}
+
+.single-post .arcade-content .entry-content h3,
+.single-post .arcade-content .entry-content h4 {
+  font-size: clamp(11px, 1.2vw, 13px);
+}
+
+.single-post .arcade-content .entry-content p,
+.single-post .arcade-content .entry-content li,
+.single-post .arcade-content .entry-content blockquote {
+  max-width: 72ch;
+}
+
+.single-post .arcade-content .entry-content ul,
+.single-post .arcade-content .entry-content ol {
+  padding-left: 1.25em;
+}
+
+.single-post .arcade-content .entry-content li + li {
+  margin-top: 0.35em;
+}
+
+.single-post .arcade-content .entry-content a {
+  color: #8df9ff;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+
+.single-post .arcade-content .entry-content a:hover,
+.single-post .arcade-content .entry-content a:focus-visible {
+  color: #ffe768;
+}
+
+.single-post .arcade-content .entry-content blockquote {
+  margin-left: 0;
+  padding: 0.65rem 0.95rem;
+  border-left: 3px solid var(--cyan);
+  background: rgba(9, 18, 53, 0.55);
+  border-radius: 0 8px 8px 0;
+}
+
+.single-post .arcade-content .entry-content pre {
+  font-family: "VT323", monospace;
+  letter-spacing: 0.01em;
+}
+
+.single-post .arcade-content .entry-content pre {
+  padding: 0.65rem 0.8rem;
+  border-radius: 8px;
+  background: rgba(5, 12, 37, 0.92);
+  overflow-x: auto;
+}
+
+.single-post .arcade-content .entry-content :not(pre) > code {
+  display: inline;
+  font-family: "IBM Plex Mono", "Fira Code", "JetBrains Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 0.82em;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0;
+  color: #ffd7f5;
+  background: rgba(28, 34, 46, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 0.3em 0.8em 0.3em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.single-post .arcade-content .entry-content .wp-block-kevinbatdorf-code-block-pro {
+  border-radius: 12px;
+  overflow: hidden;
+  font-size: 1rem !important;
+  line-height: 1.5 !important;
+  font-family: "Fira Code", "JetBrains Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", monospace !important;
+}
+
+.single-post .arcade-content .entry-content .wp-block-kevinbatdorf-code-block-pro > span:first-child {
+  margin: 0 !important;
+  border-radius: 12px 12px 0 0;
+}
+
+.single-post .arcade-content .entry-content .wp-block-kevinbatdorf-code-block-pro pre,
+.single-post .arcade-content .entry-content .wp-block-kevinbatdorf-code-block-pro pre.shiki {
+  margin: 0 !important;
+  border-radius: 0 0 12px 12px;
+  overflow-x: auto;
+  font-size: inherit !important;
+  line-height: inherit !important;
+  font-family: inherit !important;
+}
+
+.single-post .arcade-content .entry-content .wp-block-kevinbatdorf-code-block-pro code {
+  font-size: inherit !important;
+  line-height: inherit !important;
+  font-family: inherit !important;
+}
+
+@media (max-width: 760px) {
+  .single-post .arcade-content article {
+    max-width: 100%;
+  }
+
+  .single-post .arcade-content .entry-content {
+    font-size: 1.05rem;
+    line-height: 1.65;
+  }
 }
 
 .arcade-pagination {
@@ -1141,13 +1310,32 @@ a.gb-button,
   margin: 0;
   border: 0;
   background: transparent;
-  cursor: pointer;
+  cursor: crosshair;
   pointer-events: auto;
   animation: alien-wander var(--alien-wander-duration, 18s) ease-in-out infinite alternate;
   animation-delay: var(--alien-wander-delay, 0s);
   transform: translate3d(0, var(--alien-parallax, 0px), 0) scale(var(--alien-scale, 1));
   transform-origin: center;
   will-change: transform, opacity, left, top;
+}
+
+.arcade-alien.is-peeking {
+  animation: none;
+  opacity: 1;
+  transition: transform 900ms cubic-bezier(0.2, 0.7, 0.2, 1), opacity 900ms ease;
+  transform: translate3d(var(--alien-peek-slide-x, 0px), var(--alien-parallax, 0px), 0) scale(var(--alien-scale, 1)) rotate(var(--alien-peek-rotation, 0deg));
+}
+
+.arcade-alien.is-peeking.is-peek-entering {
+  opacity: 0.24;
+}
+
+.arcade-alien.is-peeking.is-peek-left {
+  transform-origin: left center;
+}
+
+.arcade-alien.is-peeking.is-peek-right {
+  transform-origin: right center;
 }
 
 .arcade-alien:focus-visible {
@@ -1178,7 +1366,11 @@ a.gb-button,
     left: var(--alien-start-x);
     top: var(--alien-start-y);
   }
-  50% {
+  35% {
+    left: var(--alien-entry-x, var(--alien-mid-x));
+    top: var(--alien-entry-y, var(--alien-mid-y));
+  }
+  70% {
     left: var(--alien-mid-x);
     top: var(--alien-mid-y);
   }

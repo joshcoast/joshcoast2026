@@ -13,6 +13,7 @@ get_header();
 		<?php if ( have_posts() ) : ?>
 			<?php while ( have_posts() ) : the_post(); ?>
 				<article <?php post_class( 'card-item' ); ?>>
+					<?php jc_16bit_arcade_render_post_card_image(); ?>
 					<?php jc_16bit_arcade_render_category_icons(); ?>
 					<h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
 					<p class="meta"><?php echo esc_html( get_the_date() ); ?> · <?php the_author(); ?></p>
