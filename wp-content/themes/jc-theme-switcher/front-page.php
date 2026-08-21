@@ -46,8 +46,8 @@ $skill_stats = array(
 );
 ?>
 <section class="site-panel hero">
-	<h1 class="hud-title"><button id="player-one-trigger" class="hud-firework-trigger" type="button">PLAYER ONE: <?php bloginfo( 'name' ); ?></button></h1>
-	<p class="hud-sub" data-text="<?php echo esc_attr( get_bloginfo( 'description' ) ); ?>"><?php bloginfo( 'description' ); ?></p>
+	<div class="hud-sub"><button id="player-one-trigger" class="hud-firework-trigger" type="button">PLAYER ONE: <?php bloginfo( 'name' ); ?></button></div>
+	<h1 class="hud-title" data-text="<?php echo esc_attr( get_bloginfo( 'description' ) ); ?>"><?php bloginfo( 'description' ); ?></h1>
 	<div class="stat-grid" role="list" aria-label="Top skills">
 		<?php foreach ( $skill_stats as $skill ) : ?>
 		<div class="stat" role="listitem">
@@ -83,21 +83,24 @@ $skill_stats = array(
 			<?php
 			while ( $featured_projects_query->have_posts() ) :
 				$featured_projects_query->the_post();
-				$project_type_obj = get_post_type_object( get_post_type() );
-				$project_type     = $project_type_obj && ! empty( $project_type_obj->labels->singular_name )
-					? $project_type_obj->labels->singular_name
-					: ucfirst( (string) get_post_type() );
 				?>
 				<article <?php post_class( 'project-priority-card' ); ?>>
 					<?php if ( 'client' === get_post_type() && has_post_thumbnail() ) : ?>
 						<div class="card-thumb card-thumb--featured">
-							<?php the_post_thumbnail( 'large', array( 'loading' => 'lazy', 'decoding' => 'async' ) ); ?>
+							<?php
+							the_post_thumbnail(
+								'large',
+								array(
+									'loading'  => 'lazy',
+									'decoding' => 'async',
+								)
+							);
+							?>
 						</div>
 					<?php else : ?>
 						<?php jc_16bit_arcade_render_post_card_image(); ?>
 					<?php endif; ?>
 					<h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-					<p class="meta"><?php echo esc_html( $project_type ); ?> · Updated <?php echo esc_html( get_the_modified_date() ); ?></p>
 					<?php if ( 'post' === get_post_type() ) : ?>
 						<?php jc_16bit_arcade_render_category_icons(); ?>
 					<?php endif; ?>
@@ -162,10 +165,11 @@ $skill_stats = array(
 	<div class="dev-heroes dev-faces" aria-label="Colleague references — click a portrait to read">
 		<p class="sprite-mode">REFERENCE PACK: 4 HEROES</p>
 
-		<?php foreach ( $references as $i => $ref ) :
+		<?php
+		foreach ( $references as $i => $ref ) :
 			$avatar_url = get_theme_file_uri( $ref['avatar_file'] );
-			$bub_id = 'ref-bubble-' . ( $i + 1 );
-		?>
+			$bub_id     = 'ref-bubble-' . ( $i + 1 );
+			?>
 		<figure
 			class="face-card"
 			style="--face-bg: <?php echo esc_attr( $ref['avatar_bg'] ); ?>;"

@@ -14,8 +14,22 @@ Tags: portfolio, blog, custom-logo, custom-menu, featured-images, full-site-edit
 
 /* Base stylesheet is intentionally minimal. Visual styles live in scheme files. */
 .screen-reader-text {
-  position: absolute;
-  left: -9999px;
+	position: absolute;
+	left: -9999px;
+}
+
+/* The appended SVG has no intrinsic size, so it needs an explicit box in every scheme. */
+.external-site-icon {
+	display: inline-flex;
+	flex: none;
+	width: 0.85em;
+	height: 0.85em;
+}
+
+.external-site-icon svg {
+	display: block;
+	width: 100%;
+	height: 100%;
 }
 
 /* Homepage arcade-only elements are hidden for non-arcade schemes. */
@@ -25,57 +39,57 @@ body:not([data-style-scheme="arcade"]) .dev-heroes .sprite-mode,
 body:not([data-style-scheme="arcade"]) .project-priority-head .sprite-mode,
 body:not([data-style-scheme="arcade"]) .ticker,
 body:not([data-style-scheme="arcade"]) .hud-quarter {
-  display: none !important;
+	display: none !important;
 }
 
 /* Shared button component system (BEM-style): themes override via CSS vars. */
 .c-btn {
-  --c-btn-bg: #fff8ee;
-  --c-btn-ink: #4c331f;
-  --c-btn-border: rgba(84, 58, 36, 0.45);
-  --c-btn-shadow: 0 4px 9px rgba(84, 58, 36, 0.12);
-  --c-btn-bg-hover: #4b3321;
-  --c-btn-ink-hover: #fff7e8;
-  --c-btn-border-hover: #4b3321;
-  --c-btn-bg-active: rgba(80, 54, 33, 0.96);
-  --c-btn-ink-active: #fff8eb;
-  --c-btn-border-active: rgba(80, 54, 33, 0.96);
+	--c-btn-bg: #fff8ee;
+	--c-btn-ink: #4c331f;
+	--c-btn-border: rgba(84, 58, 36, 0.45);
+	--c-btn-shadow: 0 4px 9px rgba(84, 58, 36, 0.12);
+	--c-btn-bg-hover: #4b3321;
+	--c-btn-ink-hover: #fff7e8;
+	--c-btn-border-hover: #4b3321;
+	--c-btn-bg-active: rgba(80, 54, 33, 0.96);
+	--c-btn-ink-active: #fff8eb;
+	--c-btn-border-active: rgba(80, 54, 33, 0.96);
 
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  min-height: 2.55rem;
-  padding: 0.52rem 1rem;
-  border: 1px solid var(--c-btn-border);
-  border-radius: 999px;
-  background: var(--c-btn-bg);
-  color: var(--c-btn-ink);
-  font: inherit;
-  font-weight: 700;
-  line-height: 1.1;
-  text-decoration: none;
-  text-shadow: none;
-  box-shadow: var(--c-btn-shadow);
-  transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease, box-shadow 140ms ease, transform 140ms ease;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.4rem;
+	min-height: 2.55rem;
+	padding: 0.52rem 1rem;
+	border: 1px solid var(--c-btn-border);
+	border-radius: 999px;
+	background: var(--c-btn-bg);
+	color: var(--c-btn-ink);
+	font: inherit;
+	font-weight: 700;
+	line-height: 1.1;
+	text-decoration: none;
+	text-shadow: none;
+	box-shadow: var(--c-btn-shadow);
+	transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease, box-shadow 140ms ease, transform 140ms ease;
 }
 
 .c-btn:hover,
 .c-btn:focus-visible {
-  background: var(--c-btn-bg-hover);
-  color: var(--c-btn-ink-hover);
-  border-color: var(--c-btn-border-hover);
+	background: var(--c-btn-bg-hover);
+	color: var(--c-btn-ink-hover);
+	border-color: var(--c-btn-border-hover);
 }
 
 .c-btn:active {
-  transform: translateY(1px);
-  background: var(--c-btn-bg-active);
-  color: var(--c-btn-ink-active);
-  border-color: var(--c-btn-border-active);
+	transform: translateY(1px);
+	background: var(--c-btn-bg-active);
+	color: var(--c-btn-ink-active);
+	border-color: var(--c-btn-border-active);
 }
 
 .c-btn--sm {
-  min-height: 2rem;
-  padding: 0.42rem 0.58rem 0.42rem 0.5rem;
-  font-size: 0.72rem;
+	min-height: 2rem;
+	padding: 0.42rem 0.58rem 0.42rem 0.5rem;
+	font-size: 0.72rem;
 }
