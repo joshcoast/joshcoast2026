@@ -46,9 +46,9 @@ function jc_16bit_arcade_primary_menu_fallback() {
 			'url'   => $notes_url,
 		),
 		array(
-			'label'   => __( 'LinkedIn', 'jc-16bit-arcade' ),
-			'url'     => $linkedin_url,
-			'external'=> true,
+			'label'    => __( 'LinkedIn', 'jc-16bit-arcade' ),
+			'url'      => $linkedin_url,
+			'external' => true,
 		),
 	);
 
@@ -89,20 +89,20 @@ function jc_16bit_arcade_register_client_post_type() {
 	);
 
 	$args = array(
-		'labels'             => $labels,
-		'public'             => true,
-		'show_ui'            => true,
-		'show_in_menu'       => true,
-		'has_archive'        => 'clients',
-		'rewrite'            => array(
+		'labels'              => $labels,
+		'public'              => true,
+		'show_ui'             => true,
+		'show_in_menu'        => true,
+		'has_archive'         => 'clients',
+		'rewrite'             => array(
 			'slug'       => 'clients',
 			'with_front' => false,
 		),
-		'show_in_rest'       => true,
-		'menu_icon'          => 'dashicons-groups',
-		'supports'           => array( 'title', 'editor', 'excerpt', 'thumbnail', 'revisions' ),
-		'publicly_queryable' => true,
-		'exclude_from_search'=> false,
+		'show_in_rest'        => true,
+		'menu_icon'           => 'dashicons-groups',
+		'supports'            => array( 'title', 'editor', 'excerpt', 'thumbnail', 'revisions' ),
+		'publicly_queryable'  => true,
+		'exclude_from_search' => false,
 	);
 
 	register_post_type( 'client', $args );
@@ -220,7 +220,7 @@ function jc_16bit_arcade_category_icon_svg( $slug ) {
 	$key = sanitize_title( (string) $slug );
 
 	switch ( $key ) {
-		case 'wordpress':
+		case 'WordPress':
 		case 'wp':
 			return '<svg viewBox="0 0 20 20" class="jc-cats__icon" aria-hidden="true" focusable="false"><rect width="20" height="20" rx="3" fill="#21759b"/><circle cx="10" cy="10" r="7" fill="#fff"/><path d="M6 6h2l2 8 1-3 1 3 2-8h2l-3 10h-2l-1-3-1 3H9z" fill="#21759b"/></svg>';
 
@@ -270,10 +270,10 @@ function jc_16bit_arcade_render_category_icons( $post_id = 0 ) {
  * @return array{slug:string,label:string,url:string}
  */
 function jc_16bit_arcade_get_post_category_image( $post_id = 0 ) {
-	$post_id      = $post_id ? (int) $post_id : get_the_ID();
-	$categories   = get_the_category( $post_id );
+	$post_id       = $post_id ? (int) $post_id : get_the_ID();
+	$categories    = get_the_category( $post_id );
 	$fallback_slug = 'tools';
-	$fallback     = array(
+	$fallback      = array(
 		'slug'  => $fallback_slug,
 		'label' => __( 'Tools', 'jc-16bit-arcade' ),
 		'url'   => get_theme_file_uri( 'assets/img/catagories/tools.jpg' ),

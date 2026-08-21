@@ -118,7 +118,6 @@ $skill_stats = array(
 
 		<div class="jc-showcase__actions">
 			<a class="jc-btn jc-btn--primary" href="<?php echo esc_url( $clients_url ); ?>">BROWSE ALL CLIENTS</a>
-			<a class="jc-btn jc-btn--secondary" href="<?php echo esc_url( $linkedin_url ); ?>" target="_blank" rel="noopener noreferrer">REQUEST WALKTHROUGH</a>
 		</div>
 	</section>
 

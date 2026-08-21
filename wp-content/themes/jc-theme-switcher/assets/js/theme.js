@@ -507,7 +507,7 @@
 		}
 
 		const candidates = Array.from(document.querySelectorAll(
-      '.jc-section-title, .jc-hero__title, .jc-stat__label, .jc-stat__value, .jc-card h3 a, .jc-card h2 a, .jc-topbar__nav a, .jc-topbar__branding a, .jc-btn'
+			'.jc-section-title, .jc-hero__title, .jc-stat__label, .jc-stat__value, .jc-card h3 a, .jc-card h2 a, .jc-topbar__nav a, .jc-topbar__branding a, .jc-btn'
 		));
 
 		if (!candidates.length) {
