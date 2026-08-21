@@ -220,7 +220,7 @@ function jc_16bit_arcade_category_icon_svg( $slug ) {
 	$key = sanitize_title( (string) $slug );
 
 	switch ( $key ) {
-		case 'WordPress':
+		case 'wordpress':
 		case 'wp':
 			return '<svg viewBox="0 0 20 20" class="jc-cats__icon" aria-hidden="true" focusable="false"><rect width="20" height="20" rx="3" fill="#21759b"/><circle cx="10" cy="10" r="7" fill="#fff"/><path d="M6 6h2l2 8 1-3 1 3 2-8h2l-3 10h-2l-1-3-1 3H9z" fill="#21759b"/></svg>';
 
