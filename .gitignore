@@ -45,9 +45,13 @@ wp-config.php
 /wp-content/plugins/advanced-custom-fields/
 /wp-content/plugins/akismet/
 /wp-content/plugins/all-in-one-wp-migration/
+/wp-content/plugins/code-block-pro/
+/wp-content/plugins/codepen-embed-block/
 /wp-content/plugins/generateblocks/
 /wp-content/plugins/generateblocks-pro/
+/wp-content/plugins/ivyforms/
 /wp-content/plugins/wordpress-beta-tester/
+/wp-content/plugins/wp-svg-images/
 **/node_modules/
 **/build/
 
