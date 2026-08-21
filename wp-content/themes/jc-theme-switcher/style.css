@@ -1,0 +1,17 @@
+/*
+Theme Name: Theme Switcher
+Theme URI: https://joshcoast.com/
+Author: Josh Coast + Copilot
+Description: A standalone retro 16-bit inspired portfolio/resume theme with animated 80s arcade vibes and a front-end style switcher.
+Version: 1.0.0
+Requires at least: 6.0
+Requires PHP: 7.4
+License: GNU General Public License v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: jc-16bit-arcade
+Tags: portfolio, blog, custom-logo, custom-menu, featured-images, full-site-editing, threaded-comments
+*/
+
+/* Compiled CSS assets are generated in assets/css/*.min.css.
+ * Source files live in src/styles/*.scss.
+ */

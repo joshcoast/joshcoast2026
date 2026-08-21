@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 156 156">
+  <!-- Generator: Adobe Illustrator 30.6.0, SVG Export Plug-In . SVG Version: 2.1.4 Build 109)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #fffed2;
+      }
+
+      .st1 {
+        fill: #fde632;
+      }
+
+      .st2 {
+        fill: #ffff73;
+      }
+
+      .st3 {
+        fill: #d07409;
+      }
+
+      .st4 {
+        fill: #f8a80a;
+      }
+
+      .st5 {
+        fill: #fac914;
+      }
+    </style>
+  </defs>
+  <g id="Coin_Animation_4">
+    <polygon class="st3" points="144 36 132 36 132 24 120 24 120 12 96 12 96 0 60 0 60 12 36 12 36 24 24 24 24 36 12 36 12 60 0 60 0 96 12 96 12 120 24 120 24 132 36 132 36 144 60 144 60 156 96 156 96 144 120 144 120 132 132 132 132 120 144 120 144 96 156 96 156 60 144 60 144 36"/>
+    <path class="st2" d="M84,12h-12v12h12v-12ZM108,108h12v-12h-12v12ZM96,120h12v-12h-12v12ZM60,24h-12v12h12v-12ZM36,48h12v-12h-12v12ZM24,60h12v-12h-12v12ZM12,84h12v-12h-12v12ZM108,96v-36h-12v12h-12v12h-12v12h-12v12h36v-12h12Z"/>
+    <path class="st5" d="M60,132v12h36v-12h-36ZM120,24h-12v12h12v-12ZM108,36h-12v12h12v-12ZM132,48v-12h-12v12h12ZM108,60h12v-12h-12v12ZM132,96h12v-36h-12v36ZM120,120h12v-12h-12v12ZM108,132h12v-12h-12v12ZM36,108h12v-12h-12v12ZM60,120v-12h-12v12h12ZM24,108v12h12v-12h-12ZM36,132h12v-12h-12v12ZM60,48v12h-12v36h12v-12h12v-12h12v-12h12v-12h-36Z"/>
+    <path class="st4" d="M96,0h-36v12h36V0ZM60,156h36v-12h-36v12ZM108,24v-12h-12v12h12ZM96,144h12v-12h-12v12ZM60,12h-24v12h24v-12ZM36,24h-12v12h12v-12ZM24,36h-12v24h12v-24ZM0,60v36h12v-36H0ZM12,96v24h12v-24h-12ZM24,120v12h12v-12h-12ZM36,132v12h24v-12h-24ZM60,120h36v-12h-36v12ZM108,96h12v-36h-12v36ZM96,108h12v-12h-12v12Z"/>
+    <path class="st1" d="M108,24h-12v-12h-12v12h-24v12h48v-12ZM120,48v-12h-12v12h12ZM120,108h12v-60h-12v60ZM108,120h12v-12h-12v12ZM48,132h60v-12h-60v12ZM60,36h-12v12h12v-12ZM48,48h-12v12h12v-12ZM24,60v24h-12v12h12v12h12v-48h-12ZM36,108v12h12v-12h-12ZM72,84h12v-12h-12v12ZM84,72h12v-12h-12v12ZM60,96h12v-12h-12v12Z"/>
+    <path class="st0" d="M60,24h12v-12h-12v12ZM36,36h12v-12h-12v12ZM24,48h12v-12h-12v12ZM12,72h12v-12h-12v12Z"/>
+  </g>
+</svg>

@@ -1,0 +1,17 @@
+/* Arcade mode overrides */
+body[data-style-scheme="arcade"] {
+  --bg-0: #0a0f2f;
+  --bg-1: #11194a;
+  --bg-2: #1b2a6a;
+  --grid: rgba(88, 212, 255, 0.2);
+  --panel: rgba(13, 21, 68, 0.78);
+  --ink: #e8f5ff;
+  --cyan: #5af2ff;
+  --pink: #ff4fd8;
+  --yellow: #ffe768;
+  --lime: #88ff80;
+  --danger: #ff6b7c;
+  --topbar-bg: rgba(6, 10, 34, 0.8);
+  --topbar-border: var(--cyan);
+  --hero-glow: rgba(90, 242, 255, 0.18);
+}

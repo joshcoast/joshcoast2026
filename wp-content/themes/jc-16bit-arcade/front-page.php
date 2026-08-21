@@ -64,7 +64,7 @@ $skill_stats = array(
 	</div>
 	<div class="cta-row">
 		<a class="btn-arcade btn-primary" href="<?php echo esc_url( $linkedin_url ); ?>" target="_blank" rel="noopener noreferrer">START CONVERSATION <span class="external-site-icon" aria-hidden="true"><svg viewBox="0 0 14 14" focusable="false"><path d="M3 11h8V7h2v6H1V1h6v2H3z" fill="currentColor"/><path d="M8 1h5v5h-2V4.4L6.7 8.7 5.3 7.3 9.6 3H8z" fill="currentColor"/></svg></span><span class="screen-reader-text"> Opens LinkedIn in a new tab</span></a>
-		<a class="btn-arcade btn-secondary" href="<?php echo esc_url( $clients_url ); ?>">VIEW FEATURED CLIENTS</a>
+		<a class="btn-arcade btn-secondary" href="<?php echo esc_url( $projects_url ); ?>">VIEW FEATURED CLIENTS</a>
 	</div>
 	<div class="humor-box">
 		<strong>NPC Tip:</strong>
