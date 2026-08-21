@@ -1,4 +1,6 @@
 (function () {
+  const DEFAULT_STYLE_SCHEME = 'stripes';
+
   const normalizeStyleScheme = (scheme) => {
     if (scheme === 'neon') {
       return 'stripes';
@@ -54,9 +56,10 @@
   };
 
   const styleSwitcherButtons = Array.from(document.querySelectorAll('.theme-switcher__button'));
-  const initialScheme = normalizeStyleScheme(document.body.dataset.styleScheme) || getStoredStyleScheme();
+  const storedScheme = getStoredStyleScheme();
+  const initialScheme = normalizeStyleScheme(document.body.dataset.styleScheme) || storedScheme || DEFAULT_STYLE_SCHEME;
 
-  applyStyleScheme(initialScheme, false);
+  applyStyleScheme(initialScheme, !storedScheme);
 
   styleSwitcherButtons.forEach((button) => {
     button.addEventListener('click', () => {

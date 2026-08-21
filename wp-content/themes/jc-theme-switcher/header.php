@@ -12,19 +12,9 @@
 	<?php wp_head(); ?>
 </head>
 <?php
-$style_scheme = '';
-if ( isset( $_COOKIE['jc_style_scheme'] ) ) {
-	$cookie_scheme = sanitize_key( wp_unslash( $_COOKIE['jc_style_scheme'] ) );
-	if ( 'neon' === $cookie_scheme ) {
-		$cookie_scheme = 'stripes';
-	}
-	if ( in_array( $cookie_scheme, array( 'arcade', 'stripes' ), true ) ) {
-		$style_scheme = $cookie_scheme;
-	}
-}
+$style_scheme = jc_16bit_arcade_get_style_scheme();
 ?>
-<?php $style_attr = '' !== $style_scheme ? ' data-style-scheme="' . esc_attr( $style_scheme ) . '"' : ''; ?>
-<body <?php body_class(); ?><?php echo $style_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> data-theme-uri="<?php echo esc_url( trailingslashit( get_theme_file_uri( '' ) ) ); ?>">
+<body <?php body_class(); ?> data-style-scheme="<?php echo esc_attr( $style_scheme ); ?>" data-theme-uri="<?php echo esc_url( trailingslashit( get_theme_file_uri( '' ) ) ); ?>">
 <?php wp_body_open(); ?>
 <div class="arcade-stars" aria-hidden="true"></div>
 <div class="arcade-bottom-scene" aria-hidden="true"></div>

@@ -127,8 +127,14 @@ function jc_16bit_arcade_editor_palette_fixes() {
 }
 add_action( 'enqueue_block_editor_assets', 'jc_16bit_arcade_editor_palette_fixes' );
 
-function jc_16bit_arcade_body_classes( $classes ) {
+/**
+ * Resolve the active style scheme with a safe default.
+ *
+ * @return string 'arcade' or 'stripes'.
+ */
+function jc_16bit_arcade_get_style_scheme() {
 	$style_scheme = '';
+
 	if ( isset( $_COOKIE['jc_style_scheme'] ) ) {
 		$cookie_scheme = sanitize_key( wp_unslash( $_COOKIE['jc_style_scheme'] ) );
 		if ( 'neon' === $cookie_scheme ) {
@@ -140,10 +146,18 @@ function jc_16bit_arcade_body_classes( $classes ) {
 		}
 	}
 
-	$classes[] = 'jc-16bit-theme';
-	if ( '' !== $style_scheme ) {
-		$classes[] = 'style-scheme-' . $style_scheme;
+	if ( '' === $style_scheme ) {
+		$style_scheme = 'stripes';
 	}
+
+	return $style_scheme;
+}
+
+function jc_16bit_arcade_body_classes( $classes ) {
+	$style_scheme = jc_16bit_arcade_get_style_scheme();
+
+	$classes[] = 'jc-16bit-theme';
+	$classes[] = 'style-scheme-' . $style_scheme;
 
 	if ( is_front_page() ) {
 		$classes[] = 'is-theme-home';
