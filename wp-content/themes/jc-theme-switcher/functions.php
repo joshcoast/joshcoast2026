@@ -185,11 +185,11 @@ function jc_16bit_arcade_nav_linkedin_icon( $title, $item, $args, $depth ) {
 		return $title;
 	}
 
-	if ( false !== strpos( $title, 'external-site-icon' ) ) {
+	if ( false !== strpos( $title, 'jc-external-icon' ) ) {
 		return $title;
 	}
 
-	$icon = '<span class="external-site-icon" aria-hidden="true"><svg viewBox="0 0 14 14" focusable="false"><path d="M3 11h8V7h2v6H1V1h6v2H3z" fill="currentColor"/><path d="M8 1h5v5h-2V4.4L6.7 8.7 5.3 7.3 9.6 3H8z" fill="currentColor"/></svg></span><span class="screen-reader-text"> Opens LinkedIn in a new tab</span>';
+	$icon = '<span class="jc-external-icon" aria-hidden="true"><svg viewBox="0 0 14 14" focusable="false"><path d="M3 11h8V7h2v6H1V1h6v2H3z" fill="currentColor"/><path d="M8 1h5v5h-2V4.4L6.7 8.7 5.3 7.3 9.6 3H8z" fill="currentColor"/></svg></span><span class="screen-reader-text"> Opens LinkedIn in a new tab</span>';
 
 	return $title . ' ' . $icon;
 }
@@ -222,24 +222,24 @@ function jc_16bit_arcade_category_icon_svg( $slug ) {
 	switch ( $key ) {
 		case 'wordpress':
 		case 'wp':
-			return '<svg viewBox="0 0 20 20" class="cat-icon" aria-hidden="true" focusable="false"><rect width="20" height="20" rx="3" fill="#21759b"/><circle cx="10" cy="10" r="7" fill="#fff"/><path d="M6 6h2l2 8 1-3 1 3 2-8h2l-3 10h-2l-1-3-1 3H9z" fill="#21759b"/></svg>';
+			return '<svg viewBox="0 0 20 20" class="jc-cats__icon" aria-hidden="true" focusable="false"><rect width="20" height="20" rx="3" fill="#21759b"/><circle cx="10" cy="10" r="7" fill="#fff"/><path d="M6 6h2l2 8 1-3 1 3 2-8h2l-3 10h-2l-1-3-1 3H9z" fill="#21759b"/></svg>';
 
 		case 'javascript':
 		case 'js':
-			return '<svg viewBox="0 0 20 20" class="cat-icon" aria-hidden="true" focusable="false"><rect width="20" height="20" rx="3" fill="#f7df1e"/><rect x="4" y="4" width="12" height="12" fill="#121212"/><rect x="7" y="6" width="2" height="7" fill="#f7df1e"/><rect x="10" y="11" width="2" height="2" fill="#f7df1e"/><rect x="12" y="6" width="2" height="2" fill="#f7df1e"/><rect x="12" y="9" width="2" height="4" fill="#f7df1e"/></svg>';
+			return '<svg viewBox="0 0 20 20" class="jc-cats__icon" aria-hidden="true" focusable="false"><rect width="20" height="20" rx="3" fill="#f7df1e"/><rect x="4" y="4" width="12" height="12" fill="#121212"/><rect x="7" y="6" width="2" height="7" fill="#f7df1e"/><rect x="10" y="11" width="2" height="2" fill="#f7df1e"/><rect x="12" y="6" width="2" height="2" fill="#f7df1e"/><rect x="12" y="9" width="2" height="4" fill="#f7df1e"/></svg>';
 
 		case 'css':
 		case 'css3':
-			return '<svg viewBox="0 0 20 20" class="cat-icon" aria-hidden="true" focusable="false"><rect width="20" height="20" rx="3" fill="#0b3a7e"/><path d="M4 4h12l-1 10-5 2-5-2z" fill="#42a5f5"/><path d="M10 6v8l4-2 .6-6z" fill="#90caf9"/></svg>';
+			return '<svg viewBox="0 0 20 20" class="jc-cats__icon" aria-hidden="true" focusable="false"><rect width="20" height="20" rx="3" fill="#0b3a7e"/><path d="M4 4h12l-1 10-5 2-5-2z" fill="#42a5f5"/><path d="M10 6v8l4-2 .6-6z" fill="#90caf9"/></svg>';
 
 		case 'react':
-			return '<svg viewBox="0 0 20 20" class="cat-icon" aria-hidden="true" focusable="false"><rect width="20" height="20" rx="3" fill="#102332"/><circle cx="10" cy="10" r="2" fill="#61dafb"/><ellipse cx="10" cy="10" rx="7" ry="3" fill="none" stroke="#61dafb" stroke-width="1.2"/><ellipse cx="10" cy="10" rx="7" ry="3" fill="none" stroke="#61dafb" stroke-width="1.2" transform="rotate(60 10 10)"/><ellipse cx="10" cy="10" rx="7" ry="3" fill="none" stroke="#61dafb" stroke-width="1.2" transform="rotate(120 10 10)"/></svg>';
+			return '<svg viewBox="0 0 20 20" class="jc-cats__icon" aria-hidden="true" focusable="false"><rect width="20" height="20" rx="3" fill="#102332"/><circle cx="10" cy="10" r="2" fill="#61dafb"/><ellipse cx="10" cy="10" rx="7" ry="3" fill="none" stroke="#61dafb" stroke-width="1.2"/><ellipse cx="10" cy="10" rx="7" ry="3" fill="none" stroke="#61dafb" stroke-width="1.2" transform="rotate(60 10 10)"/><ellipse cx="10" cy="10" rx="7" ry="3" fill="none" stroke="#61dafb" stroke-width="1.2" transform="rotate(120 10 10)"/></svg>';
 
 		case 'php':
-			return '<svg viewBox="0 0 20 20" class="cat-icon" aria-hidden="true" focusable="false"><rect width="20" height="20" rx="3" fill="#4f5b93"/><ellipse cx="10" cy="10" rx="7" ry="4" fill="#fff"/><rect x="5" y="9" width="2" height="2" fill="#4f5b93"/><rect x="8" y="9" width="2" height="2" fill="#4f5b93"/><rect x="11" y="9" width="2" height="2" fill="#4f5b93"/><rect x="14" y="9" width="1" height="2" fill="#4f5b93"/></svg>';
+			return '<svg viewBox="0 0 20 20" class="jc-cats__icon" aria-hidden="true" focusable="false"><rect width="20" height="20" rx="3" fill="#4f5b93"/><ellipse cx="10" cy="10" rx="7" ry="4" fill="#fff"/><rect x="5" y="9" width="2" height="2" fill="#4f5b93"/><rect x="8" y="9" width="2" height="2" fill="#4f5b93"/><rect x="11" y="9" width="2" height="2" fill="#4f5b93"/><rect x="14" y="9" width="1" height="2" fill="#4f5b93"/></svg>';
 
 		default:
-			return '<svg viewBox="0 0 20 20" class="cat-icon" aria-hidden="true" focusable="false"><rect width="20" height="20" rx="3" fill="#5e35b1"/><rect x="4" y="6" width="12" height="9" fill="#d1c4e9"/><rect x="4" y="5" width="6" height="3" fill="#b39ddb"/></svg>';
+			return '<svg viewBox="0 0 20 20" class="jc-cats__icon" aria-hidden="true" focusable="false"><rect width="20" height="20" rx="3" fill="#5e35b1"/><rect x="4" y="6" width="12" height="9" fill="#d1c4e9"/><rect x="4" y="5" width="6" height="3" fill="#b39ddb"/></svg>';
 	}
 }
 
@@ -251,11 +251,11 @@ function jc_16bit_arcade_render_category_icons( $post_id = 0 ) {
 		return;
 	}
 
-	echo '<ul class="cat-row" aria-label="Post categories">';
+	echo '<ul class="jc-cats" aria-label="Post categories">';
 	foreach ( $categories as $category ) {
-		echo '<li class="cat-chip">';
+		echo '<li class="jc-cats__chip">';
 		echo jc_16bit_arcade_category_icon_svg( $category->slug );
-		echo '<span class="cat-name">' . esc_html( $category->name ) . '</span>';
+		echo '<span class="jc-cats__name">' . esc_html( $category->name ) . '</span>';
 		echo '</li>';
 	}
 	echo '</ul>';
@@ -312,7 +312,7 @@ function jc_16bit_arcade_get_post_category_image( $post_id = 0 ) {
 function jc_16bit_arcade_render_post_card_image( $post_id = 0 ) {
 	$image = jc_16bit_arcade_get_post_category_image( $post_id );
 
-	echo '<div class="card-thumb card-thumb--' . esc_attr( $image['slug'] ) . '">';
+	echo '<div class="jc-card__thumb jc-card__thumb--' . esc_attr( $image['slug'] ) . '">';
 	echo '<img src="' . esc_url( $image['url'] ) . '" alt="' . esc_attr( $image['label'] ) . '" loading="lazy" decoding="async" />';
 	echo '</div>';
 }

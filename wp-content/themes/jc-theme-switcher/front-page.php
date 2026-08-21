@@ -45,48 +45,48 @@ $skill_stats = array(
 	),
 );
 ?>
-<section class="site-panel hero">
-	<div class="hud-sub"><button id="player-one-trigger" class="hud-firework-trigger" type="button">PLAYER ONE: <?php bloginfo( 'name' ); ?></button></div>
-	<h1 class="hud-title" data-text="<?php echo esc_attr( get_bloginfo( 'description' ) ); ?>"><?php bloginfo( 'description' ); ?></h1>
-	<div class="stat-grid" role="list" aria-label="Top skills">
+<section class="jc-panel jc-hero">
+	<div class="jc-hero__eyebrow"><button id="player-one-trigger" class="jc-hero__firework-trigger" type="button">PLAYER ONE: <?php bloginfo( 'name' ); ?></button></div>
+	<h1 class="jc-hero__title" data-text="<?php echo esc_attr( get_bloginfo( 'description' ) ); ?>"><?php bloginfo( 'description' ); ?></h1>
+	<div class="jc-stats" role="list" aria-label="Top skills">
 		<?php foreach ( $skill_stats as $skill ) : ?>
-		<div class="stat" role="listitem">
-			<span class="stat-label"><?php echo esc_html( $skill['label'] ); ?></span>
-			<div class="stat-progress-row">
-				<span class="stat-value"><?php echo esc_html( $skill['percent'] ); ?>%</span>
-				<span class="stat-level"><?php echo esc_html( $skill['level'] ); ?></span>
+		<div class="jc-stat" role="listitem">
+			<span class="jc-stat__label"><?php echo esc_html( $skill['label'] ); ?></span>
+			<div class="jc-stat__progress">
+				<span class="jc-stat__value"><?php echo esc_html( $skill['percent'] ); ?>%</span>
+				<span class="jc-stat__level"><?php echo esc_html( $skill['level'] ); ?></span>
 			</div>
-			<div class="stat-meter" role="presentation" aria-hidden="true">
-				<span class="stat-fill" style="width: <?php echo esc_attr( (int) $skill['percent'] ); ?>%;"></span>
+			<div class="jc-stat__meter" role="presentation" aria-hidden="true">
+				<span class="jc-stat__fill" style="width: <?php echo esc_attr( (int) $skill['percent'] ); ?>%;"></span>
 			</div>
 		</div>
 		<?php endforeach; ?>
 	</div>
-	<div class="cta-row">
-			<a class="btn-ui btn-primary c-btn c-btn--primary" href="<?php echo esc_url( $linkedin_url ); ?>" target="_blank" rel="noopener noreferrer">START CONVERSATION <span class="external-site-icon" aria-hidden="true"><svg viewBox="0 0 14 14" focusable="false"><path d="M3 11h8V7h2v6H1V1h6v2H3z" fill="currentColor"/><path d="M8 1h5v5h-2V4.4L6.7 8.7 5.3 7.3 9.6 3H8z" fill="currentColor"/></svg></span><span class="screen-reader-text"> Opens LinkedIn in a new tab</span></a>
-			<a class="btn-ui btn-secondary c-btn c-btn--secondary" href="<?php echo esc_url( $projects_url ); ?>">VIEW FEATURED CLIENTS</a>
+	<div class="jc-cta-row">
+			<a class="jc-btn jc-btn--primary" href="<?php echo esc_url( $linkedin_url ); ?>" target="_blank" rel="noopener noreferrer">START CONVERSATION <span class="jc-external-icon" aria-hidden="true"><svg viewBox="0 0 14 14" focusable="false"><path d="M3 11h8V7h2v6H1V1h6v2H3z" fill="currentColor"/><path d="M8 1h5v5h-2V4.4L6.7 8.7 5.3 7.3 9.6 3H8z" fill="currentColor"/></svg></span><span class="screen-reader-text"> Opens LinkedIn in a new tab</span></a>
+			<a class="jc-btn jc-btn--secondary" href="<?php echo esc_url( $projects_url ); ?>">VIEW FEATURED CLIENTS</a>
 	</div>
-	<div class="humor-box">
+	<div class="jc-humor-box">
 		<strong>NPC Tip:</strong>
 		<?php echo esc_html( jc_16bit_arcade_humor_line() ); ?>
 	</div>
 
-	<section class="project-priority" aria-labelledby="featured-projects-title">
-		<div class="project-priority-head">
-			<p class="sprite-mode">HIRING MODE: CLIENT WORK SHOWCASE</p>
-			<h2 class="section-title project-priority-title" id="featured-projects-title">FEATURED CLIENT PROJECTS</h2>
-			<p class="project-priority-lead">The fastest way to evaluate fit is to review shipped client work. These highlights spotlight implementation quality, UX thinking, and production-ready details.</p>
+	<section class="jc-showcase" aria-labelledby="featured-projects-title">
+		<div class="jc-showcase__head">
+			<p class="jc-eyebrow">HIRING MODE: CLIENT WORK SHOWCASE</p>
+			<h2 class="jc-section-title jc-showcase__title" id="featured-projects-title">FEATURED CLIENT PROJECTS</h2>
+			<p class="jc-showcase__lead">The fastest way to evaluate fit is to review shipped client work. These highlights spotlight implementation quality, UX thinking, and production-ready details.</p>
 		</div>
 
 		<?php if ( $featured_projects_query && $featured_projects_query->have_posts() ) : ?>
-		<div class="project-priority-grid">
+		<div class="jc-showcase__grid">
 			<?php
 			while ( $featured_projects_query->have_posts() ) :
 				$featured_projects_query->the_post();
 				?>
-				<article <?php post_class( 'project-priority-card' ); ?>>
+				<article <?php post_class( 'jc-showcase__card' ); ?>>
 					<?php if ( 'client' === get_post_type() && has_post_thumbnail() ) : ?>
-						<div class="card-thumb card-thumb--featured">
+						<div class="jc-card__thumb jc-card__thumb--featured">
 							<?php
 							the_post_thumbnail(
 								'large',
@@ -105,7 +105,7 @@ $skill_stats = array(
 						<?php jc_16bit_arcade_render_category_icons(); ?>
 					<?php endif; ?>
 					<p><?php echo esc_html( wp_trim_words( wp_strip_all_tags( get_the_excerpt() ?: get_the_content() ), 24 ) ); ?></p>
-					<a class="project-priority-link c-btn c-btn--secondary c-btn--sm" href="<?php the_permalink(); ?>">OPEN BUILD</a>
+					<a class="jc-showcase__link jc-btn jc-btn--secondary jc-btn--sm" href="<?php the_permalink(); ?>">OPEN BUILD</a>
 				</article>
 				<?php
 			endwhile;
@@ -113,12 +113,12 @@ $skill_stats = array(
 			?>
 		</div>
 		<?php else : ?>
-		<p class="project-priority-empty">Client entries will appear here automatically from the Client post type.</p>
+		<p class="jc-showcase__empty">Client entries will appear here automatically from the Client post type.</p>
 		<?php endif; ?>
 
-		<div class="project-priority-actions">
-			<a class="btn-ui btn-primary c-btn c-btn--primary" href="<?php echo esc_url( $clients_url ); ?>">BROWSE ALL CLIENTS</a>
-			<a class="btn-ui btn-secondary c-btn c-btn--secondary" href="<?php echo esc_url( $linkedin_url ); ?>" target="_blank" rel="noopener noreferrer">REQUEST WALKTHROUGH</a>
+		<div class="jc-showcase__actions">
+			<a class="jc-btn jc-btn--primary" href="<?php echo esc_url( $clients_url ); ?>">BROWSE ALL CLIENTS</a>
+			<a class="jc-btn jc-btn--secondary" href="<?php echo esc_url( $linkedin_url ); ?>" target="_blank" rel="noopener noreferrer">REQUEST WALKTHROUGH</a>
 		</div>
 	</section>
 
@@ -162,8 +162,8 @@ $skill_stats = array(
 		),
 	);
 	?>
-	<div class="dev-heroes dev-faces" aria-label="Colleague references — click a portrait to read">
-		<p class="sprite-mode">REFERENCE PACK: 4 HEROES</p>
+	<div class="jc-references jc-references__faces" aria-label="Colleague references — click a portrait to read">
+		<p class="jc-eyebrow">REFERENCE PACK: 4 HEROES</p>
 
 		<?php
 		foreach ( $references as $i => $ref ) :
@@ -171,29 +171,29 @@ $skill_stats = array(
 			$bub_id     = 'ref-bubble-' . ( $i + 1 );
 			?>
 		<figure
-			class="face-card"
-			style="--face-bg: <?php echo esc_attr( $ref['avatar_bg'] ); ?>;"
+			class="jc-reference"
+				style="--jc-reference-bg: <?php echo esc_attr( $ref['avatar_bg'] ); ?>;"
 			tabindex="0"
 			role="button"
 			aria-expanded="false"
 			aria-controls="<?php echo esc_attr( $bub_id ); ?>"
 			aria-label="<?php echo esc_attr( $ref['name'] ) . ' — click to read reference'; ?>"
 		>
-			<div class="face-swap" aria-hidden="true">
-				<img class="face-avatar" src="<?php echo esc_url( $avatar_url ); ?>" alt="" loading="lazy" decoding="async" />
+			<div class="jc-reference__swap" aria-hidden="true">
+				<img class="jc-reference__avatar" src="<?php echo esc_url( $avatar_url ); ?>" alt="" loading="lazy" decoding="async" />
 			</div>
 			<figcaption><?php echo esc_html( $ref['name'] ); ?></figcaption>
 
-			<div class="ref-bubble" id="<?php echo esc_attr( $bub_id ); ?>" aria-hidden="true">
-				<div class="ref-bubble-inner">
-					<button class="ref-bubble-close" type="button" aria-label="Close reference">&#x2715;</button>
-					<blockquote class="ref-quote">
+			<div class="jc-reference__bubble" id="<?php echo esc_attr( $bub_id ); ?>" aria-hidden="true">
+				<div class="jc-reference__bubble-inner">
+					<button class="jc-reference__close" type="button" aria-label="Close reference">&#x2715;</button>
+					<blockquote class="jc-reference__quote">
 						<p><?php echo esc_html( $ref['quote'] ); ?></p>
 					</blockquote>
-					<footer class="ref-footer">
-						<strong class="ref-name"><?php echo esc_html( $ref['name'] ); ?></strong>
-						<span class="ref-title"><?php echo esc_html( $ref['title'] ); ?></span>
-						<a class="ref-linkedin-link c-btn c-btn--secondary c-btn--sm" href="<?php echo esc_url( $ref['linkedin_url'] ); ?>" target="_blank" rel="noopener noreferrer">
+					<footer class="jc-reference__footer">
+						<strong class="jc-reference__name"><?php echo esc_html( $ref['name'] ); ?></strong>
+						<span class="jc-reference__title"><?php echo esc_html( $ref['title'] ); ?></span>
+						<a class="jc-reference__link jc-btn jc-btn--secondary jc-btn--sm" href="<?php echo esc_url( $ref['linkedin_url'] ); ?>" target="_blank" rel="noopener noreferrer">
 							View on LinkedIn
 							<svg viewBox="0 0 12 12" aria-hidden="true" focusable="false"><path d="M2 10h8V7h1v4H1V1h4v1H2z" fill="currentColor"/><path d="M6 1h5v5H9.5V3.9L6 7.4 4.6 6 8.1 2.5H6z" fill="currentColor"/></svg>
 						</a>
@@ -205,10 +205,10 @@ $skill_stats = array(
 	</div>
 </section>
 
-<div class="content-grid">
-	<section class="site-panel">
-		<h2 class="section-title">DEV JOURNAL</h2>
-		<div class="card-list">
+<div class="jc-layout-grid">
+	<section class="jc-panel">
+		<h2 class="jc-section-title">DEV JOURNAL</h2>
+		<div class="jc-card-list">
 			<?php
 			$recent_posts = new WP_Query(
 				array(
@@ -221,10 +221,10 @@ $skill_stats = array(
 				while ( $recent_posts->have_posts() ) :
 					$recent_posts->the_post();
 					?>
-					<article <?php post_class( 'card-item' ); ?>>
+					<article <?php post_class( 'jc-card' ); ?>>
 						<?php jc_16bit_arcade_render_post_card_image(); ?>
 						<h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-						<p class="meta"><?php echo esc_html( get_the_date() ); ?> · <?php the_author(); ?></p>
+						<p class="jc-meta"><?php echo esc_html( get_the_date() ); ?> · <?php the_author(); ?></p>
 						<?php jc_16bit_arcade_render_category_icons(); ?>
 						<?php the_excerpt(); ?>
 					</article>
@@ -240,9 +240,9 @@ $skill_stats = array(
 		</div>
 	</section>
 
-	<section class="site-panel">
-		<h2 class="section-title">SUPPORTING PAGES</h2>
-		<div class="card-list">
+	<section class="jc-panel">
+		<h2 class="jc-section-title">SUPPORTING PAGES</h2>
+		<div class="jc-card-list">
 			<?php
 			$recent_pages = new WP_Query(
 				array(
@@ -258,7 +258,7 @@ $skill_stats = array(
 				while ( $recent_pages->have_posts() ) :
 					$recent_pages->the_post();
 					?>
-					<article <?php post_class( 'card-item' ); ?>>
+					<article <?php post_class( 'jc-card' ); ?>>
 						<h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
 						<?php if ( has_excerpt() ) : ?>
 							<?php the_excerpt(); ?>

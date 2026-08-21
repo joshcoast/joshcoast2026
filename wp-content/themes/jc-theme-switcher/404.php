@@ -7,10 +7,10 @@
 
 get_header();
 ?>
-<section class="site-panel">
-	<h1 class="section-title">404: SECRET LEVEL NOT FOUND</h1>
+<section class="jc-panel">
+	<h1 class="jc-section-title">404: SECRET LEVEL NOT FOUND</h1>
 	<p>The page vanished like a power-up grabbed by someone else.</p>
-	<p><a class="btn-ui btn-primary" href="<?php echo esc_url( home_url( '/' ) ); ?>">RETURN TO START SCREEN</a></p>
+	<p><a class="jc-btn jc-btn--primary" href="<?php echo esc_url( home_url( '/' ) ); ?>">RETURN TO START SCREEN</a></p>
 </section>
 <?php
 get_footer();

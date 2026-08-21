@@ -16,16 +16,16 @@ $style_scheme = jc_16bit_arcade_get_style_scheme();
 ?>
 <body <?php body_class(); ?> data-style-scheme="<?php echo esc_attr( $style_scheme ); ?>" data-theme-uri="<?php echo esc_url( trailingslashit( get_theme_file_uri( '' ) ) ); ?>">
 <?php wp_body_open(); ?>
-<div class="arcade-stars" aria-hidden="true"></div>
-<div class="arcade-bottom-scene" aria-hidden="true"></div>
-<header class="site-topbar">
-	<div class="site-wrap site-topbar-inner">
-		<div class="site-branding">
+<div class="jc-stars" aria-hidden="true"></div>
+<div class="jc-bottom-scene" aria-hidden="true"></div>
+<header class="jc-topbar">
+	<div class="jc-wrap jc-topbar__inner">
+		<div class="jc-topbar__branding">
 			<a href="<?php echo esc_url( home_url( '/' ) ); ?>">
 				<?php bloginfo( 'name' ); ?>
 			</a>
 		</div>
-		<nav class="site-nav" aria-label="Primary Menu">
+		<nav class="jc-topbar__nav" aria-label="Primary Menu">
 			<?php
 			wp_nav_menu(
 				array(
@@ -36,21 +36,21 @@ $style_scheme = jc_16bit_arcade_get_style_scheme();
 			);
 			?>
 		</nav>
-		<div class="theme-switcher" role="group" aria-label="Choose a visual style">
-			<button class="theme-switcher__button <?php echo 'arcade' === $style_scheme ? 'is-active' : ''; ?>" type="button" data-style-scheme="arcade" aria-pressed="<?php echo 'arcade' === $style_scheme ? 'true' : 'false'; ?>">Arcade</button>
-			<button class="theme-switcher__button <?php echo 'stripes' === $style_scheme ? 'is-active' : ''; ?>" type="button" data-style-scheme="stripes" aria-pressed="<?php echo 'stripes' === $style_scheme ? 'true' : 'false'; ?>">Stripes</button>
+		<div class="jc-theme-switcher" role="group" aria-label="Choose a visual style">
+			<button class="jc-theme-switcher__button <?php echo 'arcade' === $style_scheme ? 'is-active' : ''; ?>" type="button" data-style-scheme="arcade" aria-pressed="<?php echo 'arcade' === $style_scheme ? 'true' : 'false'; ?>">Arcade</button>
+			<button class="jc-theme-switcher__button <?php echo 'stripes' === $style_scheme ? 'is-active' : ''; ?>" type="button" data-style-scheme="stripes" aria-pressed="<?php echo 'stripes' === $style_scheme ? 'true' : 'false'; ?>">Stripes</button>
 		</div>
-		<button class="hud-quarter" type="button" aria-label="Spin coin">
-			<span class="hud-quarter-label">Insert Coin</span>
-			<span class="hud-quarter-face" aria-hidden="true">
-				<img class="hud-coin-frame hud-coin-1" src="<?php echo esc_url( get_theme_file_uri( 'assets/img/coin-1.svg' ) ); ?>" alt="" loading="lazy" decoding="async" />
-				<img class="hud-coin-frame hud-coin-2" src="<?php echo esc_url( get_theme_file_uri( 'assets/img/coin-2.svg' ) ); ?>" alt="" loading="lazy" decoding="async" />
-				<img class="hud-coin-frame hud-coin-3" src="<?php echo esc_url( get_theme_file_uri( 'assets/img/coin-3.svg' ) ); ?>" alt="" loading="lazy" decoding="async" />
-				<img class="hud-coin-frame hud-coin-4" src="<?php echo esc_url( get_theme_file_uri( 'assets/img/coin-4.svg' ) ); ?>" alt="" loading="lazy" decoding="async" />
-				<img class="hud-coin-frame hud-coin-5" src="<?php echo esc_url( get_theme_file_uri( 'assets/img/coin-5.svg' ) ); ?>" alt="" loading="lazy" decoding="async" />
-				<img class="hud-coin-frame hud-coin-6" src="<?php echo esc_url( get_theme_file_uri( 'assets/img/coin-6.svg' ) ); ?>" alt="" loading="lazy" decoding="async" />
+		<button class="jc-coin" type="button" aria-label="Spin coin">
+			<span class="jc-coin__label">Insert Coin</span>
+			<span class="jc-coin__face" aria-hidden="true">
+				<img class="jc-coin__frame jc-coin__frame--1" src="<?php echo esc_url( get_theme_file_uri( 'assets/img/coin-1.svg' ) ); ?>" alt="" loading="lazy" decoding="async" />
+				<img class="jc-coin__frame jc-coin__frame--2" src="<?php echo esc_url( get_theme_file_uri( 'assets/img/coin-2.svg' ) ); ?>" alt="" loading="lazy" decoding="async" />
+				<img class="jc-coin__frame jc-coin__frame--3" src="<?php echo esc_url( get_theme_file_uri( 'assets/img/coin-3.svg' ) ); ?>" alt="" loading="lazy" decoding="async" />
+				<img class="jc-coin__frame jc-coin__frame--4" src="<?php echo esc_url( get_theme_file_uri( 'assets/img/coin-4.svg' ) ); ?>" alt="" loading="lazy" decoding="async" />
+				<img class="jc-coin__frame jc-coin__frame--5" src="<?php echo esc_url( get_theme_file_uri( 'assets/img/coin-5.svg' ) ); ?>" alt="" loading="lazy" decoding="async" />
+				<img class="jc-coin__frame jc-coin__frame--6" src="<?php echo esc_url( get_theme_file_uri( 'assets/img/coin-6.svg' ) ); ?>" alt="" loading="lazy" decoding="async" />
 			</span>
 		</button>
 	</div>
 </header>
-<main class="site-wrap">
+<main class="jc-wrap">

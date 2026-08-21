@@ -40,7 +40,7 @@
 			document.body.classList.add('style-scheme-' + normalizedScheme);
 		}
 
-		document.querySelectorAll('.theme-switcher__button').forEach((button) => {
+		document.querySelectorAll('.jc-theme-switcher__button').forEach((button) => {
 			const isActive = !!normalizedScheme && button.dataset.styleScheme === normalizedScheme;
 			button.classList.toggle('is-active', isActive);
 			button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
@@ -55,7 +55,7 @@
 		}
 	};
 
-	const styleSwitcherButtons = Array.from(document.querySelectorAll('.theme-switcher__button'));
+	const styleSwitcherButtons = Array.from(document.querySelectorAll('.jc-theme-switcher__button'));
 	const storedScheme = getStoredStyleScheme();
 	const initialScheme = normalizeStyleScheme(document.body.dataset.styleScheme) || storedScheme || DEFAULT_STYLE_SCHEME;
 
@@ -67,7 +67,7 @@
 		});
 	});
 
-	const starsContainer = document.querySelector('.arcade-stars');
+	const starsContainer = document.querySelector('.jc-stars');
 	const themeBase = (document.body.dataset.themeUri || '').replace(/\/?$/, '/');
 	const reduceMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 	const isHomepage = document.body.classList.contains('home') || document.body.classList.contains('front-page');
@@ -79,7 +79,7 @@
 
 		for (let i = 0; i < count; i += 1) {
 			const star = document.createElement('span');
-			star.className = 'star';
+			star.className = 'jc-star';
 			star.style.left = Math.random() * 100 + '%';
 			star.style.top = Math.random() * 100 + '%';
 			star.style.opacity = String(0.2 + Math.random() * 0.8);
@@ -200,7 +200,7 @@
 	const alienPeekMaxVisible = 5;
 	const alienPeekMinVerticalGap = 14;
 	const aliensContainer = document.createElement('div');
-	aliensContainer.className = 'arcade-aliens';
+	aliensContainer.className = 'jc-aliens';
 	aliensContainer.setAttribute('aria-hidden', 'true');
 	document.body.appendChild(aliensContainer);
 	const alienPeekHideTimers = new Map();
@@ -215,7 +215,7 @@
 			const spriteFile = alienSprites[index % alienSprites.length];
 			const alien = document.createElement('button');
 			alien.type = 'button';
-			alien.className = 'arcade-alien';
+			alien.className = 'jc-alien';
 			alien.setAttribute('aria-label', 'Destroy alien ' + (index + 1));
 
 			const parallax = rand(0.06, 0.16);
@@ -248,11 +248,11 @@
 			alien.dataset.state = 'idle';
 
 			alien.innerHTML = [
-				'<span class="arcade-alien__art">',
-				'<img class="arcade-alien__sprite" src="' + assetUrl(spriteFile) + '" alt="" loading="lazy" decoding="async" />',
-				'<img class="arcade-alien__bomb arcade-alien__bomb-1" src="' + assetUrl('bomb-1.svg') + '" alt="" loading="lazy" decoding="async" />',
-				'<img class="arcade-alien__bomb arcade-alien__bomb-2" src="' + assetUrl('bomb-2.svg') + '" alt="" loading="lazy" decoding="async" />',
-				'<img class="arcade-alien__bomb arcade-alien__bomb-3" src="' + assetUrl('bomb-3.svg') + '" alt="" loading="lazy" decoding="async" />',
+				'<span class="jc-alien__art">',
+				'<img class="jc-alien__sprite" src="' + assetUrl(spriteFile) + '" alt="" loading="lazy" decoding="async" />',
+				'<img class="jc-alien__bomb jc-alien__bomb--1" src="' + assetUrl('bomb-1.svg') + '" alt="" loading="lazy" decoding="async" />',
+				'<img class="jc-alien__bomb jc-alien__bomb--2" src="' + assetUrl('bomb-2.svg') + '" alt="" loading="lazy" decoding="async" />',
+				'<img class="jc-alien__bomb jc-alien__bomb--3" src="' + assetUrl('bomb-3.svg') + '" alt="" loading="lazy" decoding="async" />',
 				'</span>',
 			].join('');
 
@@ -269,7 +269,7 @@
 	};
 
 	const animateHomepageStats = () => {
-		const stats = Array.from(document.querySelectorAll('.hero .stat'));
+		const stats = Array.from(document.querySelectorAll('.jc-hero .jc-stat'));
 
 		if (!stats.length) {
 			return;
@@ -281,8 +281,8 @@
 		};
 
 		stats.forEach((stat, index) => {
-			const valueNode = stat.querySelector('.stat-value');
-			const fillNode = stat.querySelector('.stat-fill');
+			const valueNode = stat.querySelector('.jc-stat__value');
+			const fillNode = stat.querySelector('.jc-stat__fill');
 
 			if (!valueNode || !fillNode) {
 				return;
@@ -507,7 +507,7 @@
 		}
 
 		const candidates = Array.from(document.querySelectorAll(
-			'.section-title, .hud-title, .stat-label, .stat-value, .card-item h3 a, .card-item h2 a, .site-nav a, .site-branding a, .btn-ui'
+      '.jc-section-title, .jc-hero__title, .jc-stat__label, .jc-stat__value, .jc-card h3 a, .jc-card h2 a, .jc-topbar__nav a, .jc-topbar__branding a, .jc-btn'
 		));
 
 		if (!candidates.length) {
@@ -546,8 +546,8 @@
 
 	setupAmbientFlicker();
 
-	const hudQuarter = document.querySelector('.hud-quarter');
-	const tickerCoinTrigger = document.querySelector('.ticker-coin-trigger');
+	const hudQuarter = document.querySelector('.jc-coin');
+	const tickerCoinTrigger = document.querySelector('.jc-ticker__coin');
 	let spinTimer = null;
 	const spinDuration = 420;
 
@@ -593,7 +593,7 @@
 
 	if (trigger) {
 		const canvas = document.createElement('canvas');
-		canvas.className = 'fireworks-canvas';
+		canvas.className = 'jc-fireworks';
 		canvas.setAttribute('aria-hidden', 'true');
 		document.body.appendChild(canvas);
 
@@ -693,7 +693,7 @@
 	}
 
 	// Reference speech bubbles — fixed tooltip with dynamic positioning
-	const faceCards = document.querySelectorAll('.face-card');
+	const faceCards = document.querySelectorAll('.jc-reference');
 	const BUBBLE_GAP = 14;
 
 	const positionBubble = (card, bubble) => {
@@ -729,7 +729,7 @@
 
 	const closeBubble = (card) => {
 		card.setAttribute('aria-expanded', 'false');
-		const bubble = card.querySelector('.ref-bubble');
+		const bubble = card.querySelector('.jc-reference__bubble');
 		if (bubble) {
 			bubble.classList.remove('bubble-visible');
 			bubble.setAttribute('aria-hidden', 'true');
@@ -741,7 +741,7 @@
 			if (c !== card) closeBubble(c);
 		});
 		card.setAttribute('aria-expanded', 'true');
-		const bubble = card.querySelector('.ref-bubble');
+		const bubble = card.querySelector('.jc-reference__bubble');
 		if (!bubble) return;
 
 		// Make visible first so offsetHeight is measurable, then position
@@ -750,7 +750,7 @@
 		positionBubble(card, bubble);
 
 		// Trigger wiggle
-		const inner = bubble.querySelector('.ref-bubble-inner');
+		const inner = bubble.querySelector('.jc-reference__bubble-inner');
 		if (inner) {
 			inner.classList.remove('bubble-wiggle-anim');
 			void inner.offsetWidth;
@@ -760,7 +760,7 @@
 
 	faceCards.forEach((card) => {
 		card.addEventListener('click', (e) => {
-			if (e.target.closest('.ref-bubble')) return;
+			if (e.target.closest('.jc-reference__bubble')) return;
 			if (card.getAttribute('aria-expanded') === 'true') {
 				closeBubble(card);
 			} else {
@@ -768,7 +768,7 @@
 			}
 		});
 
-		const closeBtn = card.querySelector('.ref-bubble-close');
+		const closeBtn = card.querySelector('.jc-reference__close');
 		if (closeBtn) {
 			closeBtn.addEventListener('click', (e) => {
 				e.stopPropagation();
@@ -797,7 +797,7 @@
 	const reposition = () => {
 		faceCards.forEach((card) => {
 			if (card.getAttribute('aria-expanded') === 'true') {
-				const bubble = card.querySelector('.ref-bubble');
+				const bubble = card.querySelector('.jc-reference__bubble');
 				if (bubble) positionBubble(card, bubble);
 			}
 		});
@@ -807,7 +807,7 @@
 	window.addEventListener('scroll', reposition, { passive: true });
 
 	document.addEventListener('click', (e) => {
-		if (!e.target.closest('.face-card')) {
+		if (!e.target.closest('.jc-reference')) {
 			faceCards.forEach(closeBubble);
 		}
 	});
