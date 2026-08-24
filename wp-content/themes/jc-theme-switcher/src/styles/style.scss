@@ -18,7 +18,8 @@ Tags: portfolio, blog, custom-logo, custom-menu, featured-images, full-site-edit
 	left: -9999px;
 }
 
-/* The appended SVG has no intrinsic size, so it needs an explicit box in every scheme. */
+/* External-link icon sizing for nav and button links. */
+.jc-icon-external,
 .jc-external-icon {
 	display: inline-flex;
 	flex: none;
@@ -26,6 +27,7 @@ Tags: portfolio, blog, custom-logo, custom-menu, featured-images, full-site-edit
 	height: 0.85em;
 }
 
+.jc-icon-external svg,
 .jc-external-icon svg {
 	display: block;
 	width: 100%;
@@ -93,3 +95,32 @@ body:not([data-style-scheme="arcade"]) .jc-coin {
 	padding: 0.42rem 0.58rem 0.42rem 0.5rem;
 	font-size: 0.72rem;
 }
+/* Shared category chips for card metadata. */
+.jc-cats {
+        list-style: none;
+        margin: 0 0 0.55rem;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+}
+
+.jc-cats__chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.15rem 0.42rem;
+        border-radius: 999px;
+}
+
+.jc-cats__icon {
+        width: 0.9rem;
+        height: 0.9rem;
+        display: block;
+        flex: 0 0 auto;
+}
+
+.jc-cats__name {
+        line-height: 1;
+}
+

@@ -56,12 +56,24 @@ function jc_16bit_arcade_primary_menu_fallback() {
 	foreach ( $items as $item ) {
 		$is_external = ! empty( $item['external'] );
 		$target      = $is_external ? ' target="_blank" rel="noopener noreferrer"' : '';
+		$is_linkedin = $is_external && false !== strpos( strtolower( $item['url'] ), 'linkedin.com' );
+
+		$icon_markup = $is_linkedin ? jc_16bit_arcade_external_link_icon_markup() : '';
 
 		echo '<li class="menu-item">';
-		echo '<a href="' . esc_url( $item['url'] ) . '"' . $target . '>' . esc_html( $item['label'] ) . '</a>';
+		echo '<a href="' . esc_url( $item['url'] ) . '"' . $target . '>' . esc_html( $item['label'] ) . $icon_markup . '</a>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '</li>';
 	}
 	echo '</ul>';
+}
+
+/**
+ * External-site icon markup used in nav/buttons for off-site new-tab links.
+ *
+ * @return string
+ */
+function jc_16bit_arcade_external_link_icon_markup() {
+	return ' <span class="jc-icon-external" aria-hidden="true"><svg viewBox="0 0 12 12" focusable="false"><path d="M2 10h8V7h1v4H1V1h4v1H2z" fill="currentColor"/><path d="M6 1h5v5H9.5V3.9L6 7.4 4.6 6 8.1 2.5H6z" fill="currentColor"/></svg></span><span class="screen-reader-text"> Opens on another site in a new tab</span>';
 }
 
 /**
@@ -185,13 +197,11 @@ function jc_16bit_arcade_nav_linkedin_icon( $title, $item, $args, $depth ) {
 		return $title;
 	}
 
-	if ( false !== strpos( $title, 'jc-external-icon' ) ) {
+	if ( false !== strpos( $title, 'jc-icon-external' ) || false !== strpos( $title, 'jc-external-icon' ) ) {
 		return $title;
 	}
 
-	$icon = '<span class="jc-external-icon" aria-hidden="true"><svg viewBox="0 0 14 14" focusable="false"><path d="M3 11h8V7h2v6H1V1h6v2H3z" fill="currentColor"/><path d="M8 1h5v5h-2V4.4L6.7 8.7 5.3 7.3 9.6 3H8z" fill="currentColor"/></svg></span><span class="screen-reader-text"> Opens LinkedIn in a new tab</span>';
-
-	return $title . ' ' . $icon;
+	return $title . jc_16bit_arcade_external_link_icon_markup();
 }
 add_filter( 'nav_menu_item_title', 'jc_16bit_arcade_nav_linkedin_icon', 10, 4 );
 
