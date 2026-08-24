@@ -72,6 +72,114 @@
 	const reduceMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 	const isHomepage = document.body.classList.contains('home') || document.body.classList.contains('front-page');
 
+	const setupProjectsPageLayoutFallback = () => {
+		if (!document.body.classList.contains('page-id-11')) {
+			return;
+		}
+
+		const entryContent = document.querySelector('.jc-content .entry-content');
+		if (!entryContent || entryContent.classList.contains('jc-projects-ready')) {
+			return;
+		}
+
+		// Skip fallback if the new native project block is already in use.
+		if (entryContent.querySelector('.wp-block-jc-project-client-card')) {
+			return;
+		}
+
+		const children = Array.from(entryContent.children);
+		const headings = children.filter((child) => child.tagName === 'H2' && child.classList.contains('gb-headline-text'));
+
+		if (!headings.length) {
+			return;
+		}
+
+		const projectFigures = children.filter((child) => child.tagName === 'FIGURE' && child.classList.contains('wp-block-image'));
+		const firstHeadingIndex = children.indexOf(headings[0]);
+		const introNodes = children
+			.slice(0, firstHeadingIndex)
+			.filter((child) => !(child.tagName === 'FIGURE' && child.classList.contains('wp-block-image')));
+
+		const projectsWrapper = document.createElement('div');
+		projectsWrapper.className = 'jc-projects';
+
+		let figureIndex = 0;
+
+		headings.forEach((heading, projectIndex) => {
+			const row = document.createElement('section');
+			row.className = 'jc-project-row';
+
+			if (projectIndex % 2 === 1) {
+				row.classList.add('jc-project-row--reverse');
+			}
+
+			const media = document.createElement('figure');
+			media.className = 'jc-project-row__media';
+
+			const sourceFigure = projectFigures[figureIndex] || null;
+			if (sourceFigure) {
+				figureIndex += 1;
+				media.innerHTML = sourceFigure.innerHTML;
+			}
+
+			const copy = document.createElement('div');
+			copy.className = 'jc-project-row__copy';
+
+			let node = heading;
+			while (node) {
+				const next = node.nextElementSibling;
+				copy.appendChild(node);
+
+				if (!next || (next.tagName === 'H2' && next.classList.contains('gb-headline-text'))) {
+					break;
+				}
+
+				node = next;
+			}
+
+			const tagNodes = Array.from(copy.querySelectorAll(':scope > .gb-headline:not(.gb-headline-text)'));
+			if (tagNodes.length) {
+				const tags = document.createElement('div');
+				tags.className = 'jc-project-row__tags';
+
+				tagNodes.forEach((tagNode) => {
+					tags.appendChild(tagNode);
+				});
+
+				const description = copy.querySelector(':scope > p.gb-headline-text');
+				if (description && description.nextSibling) {
+					copy.insertBefore(tags, description.nextSibling);
+				} else {
+					copy.appendChild(tags);
+				}
+			}
+
+			const viewProjectLink = copy.querySelector(':scope > a.gb-button');
+			if (viewProjectLink) {
+				viewProjectLink.classList.add('jc-btn', 'jc-btn--sm', 'jc-project-row__link');
+			}
+
+			if (media.children.length === 0) {
+				row.classList.add('jc-project-row--no-media');
+			}
+
+			if (row.classList.contains('jc-project-row--reverse')) {
+				row.append(copy, media);
+			} else {
+				row.append(media, copy);
+			}
+
+			projectsWrapper.appendChild(row);
+		});
+
+		entryContent.innerHTML = '';
+		introNodes.forEach((node) => entryContent.appendChild(node));
+		entryContent.appendChild(projectsWrapper);
+		entryContent.classList.add('jc-projects-ready');
+	};
+
+	setupProjectsPageLayoutFallback();
+
 	const assetUrl = (fileName) => themeBase + 'assets/img/' + fileName;
 
 	if (starsContainer) {

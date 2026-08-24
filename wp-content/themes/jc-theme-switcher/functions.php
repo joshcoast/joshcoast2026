@@ -121,6 +121,276 @@ function jc_16bit_arcade_register_client_post_type() {
 }
 add_action( 'init', 'jc_16bit_arcade_register_client_post_type' );
 
+/**
+ * Register a skills taxonomy for the Client post type.
+ */
+function jc_16bit_arcade_register_client_skill_taxonomy() {
+	$labels = array(
+		'name'                       => __( 'Client Skills', 'jc-16bit-arcade' ),
+		'singular_name'              => __( 'Client Skill', 'jc-16bit-arcade' ),
+		'menu_name'                  => __( 'Client Skills', 'jc-16bit-arcade' ),
+		'all_items'                  => __( 'All Client Skills', 'jc-16bit-arcade' ),
+		'edit_item'                  => __( 'Edit Client Skill', 'jc-16bit-arcade' ),
+		'view_item'                  => __( 'View Client Skill', 'jc-16bit-arcade' ),
+		'update_item'                => __( 'Update Client Skill', 'jc-16bit-arcade' ),
+		'add_new_item'               => __( 'Add New Client Skill', 'jc-16bit-arcade' ),
+		'new_item_name'              => __( 'New Client Skill Name', 'jc-16bit-arcade' ),
+		'search_items'               => __( 'Search Client Skills', 'jc-16bit-arcade' ),
+		'popular_items'              => __( 'Popular Client Skills', 'jc-16bit-arcade' ),
+		'separate_items_with_commas' => __( 'Separate client skills with commas', 'jc-16bit-arcade' ),
+		'add_or_remove_items'        => __( 'Add or remove client skills', 'jc-16bit-arcade' ),
+		'choose_from_most_used'      => __( 'Choose from the most used client skills', 'jc-16bit-arcade' ),
+		'not_found'                  => __( 'No client skills found.', 'jc-16bit-arcade' ),
+	);
+
+	$args = array(
+		'labels'            => $labels,
+		'public'            => true,
+		'show_ui'           => true,
+		'show_admin_column' => true,
+		'show_in_rest'      => true,
+		'hierarchical'      => false,
+		'rewrite'           => array(
+			'slug'       => 'client-skill',
+			'with_front' => false,
+		),
+	);
+
+	register_taxonomy( 'client_skill', array( 'client' ), $args );
+}
+add_action( 'init', 'jc_16bit_arcade_register_client_skill_taxonomy' );
+
+/**
+ * Seed baseline client skills used by the Projects page.
+ */
+function jc_16bit_arcade_seed_client_skill_terms() {
+	$seed_terms = array(
+		'REST API',
+		'WordPress',
+		'Design',
+		'SCSS/HTML/JSX',
+		'WP Theme',
+		'SCSS/HTML/JS',
+		'Figma',
+		'React',
+		'Custom Blocks',
+		'UX Design',
+		'Headless',
+		'Craft CMS',
+		'PHP',
+		'Twig',
+		'Tailwind',
+	);
+
+	foreach ( $seed_terms as $term_name ) {
+		$slug       = sanitize_title( $term_name );
+		$term_check = term_exists( $slug, 'client_skill' );
+
+		if ( $term_check ) {
+			continue;
+		}
+
+		wp_insert_term(
+			$term_name,
+			'client_skill',
+			array(
+				'slug' => $slug,
+			)
+		);
+	}
+}
+add_action( 'init', 'jc_16bit_arcade_seed_client_skill_terms', 20 );
+
+/**
+ * Register the custom project block for selecting and rendering Client content.
+ */
+function jc_16bit_arcade_register_project_client_block() {
+	$script_handle = 'jc-project-client-card-block';
+	$script_path   = get_template_directory() . '/assets/js/blocks/project-client-card.js';
+	$script_url    = get_template_directory_uri() . '/assets/js/blocks/project-client-card.js';
+	$script_ver    = file_exists( $script_path ) ? (string) filemtime( $script_path ) : wp_get_theme()->get( 'Version' );
+
+	wp_register_script(
+		$script_handle,
+		$script_url,
+		array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-block-editor', 'wp-data', 'wp-i18n' ),
+		$script_ver,
+		true
+	);
+
+	register_block_type(
+		'jc/project-client-card',
+		array(
+			'api_version'     => 2,
+			'editor_script'   => $script_handle,
+			'render_callback' => 'jc_16bit_arcade_render_project_client_block',
+			'attributes'      => array(
+				'clientId' => array(
+					'type'    => 'number',
+					'default' => 0,
+				),
+				'title' => array(
+					'type'    => 'string',
+					'default' => '',
+				),
+				'description' => array(
+					'type'    => 'string',
+					'default' => '',
+				),
+				'actionLabel' => array(
+					'type'    => 'string',
+					'default' => __( 'View Project', 'jc-16bit-arcade' ),
+				),
+				'actionUrl' => array(
+					'type'    => 'string',
+					'default' => '',
+				),
+				'imageId' => array(
+					'type'    => 'number',
+					'default' => 0,
+				),
+				'imageUrl' => array(
+					'type'    => 'string',
+					'default' => '',
+				),
+				'imageAlt' => array(
+					'type'    => 'string',
+					'default' => '',
+				),
+				'imageOnRight' => array(
+					'type'    => 'boolean',
+					'default' => false,
+				),
+			),
+		)
+	);
+}
+add_action( 'init', 'jc_16bit_arcade_register_project_client_block', 30 );
+
+/**
+ * Render callback for the project client card block.
+ *
+ * @param array<string,mixed> $attributes Block attributes.
+ * @return string
+ */
+function jc_16bit_arcade_render_project_client_block( $attributes ) {
+	$client_id      = isset( $attributes['clientId'] ) ? absint( $attributes['clientId'] ) : 0;
+	$image_id       = isset( $attributes['imageId'] ) ? absint( $attributes['imageId'] ) : 0;
+	$image_url      = isset( $attributes['imageUrl'] ) ? esc_url_raw( (string) $attributes['imageUrl'] ) : '';
+	$image_alt      = isset( $attributes['imageAlt'] ) ? sanitize_text_field( (string) $attributes['imageAlt'] ) : '';
+	$title          = isset( $attributes['title'] ) ? sanitize_text_field( (string) $attributes['title'] ) : '';
+	$description    = isset( $attributes['description'] ) ? trim( (string) $attributes['description'] ) : '';
+	$action_label   = isset( $attributes['actionLabel'] ) ? sanitize_text_field( (string) $attributes['actionLabel'] ) : '';
+	$action_url     = isset( $attributes['actionUrl'] ) ? esc_url_raw( (string) $attributes['actionUrl'] ) : '';
+	$image_on_right = ! empty( $attributes['imageOnRight'] );
+
+	if ( ! $client_id || 'client' !== get_post_type( $client_id ) ) {
+		if ( is_admin() ) {
+			return '<div class="jc-project-client-card jc-project-client-card--placeholder"><p>' . esc_html__( 'Select a Client to render this block.', 'jc-16bit-arcade' ) . '</p></div>';
+		}
+
+		return '';
+	}
+
+	$client_title = get_the_title( $client_id );
+
+	if ( '' === $title ) {
+		$title = $client_title;
+	}
+
+	if ( '' === $action_label ) {
+		$action_label = __( 'View Project', 'jc-16bit-arcade' );
+	}
+
+	if ( '' === $action_url ) {
+		$action_url = get_permalink( $client_id );
+	}
+
+	if ( '' === $image_alt ) {
+		$image_alt = $title;
+	}
+
+	$image_markup = '';
+
+	if ( $image_id ) {
+		$image_markup = wp_get_attachment_image(
+			$image_id,
+			'large',
+			false,
+			array(
+				'class'    => 'jc-project-client-card__image',
+				'loading'  => 'lazy',
+				'decoding' => 'async',
+				'alt'      => $image_alt,
+			)
+		);
+	} elseif ( '' !== $image_url ) {
+		$image_markup = '<img class="jc-project-client-card__image" src="' . esc_url( $image_url ) . '" alt="' . esc_attr( $image_alt ) . '" loading="lazy" decoding="async" />';
+	} elseif ( has_post_thumbnail( $client_id ) ) {
+		$image_markup = get_the_post_thumbnail(
+			$client_id,
+			'large',
+			array(
+				'class'    => 'jc-project-client-card__image',
+				'loading'  => 'lazy',
+				'decoding' => 'async',
+				'alt'      => $image_alt,
+			)
+		);
+	}
+
+	if ( '' === $image_markup ) {
+		$image_markup = '<div class="jc-project-client-card__image-placeholder">' . esc_html__( 'No client image selected.', 'jc-16bit-arcade' ) . '</div>';
+	}
+
+	$skills = get_the_terms( $client_id, 'client_skill' );
+	$classes = array( 'jc-project-client-card' );
+
+	if ( $image_on_right ) {
+		$classes[] = 'jc-project-client-card--image-right';
+	}
+
+	$wrapper_attributes = get_block_wrapper_attributes(
+		array(
+			'class' => implode( ' ', $classes ),
+		)
+	);
+
+	ob_start();
+	?>
+	<article <?php echo $wrapper_attributes; ?>>
+		<figure class="jc-project-client-card__media">
+			<div class="jc-project-client-card__media-frame">
+				<?php echo $image_markup; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			</div>
+		</figure>
+		<div class="jc-project-client-card__content">
+			<?php if ( '' !== $title ) : ?>
+				<h2 class="jc-project-client-card__title"><?php echo esc_html( $title ); ?></h2>
+			<?php endif; ?>
+
+			<?php if ( '' !== $description ) : ?>
+				<p class="jc-project-client-card__description"><?php echo nl2br( esc_html( $description ) ); ?></p>
+			<?php endif; ?>
+
+			<?php if ( ! empty( $skills ) && ! is_wp_error( $skills ) ) : ?>
+				<ul class="jc-project-client-card__skills" aria-label="<?php esc_attr_e( 'Client skills', 'jc-16bit-arcade' ); ?>">
+					<?php foreach ( $skills as $skill ) : ?>
+						<li class="jc-project-client-card__skill"><?php echo esc_html( $skill->name ); ?></li>
+					<?php endforeach; ?>
+				</ul>
+			<?php endif; ?>
+
+			<?php if ( '' !== $action_url ) : ?>
+				<a class="jc-btn jc-btn--sm jc-project-client-card__action" href="<?php echo esc_url( $action_url ); ?>"><?php echo esc_html( $action_label ); ?></a>
+			<?php endif; ?>
+		</div>
+	</article>
+	<?php
+
+	return (string) ob_get_clean();
+}
+
 function jc_16bit_arcade_assets() {
 	wp_enqueue_style( 'jc-16bit-google-fonts', 'https://fonts.googleapis.com/css2?family=Ultra&family=Press+Start+2P&family=VT323&display=swap', array(), null );
 	wp_enqueue_style( 'jc-16bit-style', get_template_directory_uri() . '/assets/css/style.min.css', array( 'jc-16bit-google-fonts' ), wp_get_theme()->get( 'Version' ) );
@@ -232,11 +502,11 @@ function jc_16bit_arcade_category_icon_svg( $slug ) {
 	switch ( $key ) {
 		case 'wordpress':
 		case 'wp':
-			return '<svg viewBox="0 0 20 20" class="jc-cats__icon" aria-hidden="true" focusable="false"><rect width="20" height="20" rx="3" fill="#21759b"/><circle cx="10" cy="10" r="7" fill="#fff"/><path d="M6 6h2l2 8 1-3 1 3 2-8h2l-3 10h-2l-1-3-1 3H9z" fill="#21759b"/></svg>';
+				return '<svg viewBox="0 0 20 20" class="jc-cats__icon" aria-hidden="true" focusable="false"><rect width="20" height="20" rx="3" fill="#21759b"/><circle cx="10" cy="10" r="7" fill="#fff"/><path d="M5.9 6.2h1.8l1.6 6.1 1.1-3.7h1.2l1.1 3.7 1.6-6.1h1.8l-2.5 8.3h-1.6l-1-3.2-1 3.2H8.4z" fill="#21759b"/></svg>';
 
 		case 'javascript':
 		case 'js':
-			return '<svg viewBox="0 0 20 20" class="jc-cats__icon" aria-hidden="true" focusable="false"><rect width="20" height="20" rx="3" fill="#f7df1e"/><rect x="4" y="4" width="12" height="12" fill="#121212"/><rect x="7" y="6" width="2" height="7" fill="#f7df1e"/><rect x="10" y="11" width="2" height="2" fill="#f7df1e"/><rect x="12" y="6" width="2" height="2" fill="#f7df1e"/><rect x="12" y="9" width="2" height="4" fill="#f7df1e"/></svg>';
+			return '<svg viewBox="0 0 20 20" class="jc-cats__icon" aria-hidden="true" focusable="false"><rect width="20" height="20" rx="3" fill="#f7df1e"/><rect x="4" y="4" width="12" height="12" rx="1" fill="#121212"/><path d="M8 7v4.8c0 1.2-.6 1.9-1.8 1.9-.6 0-1.1-.2-1.5-.5" fill="none" stroke="#f7df1e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12.9 7.2c-.9 0-1.5.4-1.5 1s.5.9 1.4 1.2c1.3.4 2.1 1 2.1 2.3 0 1.4-1.2 2.3-2.8 2.3-1.1 0-2.1-.4-2.7-1.2" fill="none" stroke="#f7df1e" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
 		case 'css':
 		case 'css3':
@@ -263,7 +533,8 @@ function jc_16bit_arcade_render_category_icons( $post_id = 0 ) {
 
 	echo '<ul class="jc-cats" aria-label="Post categories">';
 	foreach ( $categories as $category ) {
-		echo '<li class="jc-cats__chip">';
+		$chip_slug = sanitize_html_class( $category->slug );
+		echo '<li class="jc-cats__chip jc-cats__chip--' . esc_attr( $chip_slug ) . '">';
 		echo jc_16bit_arcade_category_icon_svg( $category->slug );
 		echo '<span class="jc-cats__name">' . esc_html( $category->name ) . '</span>';
 		echo '</li>';
