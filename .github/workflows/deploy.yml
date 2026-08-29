@@ -34,16 +34,26 @@ jobs:
 
       - name: Deploy wp-content to Nexcess
         run: |
+          set -euo pipefail
           sudo apt-get install -y -qq sshpass
-          RSYNC_CMD="sshpass -p '${{ secrets.NEXCESS_SSH_PASS }}' rsync -avz --delete -e 'ssh -o StrictHostKeyChecking=no'"
+          RSYNC_SSH_CMD="ssh -o StrictHostKeyChecking=no"
+          RSYNC_PASSWORD="${{ secrets.NEXCESS_SSH_PASS }}"
           DEST="a2b69fd7_1@cf9a19eaca.nxcli.io:/home/a2b69fd7/cf9a19eaca.nxcli.io/html"
-          eval $RSYNC_CMD wp-content/themes/generatepress-child/ $DEST/wp-content/themes/generatepress-child/
-          eval $RSYNC_CMD wp-content/themes/joshcoast/ $DEST/wp-content/themes/joshcoast/
-          eval $RSYNC_CMD wp-content/plugins/are-you-paying-attention/ $DEST/wp-content/plugins/are-you-paying-attention/
-          eval $RSYNC_CMD wp-content/plugins/jc-taxonomy-filter/ $DEST/wp-content/plugins/jc-taxonomy-filter/
-          eval $RSYNC_CMD wp-content/plugins/word-count/ $DEST/wp-content/plugins/word-count/
-          eval $RSYNC_CMD wp-content/plugins/wp-blog-category-filter/ $DEST/wp-content/plugins/wp-blog-category-filter/
-          eval $RSYNC_CMD wp-content/plugins/coast-blocks/ $DEST/wp-content/plugins/coast-blocks/
-          eval $RSYNC_CMD wp-content/plugins/toolbox-blocks/ $DEST/wp-content/plugins/toolbox-blocks/
-          eval $RSYNC_CMD wp-content/themes/jc-16bit-arcade/ $DEST/wp-content/themes/jc-16bit-arcade/
-          eval $RSYNC_CMD wp-content/themes/jc-theme-switcher/ $DEST/wp-content/themes/jc-theme-switcher/
+
+          DEPLOY_PATHS=(
+            "wp-content/plugins/are-you-paying-attention/"
+            "wp-content/plugins/jc-taxonomy-filter/"
+            "wp-content/plugins/word-count/"
+            "wp-content/plugins/wp-blog-category-filter/"
+            "wp-content/plugins/coast-blocks/"
+            "wp-content/plugins/toolbox-blocks/"
+            "wp-content/themes/jc-theme-switcher/"
+          )
+
+          for SOURCE_PATH in "${DEPLOY_PATHS[@]}"; do
+            if [ -d "$SOURCE_PATH" ]; then
+              sshpass -p "$RSYNC_PASSWORD" rsync -avz --delete -e "$RSYNC_SSH_CMD" "$SOURCE_PATH" "$DEST/$SOURCE_PATH"
+            else
+              echo "Skipping missing path: $SOURCE_PATH"
+            fi
+          done
