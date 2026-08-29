@@ -27,12 +27,23 @@ $style_scheme = jc_16bit_arcade_get_style_scheme();
 		</div>
 		<nav class="jc-topbar__nav" aria-label="Primary Menu">
 			<?php
+			$menu_args      = array(
+				'theme_location' => 'primary',
+				'container'      => false,
+				'fallback_cb'    => 'jc_16bit_arcade_primary_menu_fallback',
+			);
+			$menu_locations = get_nav_menu_locations();
+
+			if ( empty( $menu_locations['primary'] ) ) {
+				$main_menu = wp_get_nav_menu_object( 'Main Menu' );
+
+				if ( $main_menu && ! is_wp_error( $main_menu ) ) {
+					$menu_args['menu'] = $main_menu;
+				}
+			}
+
 			wp_nav_menu(
-				array(
-					'theme_location' => 'primary',
-					'container'      => false,
-					'fallback_cb'    => 'jc_16bit_arcade_primary_menu_fallback',
-				)
+				$menu_args
 			);
 			?>
 		</nav>

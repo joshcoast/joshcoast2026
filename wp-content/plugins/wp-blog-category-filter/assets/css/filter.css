@@ -23,8 +23,8 @@
     & .wp-blog-filter__button {
         line-height: 0;
         color: var(--base-3);
-        padding-left: 0.9rem;
-        padding-right: 0.9rem;
+		padding-left: 1rem;
+		padding-right: 1rem;
         display: block;
         font-size: 0.9rem;
         position: relative;
@@ -178,7 +178,7 @@
 }
 
 .wp-blog-filter__post-card .cat-row {
-    margin: 0.75rem 0 0;
+    margin: 1rem 0 0;
 }
 
 /* Post Excerpt */
@@ -208,8 +208,8 @@
     text-transform: uppercase;
     text-align: center;
     padding: 8px 16px;
-    margin-top: 30px;
-    margin-right: 20px;
+    margin-top: 32px;
+    margin-right: 24px;
     border: 2px solid var(--base-3);
     color: var(--base-3);
     text-decoration: none;
