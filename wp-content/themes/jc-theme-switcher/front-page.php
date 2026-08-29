@@ -8,7 +8,7 @@
 get_header();
 
 $linkedin_url = apply_filters( 'jc_16bit_arcade_linkedin_url', 'https://www.linkedin.com/' );
-$resume_url   = apply_filters( 'jc_16bit_arcade_resume_url', home_url( '/resume.pdf' ) );
+$resume_url   = 'https://joshcoast.com/wp-content/uploads/2026/08/Resume-2026.pdf';
 
 $projects_page = get_page_by_path( 'projects' );
 $projects_url  = $projects_page ? get_permalink( $projects_page ) : home_url( '/projects/' );
