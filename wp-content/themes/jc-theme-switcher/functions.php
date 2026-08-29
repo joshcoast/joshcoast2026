@@ -30,6 +30,7 @@ function jc_16bit_arcade_primary_menu_fallback() {
 	$home_url     = home_url( '/' );
 	$projects_url = home_url( '/projects/' );
 	$notes_url    = home_url( '/joshs-notes/' );
+	$resume_url   = apply_filters( 'jc_16bit_arcade_resume_url', home_url( '/resume.pdf' ) );
 	$linkedin_url = apply_filters( 'jc_16bit_arcade_linkedin_url', 'https://www.linkedin.com/' );
 
 	$items = array(
@@ -46,22 +47,41 @@ function jc_16bit_arcade_primary_menu_fallback() {
 			'url'   => $notes_url,
 		),
 		array(
+			'label'    => __( 'Resume', 'jc-16bit-arcade' ),
+			'url'      => $resume_url,
+			'download' => true,
+			'classes'  => array( 'jc-menu-icon-download' ),
+		),
+		array(
 			'label'    => __( 'LinkedIn', 'jc-16bit-arcade' ),
 			'url'      => $linkedin_url,
 			'external' => true,
+			'classes'  => array( 'jc-menu-icon-external' ),
 		),
 	);
 
 	echo '<ul class="menu">';
 	foreach ( $items as $item ) {
 		$is_external = ! empty( $item['external'] );
+		$is_download = ! empty( $item['download'] );
+		$item_class  = ! empty( $item['classes'] ) && is_array( $item['classes'] ) ? array_filter( $item['classes'] ) : array();
 		$target      = $is_external ? ' target="_blank" rel="noopener noreferrer"' : '';
-		$is_linkedin = $is_external && false !== strpos( strtolower( $item['url'] ), 'linkedin.com' );
+		$download    = $is_download ? ' download' : '';
 
-		$icon_markup = $is_linkedin ? jc_16bit_arcade_external_link_icon_markup() : '';
+		$icon_markup = '';
+		if ( in_array( 'jc-menu-icon-external', $item_class, true ) ) {
+			$icon_markup = jc_16bit_arcade_external_link_icon_markup();
+		} elseif ( in_array( 'jc-menu-icon-download', $item_class, true ) ) {
+			$icon_markup = jc_16bit_arcade_download_icon_markup();
+		}
 
-		echo '<li class="menu-item">';
-		echo '<a href="' . esc_url( $item['url'] ) . '"' . $target . '>' . esc_html( $item['label'] ) . $icon_markup . '</a>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		$li_class_attr = '';
+		if ( ! empty( $item_class ) ) {
+			$li_class_attr = ' class="menu-item ' . esc_attr( implode( ' ', $item_class ) ) . '"';
+		}
+
+		echo '<li' . $li_class_attr . '>';
+		echo '<a href="' . esc_url( $item['url'] ) . '"' . $target . $download . '>' . esc_html( $item['label'] ) . $icon_markup . '</a>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '</li>';
 	}
 	echo '</ul>';
@@ -74,6 +94,15 @@ function jc_16bit_arcade_primary_menu_fallback() {
  */
 function jc_16bit_arcade_external_link_icon_markup() {
 	return ' <span class="jc-icon-external" aria-hidden="true"><svg viewBox="0 0 12 12" focusable="false"><path d="M2 10h8V7h1v4H1V1h4v1H2z" fill="currentColor"/><path d="M6 1h5v5H9.5V3.9L6 7.4 4.6 6 8.1 2.5H6z" fill="currentColor"/></svg></span><span class="screen-reader-text"> Opens on another site in a new tab</span>';
+}
+
+/**
+ * Download icon markup used for resume links in nav/buttons.
+ *
+ * @return string
+ */
+function jc_16bit_arcade_download_icon_markup() {
+	return ' <span class="jc-icon-external" aria-hidden="true"><svg viewBox="0 0 12 12" focusable="false"><path d="M6 1v5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M4.3 4.8 6 6.7l1.7-1.9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 8.5h8V11H2z" fill="currentColor"/></svg></span><span class="screen-reader-text"> Download resume</span>';
 }
 
 /**
@@ -120,6 +149,189 @@ function jc_16bit_arcade_register_client_post_type() {
 	register_post_type( 'client', $args );
 }
 add_action( 'init', 'jc_16bit_arcade_register_client_post_type' );
+
+/**
+ * Register a References post type for the front-page reference cards.
+ */
+function jc_16bit_arcade_register_reference_post_type() {
+	$labels = array(
+		'name'               => __( 'References', 'jc-16bit-arcade' ),
+		'singular_name'      => __( 'Reference', 'jc-16bit-arcade' ),
+		'menu_name'          => __( 'References', 'jc-16bit-arcade' ),
+		'name_admin_bar'     => __( 'Reference', 'jc-16bit-arcade' ),
+		'add_new'            => __( 'Add New', 'jc-16bit-arcade' ),
+		'add_new_item'       => __( 'Add New Reference', 'jc-16bit-arcade' ),
+		'new_item'           => __( 'New Reference', 'jc-16bit-arcade' ),
+		'edit_item'          => __( 'Edit Reference', 'jc-16bit-arcade' ),
+		'view_item'          => __( 'View Reference', 'jc-16bit-arcade' ),
+		'all_items'          => __( 'All References', 'jc-16bit-arcade' ),
+		'search_items'       => __( 'Search References', 'jc-16bit-arcade' ),
+		'not_found'          => __( 'No references found.', 'jc-16bit-arcade' ),
+		'not_found_in_trash' => __( 'No references found in Trash.', 'jc-16bit-arcade' ),
+	);
+
+	$args = array(
+		'labels'              => $labels,
+		'public'              => false,
+		'show_ui'             => true,
+		'show_in_menu'        => true,
+		'show_in_admin_bar'   => true,
+		'show_in_nav_menus'   => false,
+		'has_archive'         => false,
+		'rewrite'             => false,
+		'show_in_rest'        => false,
+		'menu_icon'           => 'dashicons-format-quote',
+		'supports'            => array( 'title', 'page-attributes', 'thumbnail' ),
+		'publicly_queryable'  => false,
+		'exclude_from_search' => true,
+	);
+
+	register_post_type( 'jc_reference', $args );
+}
+add_action( 'init', 'jc_16bit_arcade_register_reference_post_type' );
+
+/**
+ * Add custom fields for reference cards.
+ */
+function jc_16bit_arcade_add_reference_meta_box() {
+	add_meta_box(
+		'jc-reference-fields',
+		__( 'Reference Card Fields', 'jc-16bit-arcade' ),
+		'jc_16bit_arcade_render_reference_meta_box',
+		'jc_reference',
+		'normal',
+		'high'
+	);
+}
+add_action( 'add_meta_boxes', 'jc_16bit_arcade_add_reference_meta_box' );
+
+/**
+ * Render meta fields for reference cards.
+ *
+ * @param WP_Post $post Post object.
+ */
+function jc_16bit_arcade_render_reference_meta_box( $post ) {
+	wp_nonce_field( 'jc_16bit_arcade_reference_meta', 'jc_16bit_arcade_reference_meta_nonce' );
+
+	$reference_name       = (string) get_post_meta( $post->ID, '_jc_reference_name', true );
+	$reference_title      = (string) get_post_meta( $post->ID, '_jc_reference_title', true );
+	$reference_quote      = (string) get_post_meta( $post->ID, '_jc_reference_quote', true );
+	$reference_linkedin   = (string) get_post_meta( $post->ID, '_jc_reference_linkedin_url', true );
+	$avatar_arcade_url    = (string) get_post_meta( $post->ID, '_jc_reference_avatar_arcade_url', true );
+	$avatar_stripes_url   = (string) get_post_meta( $post->ID, '_jc_reference_avatar_stripes_url', true );
+	$reference_background = (string) get_post_meta( $post->ID, '_jc_reference_avatar_bg', true );
+	?>
+	<p>
+		<label for="jc_reference_name"><strong><?php esc_html_e( 'Display Name', 'jc-16bit-arcade' ); ?></strong></label><br />
+		<input type="text" id="jc_reference_name" name="jc_reference_name" class="widefat" value="<?php echo esc_attr( $reference_name ); ?>" />
+	</p>
+
+	<p>
+		<label for="jc_reference_title"><strong><?php esc_html_e( 'Title / Role', 'jc-16bit-arcade' ); ?></strong></label><br />
+		<input type="text" id="jc_reference_title" name="jc_reference_title" class="widefat" value="<?php echo esc_attr( $reference_title ); ?>" />
+	</p>
+
+	<p>
+		<label for="jc_reference_quote"><strong><?php esc_html_e( 'Quote', 'jc-16bit-arcade' ); ?></strong></label><br />
+		<textarea id="jc_reference_quote" name="jc_reference_quote" rows="5" class="widefat"><?php echo esc_textarea( $reference_quote ); ?></textarea>
+	</p>
+
+	<p>
+		<label for="jc_reference_linkedin_url"><strong><?php esc_html_e( 'LinkedIn URL', 'jc-16bit-arcade' ); ?></strong></label><br />
+		<input type="url" id="jc_reference_linkedin_url" name="jc_reference_linkedin_url" class="widefat" value="<?php echo esc_attr( $reference_linkedin ); ?>" />
+	</p>
+
+	<p>
+		<label for="jc_reference_avatar_arcade_url"><strong><?php esc_html_e( 'Arcade Mode Image URL', 'jc-16bit-arcade' ); ?></strong></label><br />
+		<input type="url" id="jc_reference_avatar_arcade_url" name="jc_reference_avatar_arcade_url" class="widefat" value="<?php echo esc_attr( $avatar_arcade_url ); ?>" />
+	</p>
+
+	<p>
+		<label for="jc_reference_avatar_stripes_url"><strong><?php esc_html_e( 'Stripes Mode Image URL', 'jc-16bit-arcade' ); ?></strong></label><br />
+		<input type="url" id="jc_reference_avatar_stripes_url" name="jc_reference_avatar_stripes_url" class="widefat" value="<?php echo esc_attr( $avatar_stripes_url ); ?>" />
+	</p>
+
+	<p>
+		<label for="jc_reference_avatar_bg"><strong><?php esc_html_e( 'Arcade Card Background Color (optional)', 'jc-16bit-arcade' ); ?></strong></label><br />
+		<input type="text" id="jc_reference_avatar_bg" name="jc_reference_avatar_bg" class="widefat" placeholder="#d1e2aa" value="<?php echo esc_attr( $reference_background ); ?>" />
+	</p>
+
+	<p>
+		<em><?php esc_html_e( 'Tip: Keep post title as an internal label. The card uses Display Name, Title / Role, Quote, LinkedIn URL, and style-mode images above.', 'jc-16bit-arcade' ); ?></em>
+	</p>
+	<?php
+}
+
+/**
+ * Save reference card meta fields.
+ *
+ * @param int $post_id Post ID.
+ */
+function jc_16bit_arcade_save_reference_meta( $post_id ) {
+	if ( 'jc_reference' !== get_post_type( $post_id ) ) {
+		return;
+	}
+
+	if ( ! isset( $_POST['jc_16bit_arcade_reference_meta_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['jc_16bit_arcade_reference_meta_nonce'] ) ), 'jc_16bit_arcade_reference_meta' ) ) {
+		return;
+	}
+
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+		return;
+	}
+
+	if ( ! current_user_can( 'edit_post', $post_id ) ) {
+		return;
+	}
+
+	$fields = array(
+		'_jc_reference_name'              => array(
+			'input'    => 'jc_reference_name',
+			'sanitize' => 'sanitize_text_field',
+		),
+		'_jc_reference_title'             => array(
+			'input'    => 'jc_reference_title',
+			'sanitize' => 'sanitize_text_field',
+		),
+		'_jc_reference_quote'             => array(
+			'input'    => 'jc_reference_quote',
+			'sanitize' => 'sanitize_textarea_field',
+		),
+		'_jc_reference_linkedin_url'      => array(
+			'input'    => 'jc_reference_linkedin_url',
+			'sanitize' => 'esc_url_raw',
+		),
+		'_jc_reference_avatar_arcade_url' => array(
+			'input'    => 'jc_reference_avatar_arcade_url',
+			'sanitize' => 'esc_url_raw',
+		),
+		'_jc_reference_avatar_stripes_url' => array(
+			'input'    => 'jc_reference_avatar_stripes_url',
+			'sanitize' => 'esc_url_raw',
+		),
+		'_jc_reference_avatar_bg'         => array(
+			'input'    => 'jc_reference_avatar_bg',
+			'sanitize' => 'sanitize_hex_color',
+		),
+	);
+
+	foreach ( $fields as $meta_key => $field ) {
+		$raw_value = isset( $_POST[ $field['input'] ] ) ? wp_unslash( $_POST[ $field['input'] ] ) : '';
+
+		if ( 'sanitize_hex_color' === $field['sanitize'] ) {
+			$sanitized_value = sanitize_hex_color( (string) $raw_value );
+		} else {
+			$sanitized_value = call_user_func( $field['sanitize'], (string) $raw_value );
+		}
+
+		if ( '' === $sanitized_value || null === $sanitized_value ) {
+			delete_post_meta( $post_id, $meta_key );
+		} else {
+			update_post_meta( $post_id, $meta_key, $sanitized_value );
+		}
+	}
+}
+add_action( 'save_post', 'jc_16bit_arcade_save_reference_meta' );
 
 /**
  * Register a skills taxonomy for the Client post type.
@@ -450,7 +662,7 @@ function jc_16bit_arcade_body_classes( $classes ) {
 add_filter( 'body_class', 'jc_16bit_arcade_body_classes' );
 
 /**
- * Add an external-link icon to LinkedIn items in the primary nav.
+ * Add icon markup to primary nav links via menu item CSS classes.
  *
  * @param string   $title Item title HTML.
  * @param WP_Post  $item  Menu item object.
@@ -463,17 +675,52 @@ function jc_16bit_arcade_nav_linkedin_icon( $title, $item, $args, $depth ) {
 		return $title;
 	}
 
-	if ( empty( $item->url ) || false === strpos( strtolower( $item->url ), 'linkedin.com' ) ) {
-		return $title;
-	}
-
 	if ( false !== strpos( $title, 'jc-icon-external' ) || false !== strpos( $title, 'jc-external-icon' ) ) {
 		return $title;
 	}
 
-	return $title . jc_16bit_arcade_external_link_icon_markup();
+	$item_classes = isset( $item->classes ) && is_array( $item->classes ) ? array_filter( $item->classes ) : array();
+
+	if ( in_array( 'jc-menu-icon-download', $item_classes, true ) ) {
+		return $title . jc_16bit_arcade_download_icon_markup();
+	}
+
+	if ( in_array( 'jc-menu-icon-external', $item_classes, true ) ) {
+		return $title . jc_16bit_arcade_external_link_icon_markup();
+	}
+
+	return $title;
 }
 add_filter( 'nav_menu_item_title', 'jc_16bit_arcade_nav_linkedin_icon', 10, 4 );
+
+/**
+ * Add link attributes for icon-flagged primary nav items.
+ *
+ * @param array    $atts Link attributes.
+ * @param WP_Post  $item Menu item object.
+ * @param stdClass $args Nav menu args.
+ * @param int      $depth Menu depth.
+ * @return array
+ */
+function jc_16bit_arcade_primary_nav_link_attributes( $atts, $item, $args, $depth ) {
+	if ( ! isset( $args->theme_location ) || 'primary' !== $args->theme_location ) {
+		return $atts;
+	}
+
+	$item_classes = isset( $item->classes ) && is_array( $item->classes ) ? array_filter( $item->classes ) : array();
+
+	if ( in_array( 'jc-menu-icon-download', $item_classes, true ) ) {
+		$atts['download'] = '';
+	}
+
+	if ( in_array( 'jc-menu-icon-external', $item_classes, true ) ) {
+		$atts['target'] = '_blank';
+		$atts['rel']    = 'noopener noreferrer';
+	}
+
+	return $atts;
+}
+add_filter( 'nav_menu_link_attributes', 'jc_16bit_arcade_primary_nav_link_attributes', 10, 4 );
 
 function jc_16bit_arcade_humor_line() {
 	$lines = array(

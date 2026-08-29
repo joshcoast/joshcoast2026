@@ -802,6 +802,10 @@
 
 	// Reference speech bubbles — fixed tooltip with dynamic positioning
 	const faceCards = document.querySelectorAll('.jc-reference');
+	const referenceCountLabel = document.querySelector('.jc-references__count');
+	if (referenceCountLabel) {
+		referenceCountLabel.textContent = String(faceCards.length);
+	}
 	const BUBBLE_GAP = 14;
 
 	const positionBubble = (card, bubble) => {

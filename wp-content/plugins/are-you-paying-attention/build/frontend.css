@@ -6,14 +6,14 @@
   position: relative;
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.03);
   border: 1px solid #dbdbdb;
-  padding: 20px;
+  padding: 24px;
   border-radius: 4px;
-  margin-bottom: 35px;
+  margin-bottom: 32px;
   background: #ebebeb;
 }
 .paying-attention-frontend p {
   font-size: 1.55rem;
-  margin: 0 0 15px 0 !important;
+  margin: 0 0 16px 0 !important;
 }
 .paying-attention-frontend ul {
   margin: 0;
@@ -21,7 +21,7 @@
 }
 @media screen and (min-width: 767px) {
   .paying-attention-frontend ul {
-    margin: 0 -20px 0 0;
+    margin: 0 -24px 0 0;
     display: flex;
   }
 }
@@ -29,18 +29,18 @@
   vertical-align: middle;
   font-size: 0.93rem;
   flex: 1;
-  margin: 0 0 15px 0;
+  margin: 0 0 16px 0;
   border: 1px solid #DBDBDB;
   padding: 0;
   list-style: none;
   cursor: pointer;
-  padding: 10px;
+  padding: 8px;
   border-radius: 4px;
   background-color: rgba(255, 255, 255, 0.7);
 }
 @media screen and (min-width: 767px) {
   .paying-attention-frontend li {
-    margin: 0 20px 0 0;
+    margin: 0 24px 0 0;
   }
 }
 .paying-attention-frontend li:hover {
@@ -48,8 +48,8 @@
 }
 .paying-attention-frontend li svg {
   fill: rgb(0, 158, 47);
-  margin-right: 5px;
-  margin-bottom: -5px;
+  margin-right: 8px;
+  margin-bottom: -8px;
 }
 .paying-attention-frontend .no-click {
   cursor: auto;
@@ -88,7 +88,7 @@
 }
 .paying-attention-frontend .correct-message svg,
 .paying-attention-frontend .incorrect-message svg {
-  margin-right: 12px;
+  margin-right: 16px;
 }
 .paying-attention-frontend .correct-message p,
 .paying-attention-frontend .incorrect-message p {
