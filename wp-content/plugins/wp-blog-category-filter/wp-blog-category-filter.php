@@ -661,6 +661,8 @@ function wp_blog_filter_render_post() {
 				</span>
 			</a>
 		</footer>
+
+		<span class="wp-blog-filter__flow" aria-hidden="true"></span>
 	</article>
 	<?php
 }
