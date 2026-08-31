@@ -790,6 +790,105 @@ function jc_16bit_arcade_render_category_icons( $post_id = 0 ) {
 }
 
 /**
+ * Register per-category teaser image fields for each style scheme.
+ */
+function jc_16bit_arcade_register_category_teaser_image_fields() {
+	if ( ! function_exists( 'acf_add_local_field_group' ) ) {
+		return;
+	}
+
+	acf_add_local_field_group(
+		array(
+			'key'                   => 'group_jc_category_teaser_images',
+			'title'                 => __( 'Teaser Images', 'jc-16bit-arcade' ),
+			'fields'                => array(
+				array(
+					'key'           => 'field_jc_teaser_image_arcade',
+					'label'         => __( 'Arcade Teaser Image', 'jc-16bit-arcade' ),
+					'name'          => 'jc_teaser_image_arcade',
+					'type'          => 'image',
+					'return_format' => 'id',
+					'preview_size'  => 'medium',
+					'library'       => 'all',
+				),
+				array(
+					'key'           => 'field_jc_teaser_image_stripes',
+					'label'         => __( 'Stripes Teaser Image', 'jc-16bit-arcade' ),
+					'name'          => 'jc_teaser_image_stripes',
+					'type'          => 'image',
+					'return_format' => 'id',
+					'preview_size'  => 'medium',
+					'library'       => 'all',
+				),
+			),
+			'location'              => array(
+				array(
+					array(
+						'param'    => 'taxonomy',
+						'operator' => '==',
+						'value'    => 'category',
+					),
+				),
+			),
+			'menu_order'            => 0,
+			'position'              => 'normal',
+			'style'                 => 'default',
+			'label_placement'       => 'top',
+			'instruction_placement' => 'label',
+			'hide_on_screen'        => '',
+			'active'                => true,
+			'description'           => '',
+		)
+	);
+}
+add_action( 'acf/init', 'jc_16bit_arcade_register_category_teaser_image_fields' );
+
+/**
+ * Resolve a style-scheme teaser image URL for a category term.
+ *
+ * @param int    $term_id Category term ID.
+ * @param string $scheme  Style scheme key.
+ * @return string
+ */
+function jc_16bit_arcade_get_category_teaser_image_url( $term_id, $scheme ) {
+	$term_id    = (int) $term_id;
+	$field_name = 'jc_teaser_image_' . sanitize_key( $scheme );
+	$image_id   = 0;
+
+	if ( function_exists( 'get_field' ) ) {
+		$acf_value = get_field( $field_name, 'category_' . $term_id );
+
+		if ( is_numeric( $acf_value ) ) {
+			$image_id = (int) $acf_value;
+		} elseif ( is_array( $acf_value ) && isset( $acf_value['ID'] ) ) {
+			$image_id = (int) $acf_value['ID'];
+		} elseif ( is_array( $acf_value ) && isset( $acf_value['id'] ) ) {
+			$image_id = (int) $acf_value['id'];
+		} elseif ( is_string( $acf_value ) && filter_var( $acf_value, FILTER_VALIDATE_URL ) ) {
+			return $acf_value;
+		}
+	}
+
+	if ( ! $image_id ) {
+		$meta_value = get_term_meta( $term_id, $field_name, true );
+
+		if ( is_numeric( $meta_value ) ) {
+			$image_id = (int) $meta_value;
+		} elseif ( is_string( $meta_value ) && filter_var( $meta_value, FILTER_VALIDATE_URL ) ) {
+			return $meta_value;
+		}
+	}
+
+	if ( ! $image_id ) {
+		return '';
+	}
+
+	$image_url = wp_get_attachment_image_url( $image_id, 'large' );
+
+	return $image_url ? $image_url : '';
+}
+
+/**
  * Get the category image for a post based on its first category.
  *
  * Falls back to tools.jpg when the category is uncategorized or has no image.
@@ -816,6 +915,17 @@ function jc_16bit_arcade_get_post_category_image( $post_id = 0 ) {
 
 	if ( 'uncategorized' === $slug ) {
 		return $fallback;
+	}
+
+	$style_scheme = jc_16bit_arcade_get_style_scheme();
+	$custom_url   = jc_16bit_arcade_get_category_teaser_image_url( (int) $primary->term_id, $style_scheme );
+
+	if ( $custom_url ) {
+		return array(
+			'slug'  => $slug,
+			'label' => $primary->name,
+			'url'   => $custom_url,
+		);
 	}
 
 	$relative_path = 'assets/img/catagories/' . $slug . '.jpg';
