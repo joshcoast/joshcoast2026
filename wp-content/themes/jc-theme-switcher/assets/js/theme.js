@@ -1,4 +1,3 @@
-alert('TESTING THEME.JS FILE');
 (function () {
 	const DEFAULT_STYLE_SCHEME = 'stripes';
 
