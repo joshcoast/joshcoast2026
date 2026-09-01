@@ -1,3 +1,4 @@
+alert('TESTING THEME.JS FILE');
 (function () {
 	const DEFAULT_STYLE_SCHEME = 'stripes';
 
@@ -845,6 +846,10 @@
 		if (bubble) {
 			bubble.classList.remove('bubble-visible');
 			bubble.setAttribute('aria-hidden', 'true');
+			bubble.style.transition = '';
+			bubble.style.visibility = '';
+			bubble.style.opacity = '';
+			bubble.style.pointerEvents = '';
 		}
 	};
 
@@ -856,10 +861,24 @@
 		const bubble = card.querySelector('.jc-reference__bubble');
 		if (!bubble) return;
 
-		// Make visible first so offsetHeight is measurable, then position
-		bubble.classList.add('bubble-visible');
+		// Keep hidden while measuring/positioning to avoid a one-frame jump.
+		bubble.classList.remove('bubble-visible');
+		bubble.style.transition = 'none';
+		bubble.style.visibility = 'hidden';
+		bubble.style.opacity = '0';
+		bubble.style.pointerEvents = 'none';
 		bubble.setAttribute('aria-hidden', 'false');
 		positionBubble(card, bubble);
+
+		requestAnimationFrame(() => {
+			if (card.getAttribute('aria-expanded') !== 'true') return;
+			positionBubble(card, bubble);
+			bubble.style.transition = '';
+			bubble.style.visibility = '';
+			bubble.style.opacity = '';
+			bubble.style.pointerEvents = '';
+			bubble.classList.add('bubble-visible');
+		});
 
 		// Trigger wiggle
 		const inner = bubble.querySelector('.jc-reference__bubble-inner');

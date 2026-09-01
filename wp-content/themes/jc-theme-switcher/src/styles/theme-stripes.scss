@@ -358,8 +358,8 @@ body[data-style-scheme="stripes"] {
 
 	@media (prefers-reduced-motion: reduce) {
 		.jc-stat__fill {
-				animation: none;
-				transform: none;
+			animation: none;
+			transform: none;
 
 		}
 	}
@@ -602,7 +602,7 @@ body[data-style-scheme="stripes"] {
 		margin-bottom: 1rem;
 	}
 
-	.jc-showcase__head > * {
+	.jc-showcase__head>* {
 		margin: 0;
 	}
 
@@ -663,15 +663,15 @@ body[data-style-scheme="stripes"] {
 		box-shadow: none;
 	}
 
-	.jc-showcase__grid > .jc-showcase__card:nth-child(1) {
+	.jc-showcase__grid>.jc-showcase__card:nth-child(1) {
 		background: #F9DBC8;
 	}
 
-	.jc-showcase__grid > .jc-showcase__card:nth-child(2) {
+	.jc-showcase__grid>.jc-showcase__card:nth-child(2) {
 		background: #F8E7C4;
 	}
 
-	.jc-showcase__grid > .jc-showcase__card:nth-child(3) {
+	.jc-showcase__grid>.jc-showcase__card:nth-child(3) {
 		background: #E5E3DA;
 	}
 
@@ -935,6 +935,7 @@ body[data-style-scheme="stripes"] {
 		display: grid;
 		place-items: center;
 		overflow: hidden;
+		transition: transform 130ms ease;
 	}
 
 	.jc-reference__avatar {
@@ -951,8 +952,8 @@ body[data-style-scheme="stripes"] {
 		display: block;
 	}
 
-	.jc-reference:hover,
-	.jc-reference:focus-visible {
+	.jc-reference:hover .jc-reference__swap,
+	.jc-reference:focus-visible .jc-reference__swap {
 		transform: translateY(-2px);
 	}
 
@@ -1035,7 +1036,7 @@ body[data-style-scheme="stripes"] {
 		overflow: visible;
 	}
 
-  
+
 
 	.jc-reference__bubble-inner::before {
 		display: none;
@@ -1079,7 +1080,7 @@ body[data-style-scheme="stripes"] {
 		flex: 1 1 100%;
 		font-size: 0.83rem;
 		line-height: 1.32;
-    font-weight: 700;
+		font-weight: 700;
 	}
 
 	.jc-reference__close {
@@ -1109,7 +1110,7 @@ body[data-style-scheme="stripes"] {
 		line-height: 1;
 		white-space: nowrap;
 		font-size: 0.68rem;
-    margin: auto;
+		margin: auto;
 	}
 
 	.jc-reference__link svg {
@@ -1243,13 +1244,11 @@ body[data-style-scheme="stripes"] {
 		border-radius: 12px;
 		border: 1px solid rgba(99, 73, 46, 0.28);
 		background:
-			repeating-linear-gradient(
-				to bottom,
+			repeating-linear-gradient(to bottom,
 				transparent 0,
 				transparent 29px,
 				var(--wbf-note-lines) 29px,
-				var(--wbf-note-lines) 30px
-			),
+				var(--wbf-note-lines) 30px),
 			linear-gradient(180deg, var(--wbf-note-paper), var(--wbf-note-paper-shadow));
 		box-shadow: 0 7px 18px rgba(76, 55, 33, 0.18);
 	}
@@ -1421,73 +1420,73 @@ body[data-style-scheme="stripes"] {
 		}
 
 		.jc-showcase__grid {
-				grid-template-columns: repeat(3, minmax(0, 1fr));
+			grid-template-columns: repeat(3, minmax(0, 1fr));
 
 		}
 
 		.jc-layout-grid {
-				display: grid;
-				gap: 2rem;
-				grid-template-columns: 1.35fr 0.65fr;
-				align-items: start;
+			display: grid;
+			gap: 2rem;
+			grid-template-columns: 1.35fr 0.65fr;
+			align-items: start;
 
 		}
 
-			.jc-layout-grid > .jc-panel:last-child {
-				background: transparent;
-				border: 0;
-				padding: 2rem 0;
-				box-shadow: none;
-			}
+		.jc-layout-grid>.jc-panel:last-child {
+			background: transparent;
+			border: 0;
+			padding: 2rem 0;
+			box-shadow: none;
+		}
 
 		.jc-layout-grid>.jc-panel:first-child {
-				background: #E4E2DA;
+			background: #E4E2DA;
 
 		}
 	}
 
 	@media (max-width: 860px) {
 		.jc-topbar__inner {
-				flex-direction: column;
-				align-items: flex-start;
+			flex-direction: column;
+			align-items: flex-start;
 
 		}
 
 		.jc-theme-switcher {
-				order: 3;
+			order: 3;
 
 		}
 	}
 
 	@media (max-width: 680px) {
-				font-size: 18px;
-				line-height: 1.58;
+		font-size: 18px;
+		line-height: 1.58;
 
 
 		.jc-wrap {
-				width: min(100% - 1.5rem, 1120px);
+			width: min(100% - 1.5rem, 1120px);
 
 		}
 
 		.jc-hero__title {
-				font-size: clamp(1.8rem, 10vw, 3.4rem);
+			font-size: clamp(1.8rem, 10vw, 3.4rem);
 
 		}
 
 		.jc-card-list {
-				grid-template-columns: 1fr;
+			grid-template-columns: 1fr;
 
 		}
 
 		.jc-references {
-				grid-template-columns: 1fr;
+			grid-template-columns: 1fr;
 
 		}
 
 		.jc-reference,
 		.jc-reference:nth-child(2n),
 		.jc-reference:nth-child(2n + 1) {
-				transform: none;
+			transform: none;
 
 		}
 	}
