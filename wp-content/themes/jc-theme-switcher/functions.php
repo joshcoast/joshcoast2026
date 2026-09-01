@@ -954,3 +954,16 @@ function jc_16bit_arcade_render_post_card_image( $post_id = 0 ) {
 	echo '<img src="' . esc_url( $image['url'] ) . '" alt="' . esc_attr( $image['label'] ) . '" loading="lazy" decoding="async" />';
 	echo '</div>';
 }
+
+/**
+ * Render the category image as a full-width hero for single posts.
+ *
+ * @param int $post_id Post ID.
+ */
+function jc_16bit_arcade_render_single_post_hero( $post_id = 0 ) {
+	$image = jc_16bit_arcade_get_post_category_image( $post_id );
+
+	echo '<figure class="jc-single-post__hero jc-single-post__hero--' . esc_attr( $image['slug'] ) . '">';
+	echo '<img src="' . esc_url( $image['url'] ) . '" alt="' . esc_attr( $image['label'] ) . '" loading="eager" fetchpriority="high" decoding="async" />';
+	echo '</figure>';
+}

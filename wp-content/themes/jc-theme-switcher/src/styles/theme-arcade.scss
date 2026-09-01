@@ -1517,6 +1517,10 @@ body[data-style-scheme="arcade"] {
 		margin-inline: auto;
 	}
 
+	.single-post .jc-content {
+		--jc-single-panel-padding: clamp(1rem, 3vw, 2rem);
+	}
+
 	:is(.single-post, .single-client) .jc-content .jc-section-title {
 		margin-bottom: 0.55rem;
 		line-height: 1.45;

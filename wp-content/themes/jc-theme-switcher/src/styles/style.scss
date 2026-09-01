@@ -359,6 +359,35 @@ body:not([data-style-scheme="arcade"]) .jc-coin {
 	letter-spacing: 0.06em;
 }
 
+/* Single post hero: full-width category image with centered reading column. */
+.single-post .jc-content .jc-single-post {
+	width: 100%;
+	max-width: none;
+	margin: 0;
+	display: grid;
+	gap: 1rem;
+}
+
+.single-post .jc-content .jc-single-post__hero {
+	margin: calc(var(--jc-single-panel-padding, 1rem) * -1) calc(var(--jc-single-panel-padding, 1rem) * -1) 0;
+	aspect-ratio: 16 / 9;
+	overflow: hidden;
+	background: #000;
+}
+
+.single-post .jc-content .jc-single-post__hero img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+}
+
+.single-post .jc-content .jc-single-post__body {
+	width: min(74ch, 100%);
+	margin-inline: auto;
+}
+
 .jc-project-client-card--image-right > .jc-project-client-card__media {
 	order: 2;
 	justify-content: flex-end;

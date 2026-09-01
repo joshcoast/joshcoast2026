@@ -808,6 +808,14 @@ body[data-style-scheme="stripes"] {
 		background: rgba(243, 225, 196, 0.5);
 	}
 
+	.single-post .jc-content {
+		--jc-single-panel-padding: clamp(1rem, 2.2vw, 2rem);
+	}
+
+	.single-post .jc-content .jc-single-post__hero {
+		box-shadow: 0 10px 24px rgba(75, 54, 35, 0.16);
+	}
+
 	.single-client .jc-content .jc-case-study__media img {
 		border-color: rgba(79, 55, 34, 0.3);
 	}
