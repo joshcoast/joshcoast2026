@@ -967,3 +967,36 @@ function jc_16bit_arcade_render_single_post_hero( $post_id = 0 ) {
 	echo '<img src="' . esc_url( $image['url'] ) . '" alt="' . esc_attr( $image['label'] ) . '" loading="eager" fetchpriority="high" decoding="async" />';
 	echo '</figure>';
 }
+
+/**
+ * Get the adjacent client project, wrapping around the ends of the list.
+ *
+ * Wrapping keeps the project tour from dead-ending on the first and last
+ * entries. Returns null only when there is no other published client.
+ *
+ * @param string $direction Either 'next' or 'previous'.
+ * @return WP_Post|null
+ */
+function jc_16bit_arcade_get_adjacent_client( $direction = 'next' ) {
+	$is_previous = ( 'previous' === $direction );
+	$adjacent    = $is_previous ? get_previous_post() : get_next_post();
+
+	if ( $adjacent instanceof WP_Post ) {
+		return $adjacent;
+	}
+
+	// At one end of the list, so wrap to the opposite end.
+	$wrapped = get_posts(
+		array(
+			'post_type'        => 'client',
+			'post_status'      => 'publish',
+			'numberposts'      => 1,
+			'orderby'          => 'date',
+			'order'            => $is_previous ? 'DESC' : 'ASC',
+			'exclude'          => array( get_the_ID() ),
+			'suppress_filters' => false,
+		)
+	);
+
+	return $wrapped ? $wrapped[0] : null;
+}

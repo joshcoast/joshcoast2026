@@ -32,6 +32,16 @@ Tags: portfolio, blog, custom-logo, custom-menu, featured-images, full-site-edit
 	}
 }
 
+@keyframes jc-project-nav-blink {
+	from {
+		opacity: 1;
+	}
+
+	to {
+		opacity: 0.25;
+	}
+}
+
 @keyframes coin-hop {
 	0% {
 		transform: translateY(0);
@@ -1690,6 +1700,68 @@ body[data-style-scheme="arcade"] {
 
 	.single-client .jc-content .jc-case-study__divider {
 		margin-inline: 0.4rem;
+	}
+
+	/* Adjacent project navigation: HUD panel with a glowing target reticle on hover. */
+	.jc-project-nav__item {
+		border: 2px solid rgba(90, 242, 255, 0.45);
+		border-radius: 10px;
+		background: rgba(8, 15, 43, 0.86);
+		color: var(--ink);
+		box-shadow: 0 0 0 2px rgba(12, 26, 64, 0.8), 0 10px 26px rgba(0, 0, 0, 0.42);
+		transition: border-color 160ms ease, box-shadow 220ms ease, transform 220ms ease;
+	}
+
+	.jc-project-nav__item:hover,
+	.jc-project-nav__item:focus-visible {
+		transform: translateY(-2px);
+		border-color: var(--cyan);
+		box-shadow:
+			0 0 0 2px rgba(12, 26, 64, 0.8),
+			0 0 18px rgba(90, 242, 255, 0.35),
+			0 12px 28px rgba(0, 0, 0, 0.5);
+	}
+
+	.jc-project-nav__media {
+		border: 2px solid rgba(90, 242, 255, 0.35);
+		border-radius: 6px;
+		background: rgba(5, 12, 37, 0.9);
+	}
+
+	.jc-project-nav__eyebrow {
+		font-family: var(--font-family-ui);
+		font-size: 8px;
+		line-height: 1.7;
+		color: var(--yellow);
+	}
+
+	.jc-project-nav__title {
+		font-family: var(--font-family-heading);
+		font-size: clamp(0.68rem, 1.1vw, 0.9rem);
+		line-height: 1.4;
+		color: var(--ink);
+	}
+
+	.jc-project-nav__item:hover .jc-project-nav__arrow,
+	.jc-project-nav__item:focus-visible .jc-project-nav__arrow {
+		animation: jc-project-nav-blink 660ms steps(2, end) infinite;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+
+		.jc-project-nav__item {
+			transition: none;
+		}
+
+		.jc-project-nav__item:hover,
+		.jc-project-nav__item:focus-visible {
+			transform: none;
+		}
+
+		.jc-project-nav__item:hover .jc-project-nav__arrow,
+		.jc-project-nav__item:focus-visible .jc-project-nav__arrow {
+			animation: none;
+		}
 	}
 
 	.single-client .jc-content .jc-case-study__deck {

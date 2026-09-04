@@ -87,6 +87,134 @@ Tags: portfolio, blog, custom-logo, custom-menu, featured-images, full-site-edit
 	}
 }
 
+/* Adjacent project navigation on client singles. Layout only; each scheme skins it. */
+.jc-project-nav {
+	display: grid;
+	gap: 1rem;
+	grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+	margin-top: clamp(2rem, 5vw, 3.5rem);
+}
+
+.jc-project-nav__item {
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: 0.9rem;
+	padding: 0.9rem 1.1rem;
+	overflow: hidden;
+	text-decoration: none;
+}
+
+.jc-project-nav__item--next {
+	flex-direction: row-reverse;
+	text-align: right;
+}
+
+.jc-project-nav__media {
+	flex: none;
+	display: block;
+	width: 5.5rem;
+	aspect-ratio: 16 / 10;
+	overflow: hidden;
+}
+
+.jc-project-nav__media img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.jc-project-nav__item:hover .jc-project-nav__media img,
+.jc-project-nav__item:focus-visible .jc-project-nav__media img {
+	transform: scale(1.08);
+}
+
+.jc-project-nav__copy {
+	display: grid;
+	gap: 0.25rem;
+	min-width: 0;
+}
+
+.jc-project-nav__eyebrow {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+}
+
+.jc-project-nav__item--next .jc-project-nav__eyebrow {
+	flex-direction: row-reverse;
+	justify-content: flex-start;
+}
+
+.jc-project-nav__arrow {
+	display: inline-flex;
+	flex: none;
+	width: 0.95em;
+	height: 0.95em;
+	transition: transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.jc-project-nav__arrow svg {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+/* One glyph, mirrored for the backwards direction. */
+.jc-project-nav__item--previous .jc-project-nav__arrow svg {
+	transform: scaleX(-1);
+}
+
+.jc-project-nav__item--next:hover .jc-project-nav__arrow,
+.jc-project-nav__item--next:focus-visible .jc-project-nav__arrow {
+	transform: translateX(0.25rem);
+}
+
+.jc-project-nav__item--previous:hover .jc-project-nav__arrow,
+.jc-project-nav__item--previous:focus-visible .jc-project-nav__arrow {
+	transform: translateX(-0.25rem);
+}
+
+.jc-project-nav__title {
+	display: block;
+	overflow-wrap: anywhere;
+}
+
+@media (max-width: 30rem) {
+
+	.jc-project-nav__item,
+	.jc-project-nav__item--next {
+		flex-direction: column;
+		align-items: flex-start;
+		text-align: left;
+	}
+
+	.jc-project-nav__item--next .jc-project-nav__eyebrow {
+		flex-direction: row;
+	}
+
+	.jc-project-nav__media {
+		width: 100%;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.jc-project-nav__media img,
+	.jc-project-nav__arrow {
+		transition: none;
+	}
+
+	.jc-project-nav__item:hover .jc-project-nav__media img,
+	.jc-project-nav__item:focus-visible .jc-project-nav__media img {
+		transform: none;
+	}
+}
+
 /* External-link icon sizing for nav and button links. */
 .jc-icon-external,
 .jc-external-icon {
