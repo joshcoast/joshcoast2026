@@ -2402,4 +2402,43 @@ body[data-style-scheme="arcade"] {
 
 		}
 	}
+
+	@media (max-width: 600px) {
+		.jc-topbar__inner {
+			flex-direction: row;
+			flex-wrap: wrap;
+			align-items: center;
+		}
+
+		.jc-nav-toggle {
+			display: inline-flex;
+			order: 2;
+			margin-left: auto;
+			border-radius: 6px;
+			border-color: var(--yellow);
+			color: var(--yellow);
+		}
+
+		.jc-topbar__nav,
+		.jc-theme-switcher {
+			display: none;
+		}
+
+		/* The decorative coin crowds the row out; its easter egg still runs from the footer ticker.
+		   Selector depth matches the base `.jc-topbar .jc-coin` rule so it actually wins. */
+		.jc-topbar .jc-coin {
+			display: none;
+		}
+
+		.jc-topbar.is-nav-open .jc-topbar__nav {
+			display: block;
+			order: 3;
+			width: 100%;
+		}
+
+		.jc-topbar.is-nav-open .jc-theme-switcher {
+			display: inline-flex;
+			order: 4;
+		}
+	}
 }

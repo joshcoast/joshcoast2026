@@ -25,7 +25,11 @@ $style_scheme = jc_16bit_arcade_get_style_scheme();
 				<?php bloginfo( 'name' ); ?>
 			</a>
 		</div>
-		<nav class="jc-topbar__nav" aria-label="Primary Menu">
+		<button class="jc-nav-toggle" type="button" aria-expanded="false" aria-controls="jc-primary-nav">
+			<span class="jc-nav-toggle__bars" aria-hidden="true"></span>
+			<span class="screen-reader-text"><?php esc_html_e( 'Menu', 'jc-16bit-arcade' ); ?></span>
+		</button>
+		<nav class="jc-topbar__nav" id="jc-primary-nav" aria-label="Primary Menu">
 			<?php
 			$menu_args      = array(
 				'theme_location' => 'primary',

@@ -67,6 +67,50 @@
 		});
 	});
 
+	const navToggle = document.querySelector('.jc-nav-toggle');
+	const topbar = document.querySelector('.jc-topbar');
+
+	if (navToggle && topbar) {
+		const collapsedQuery = window.matchMedia('(max-width: 600px)');
+
+		const setNavOpen = (open) => {
+			topbar.classList.toggle('is-nav-open', open);
+			navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+		};
+
+		setNavOpen(false);
+
+		navToggle.addEventListener('click', () => {
+			setNavOpen(!topbar.classList.contains('is-nav-open'));
+		});
+
+		topbar.addEventListener('click', (event) => {
+			if (event.target.closest('.jc-topbar__nav a')) {
+				setNavOpen(false);
+			}
+		});
+
+		document.addEventListener('keydown', (event) => {
+			if (event.key === 'Escape' && topbar.classList.contains('is-nav-open')) {
+				setNavOpen(false);
+				navToggle.focus();
+			}
+		});
+
+		// Reset state when leaving the collapsed range so the menu can't stay stuck open.
+		const handleBreakpoint = (event) => {
+			if (!event.matches) {
+				setNavOpen(false);
+			}
+		};
+
+		if (typeof collapsedQuery.addEventListener === 'function') {
+			collapsedQuery.addEventListener('change', handleBreakpoint);
+		} else if (typeof collapsedQuery.addListener === 'function') {
+			collapsedQuery.addListener(handleBreakpoint);
+		}
+	}
+
 	const starsContainer = document.querySelector('.jc-stars');
 	const themeBase = (document.body.dataset.themeUri || '').replace(/\/?$/, '/');
 	const reduceMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
