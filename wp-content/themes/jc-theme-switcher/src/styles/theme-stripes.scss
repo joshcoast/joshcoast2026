@@ -693,6 +693,7 @@ body[data-style-scheme="stripes"] {
 		border-radius: 22px;
 		background: #F9DBC8;
 		box-shadow: none;
+		overflow: hidden;
 	}
 
 	.jc-showcase__grid>.jc-showcase__card:nth-child(1) {
@@ -707,7 +708,6 @@ body[data-style-scheme="stripes"] {
 		background: #E5E3DA;
 	}
 
-	.jc-showcase__card,
 	.jc-card {
 		overflow: visible;
 	}
@@ -726,12 +726,18 @@ body[data-style-scheme="stripes"] {
 	}
 
 	.jc-card__thumb {
-		margin: 0 0 0.72rem;
+		margin: -0.75rem 0 0.72rem;
 		aspect-ratio: 16 / 9;
 		overflow: hidden;
 		background: #efe6d7;
-		border: 2px solid rgba(81, 56, 33, 0.3);
-		border-radius: 16px;
+		border: 0;
+		border-radius: 0;
+		box-shadow: none;
+	}
+
+	.jc-showcase__card>.jc-card__thumb {
+		align-self: stretch;
+		margin: -1rem -1rem 0.72rem;
 	}
 
 	.jc-card__thumb img {
@@ -739,6 +745,9 @@ body[data-style-scheme="stripes"] {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
+		border: 0;
+		border-radius: 0;
+		box-shadow: none;
 	}
 
 	.jc-showcase__card> :not(.jc-card__thumb):not(.jc-showcase__link),
