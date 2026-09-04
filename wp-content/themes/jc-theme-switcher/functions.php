@@ -418,9 +418,8 @@ add_action( 'init', 'jc_16bit_arcade_seed_client_skill_terms', 20 );
  */
 function jc_16bit_arcade_register_project_client_block() {
 	$script_handle = 'jc-project-client-card-block';
-	$script_path   = get_template_directory() . '/assets/js/blocks/project-client-card.js';
 	$script_url    = get_template_directory_uri() . '/assets/js/blocks/project-client-card.js';
-	$script_ver    = file_exists( $script_path ) ? (string) filemtime( $script_path ) : wp_get_theme()->get( 'Version' );
+	$script_ver    = jc_16bit_arcade_asset_version( 'assets/js/blocks/project-client-card.js' );
 
 	wp_register_script(
 		$script_handle,
@@ -603,12 +602,32 @@ function jc_16bit_arcade_render_project_client_block( $attributes ) {
 	return (string) ob_get_clean();
 }
 
+/**
+ * Build a cache-busting version string for a theme asset.
+ *
+ * The theme version is hardcoded, so it never changes on deploy and browsers
+ * keep serving stale CSS and JS. Keying the version to the file's modification
+ * time busts the cache exactly when the file changes, and no more often.
+ *
+ * @param string $relative_path Theme-relative path, e.g. 'assets/css/style.min.css'.
+ * @return string
+ */
+function jc_16bit_arcade_asset_version( $relative_path ) {
+	$path = get_theme_file_path( $relative_path );
+
+	if ( file_exists( $path ) ) {
+		return (string) filemtime( $path );
+	}
+
+	return (string) wp_get_theme()->get( 'Version' );
+}
+
 function jc_16bit_arcade_assets() {
 	wp_enqueue_style( 'jc-16bit-google-fonts', 'https://fonts.googleapis.com/css2?family=Ultra&family=Press+Start+2P&family=VT323&display=swap', array(), null );
-	wp_enqueue_style( 'jc-16bit-style', get_template_directory_uri() . '/assets/css/style.min.css', array( 'jc-16bit-google-fonts' ), wp_get_theme()->get( 'Version' ) );
-	wp_enqueue_style( 'jc-16bit-theme-arcade', get_template_directory_uri() . '/assets/css/theme-arcade.min.css', array( 'jc-16bit-style' ), wp_get_theme()->get( 'Version' ) );
-	wp_enqueue_style( 'jc-16bit-theme-stripes', get_template_directory_uri() . '/assets/css/theme-stripes.min.css', array( 'jc-16bit-theme-arcade' ), wp_get_theme()->get( 'Version' ) );
-	wp_enqueue_script( 'jc-16bit-theme', get_template_directory_uri() . '/assets/js/theme.js', array(), wp_get_theme()->get( 'Version' ), true );
+	wp_enqueue_style( 'jc-16bit-style', get_template_directory_uri() . '/assets/css/style.min.css', array( 'jc-16bit-google-fonts' ), jc_16bit_arcade_asset_version( 'assets/css/style.min.css' ) );
+	wp_enqueue_style( 'jc-16bit-theme-arcade', get_template_directory_uri() . '/assets/css/theme-arcade.min.css', array( 'jc-16bit-style' ), jc_16bit_arcade_asset_version( 'assets/css/theme-arcade.min.css' ) );
+	wp_enqueue_style( 'jc-16bit-theme-stripes', get_template_directory_uri() . '/assets/css/theme-stripes.min.css', array( 'jc-16bit-theme-arcade' ), jc_16bit_arcade_asset_version( 'assets/css/theme-stripes.min.css' ) );
+	wp_enqueue_script( 'jc-16bit-theme', get_template_directory_uri() . '/assets/js/theme.js', array(), jc_16bit_arcade_asset_version( 'assets/js/theme.js' ), true );
 }
 add_action( 'wp_enqueue_scripts', 'jc_16bit_arcade_assets' );
 
