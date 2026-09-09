@@ -26,6 +26,19 @@
 		return normalizeStyleScheme(rawValue);
 	};
 
+	const updateCategoryThumbnails = (scheme) => {
+		const effectiveScheme = scheme || DEFAULT_STYLE_SCHEME;
+
+		document
+			.querySelectorAll('.jc-card__thumb img[data-style-scheme-src-' + effectiveScheme + '], .jc-single-post__hero img[data-style-scheme-src-' + effectiveScheme + ']')
+			.forEach((img) => {
+				const newSrc = img.dataset['styleSchemeSrc' + effectiveScheme.charAt(0).toUpperCase() + effectiveScheme.slice(1)];
+				if (newSrc && img.src !== newSrc) {
+					img.src = newSrc;
+				}
+			});
+	};
+
 	const applyStyleScheme = (scheme, persist = true) => {
 		const normalizedScheme = normalizeStyleScheme(scheme);
 
@@ -39,6 +52,8 @@
 		if (normalizedScheme) {
 			document.body.classList.add('style-scheme-' + normalizedScheme);
 		}
+
+		updateCategoryThumbnails(normalizedScheme);
 
 		document.querySelectorAll('.jc-theme-switcher__button').forEach((button) => {
 			const isActive = !!normalizedScheme && button.dataset.styleScheme === normalizedScheme;

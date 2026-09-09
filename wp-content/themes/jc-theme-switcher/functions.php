@@ -908,21 +908,51 @@ function jc_16bit_arcade_get_category_teaser_image_url( $term_id, $scheme ) {
 }
 
 /**
+ * Resolve the teaser image URL for a category slug/term under a given style scheme.
+ *
+ * @param WP_Term $primary Category term.
+ * @param string  $scheme  Style scheme key ('arcade' or 'stripes').
+ * @return string
+ */
+function jc_16bit_arcade_resolve_category_image_url_for_scheme( $primary, $scheme ) {
+	$custom_url = jc_16bit_arcade_get_category_teaser_image_url( (int) $primary->term_id, $scheme );
+
+	if ( $custom_url ) {
+		return $custom_url;
+	}
+
+	$slug          = sanitize_title( $primary->slug );
+	$relative_path = 'assets/img/catagories/' . $slug . '.jpg';
+	$absolute_path = get_theme_file_path( $relative_path );
+
+	if ( ! file_exists( $absolute_path ) ) {
+		return '';
+	}
+
+	return get_theme_file_uri( $relative_path );
+}
+
+/**
  * Get the category image for a post based on its first category.
  *
  * Falls back to tools.jpg when the category is uncategorized or has no image.
+ * Returns URLs for every style scheme so the front end can swap images
+ * instantly (without a page reload) when the style switcher is used.
  *
  * @param int $post_id Post ID.
- * @return array{slug:string,label:string,url:string}
+ * @return array{slug:string,label:string,url:string,urls:array<string,string>}
  */
 function jc_16bit_arcade_get_post_category_image( $post_id = 0 ) {
-	$post_id       = $post_id ? (int) $post_id : get_the_ID();
-	$categories    = get_the_category( $post_id );
-	$fallback_slug = 'tools';
-	$fallback      = array(
+	$post_id        = $post_id ? (int) $post_id : get_the_ID();
+	$categories     = get_the_category( $post_id );
+	$fallback_slug  = 'tools';
+	$fallback_url   = get_theme_file_uri( 'assets/img/catagories/tools.jpg' );
+	$style_schemes  = array( 'arcade', 'stripes' );
+	$fallback       = array(
 		'slug'  => $fallback_slug,
 		'label' => __( 'Tools', 'jc-16bit-arcade' ),
-		'url'   => get_theme_file_uri( 'assets/img/catagories/tools.jpg' ),
+		'url'   => $fallback_url,
+		'urls'  => array_fill_keys( $style_schemes, $fallback_url ),
 	);
 
 	if ( empty( $categories ) || is_wp_error( $categories ) ) {
@@ -936,28 +966,20 @@ function jc_16bit_arcade_get_post_category_image( $post_id = 0 ) {
 		return $fallback;
 	}
 
+	$urls = array();
+
+	foreach ( $style_schemes as $scheme ) {
+		$scheme_url    = jc_16bit_arcade_resolve_category_image_url_for_scheme( $primary, $scheme );
+		$urls[ $scheme ] = $scheme_url ? $scheme_url : $fallback_url;
+	}
+
 	$style_scheme = jc_16bit_arcade_get_style_scheme();
-	$custom_url   = jc_16bit_arcade_get_category_teaser_image_url( (int) $primary->term_id, $style_scheme );
-
-	if ( $custom_url ) {
-		return array(
-			'slug'  => $slug,
-			'label' => $primary->name,
-			'url'   => $custom_url,
-		);
-	}
-
-	$relative_path = 'assets/img/catagories/' . $slug . '.jpg';
-	$absolute_path = get_theme_file_path( $relative_path );
-
-	if ( ! file_exists( $absolute_path ) ) {
-		return $fallback;
-	}
 
 	return array(
 		'slug'  => $slug,
 		'label' => $primary->name,
-		'url'   => get_theme_file_uri( $relative_path ),
+		'url'   => $urls[ $style_scheme ],
+		'urls'  => $urls,
 	);
 }
 
@@ -970,7 +992,11 @@ function jc_16bit_arcade_render_post_card_image( $post_id = 0 ) {
 	$image = jc_16bit_arcade_get_post_category_image( $post_id );
 
 	echo '<div class="jc-card__thumb jc-card__thumb--' . esc_attr( $image['slug'] ) . '">';
-	echo '<img src="' . esc_url( $image['url'] ) . '" alt="' . esc_attr( $image['label'] ) . '" loading="lazy" decoding="async" />';
+	echo '<img src="' . esc_url( $image['url'] ) . '" alt="' . esc_attr( $image['label'] ) . '" loading="lazy" decoding="async"';
+	foreach ( $image['urls'] as $scheme => $url ) {
+		echo ' data-style-scheme-src-' . esc_attr( $scheme ) . '="' . esc_url( $url ) . '"';
+	}
+	echo ' />';
 	echo '</div>';
 }
 
@@ -983,7 +1009,11 @@ function jc_16bit_arcade_render_single_post_hero( $post_id = 0 ) {
 	$image = jc_16bit_arcade_get_post_category_image( $post_id );
 
 	echo '<figure class="jc-single-post__hero jc-single-post__hero--' . esc_attr( $image['slug'] ) . '">';
-	echo '<img src="' . esc_url( $image['url'] ) . '" alt="' . esc_attr( $image['label'] ) . '" loading="eager" fetchpriority="high" decoding="async" />';
+	echo '<img src="' . esc_url( $image['url'] ) . '" alt="' . esc_attr( $image['label'] ) . '" loading="eager" fetchpriority="high" decoding="async"';
+	foreach ( $image['urls'] as $scheme => $url ) {
+		echo ' data-style-scheme-src-' . esc_attr( $scheme ) . '="' . esc_url( $url ) . '"';
+	}
+	echo ' />';
 	echo '</figure>';
 }
 
