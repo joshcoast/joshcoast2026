@@ -284,22 +284,71 @@ body[data-style-scheme="stripes"] {
 
 	.jc-hero {
 		display: grid;
-		gap: 1.5rem;
-		background: transparent;
-		padding: 0;
+		gap: clamp(1rem, 2.2vw, 1.75rem);
+		align-content: center;
+		position: relative;
+		min-height: clamp(34rem, 72vh, 50rem);
+		margin: 0 calc(50% - 50vw) clamp(1.5rem, 4vw, 3rem);
+		padding: clamp(4rem, 8vw, 7rem) max(1.25rem, calc((100vw - 1120px) / 2 + 1.25rem));
+		overflow: hidden;
+		background:
+			linear-gradient(180deg, rgba(246, 235, 222, 0.88), rgba(239, 224, 208, 0.92)),
+			radial-gradient(circle at 12% 78%, rgba(180, 57, 23, 0.08) 0 0.32rem, transparent 0.34rem) 0 0 / 3.6rem 3.6rem,
+			#eee4da;
+		isolation: isolate;
 	}
 
 	.jc-panel.jc-hero {
-		padding: 0;
 		border: 0;
 		border-radius: 0;
-		background: transparent;
 		box-shadow: none;
+	}
+
+	.jc-panel.jc-hero::before,
+	.jc-panel.jc-hero::after {
+		content: "";
+		position: absolute;
+		pointer-events: none;
+		z-index: 0;
+	}
+
+	.jc-panel.jc-hero::before {
+		display: block;
+		inset: 0;
+		background:
+			radial-gradient(circle at 22% 29%, #b7551a 0 clamp(9rem, 17vw, 20rem), transparent calc(clamp(9rem, 17vw, 20rem) + 1px)),
+			linear-gradient(#d89024 0 0) no-repeat 50% 31% / min(48vw, 38rem) clamp(0.7rem, 1vw, 1.05rem),
+			linear-gradient(#d89024 0 0) no-repeat 52% 39% / min(52vw, 42rem) clamp(0.7rem, 1vw, 1.05rem),
+			linear-gradient(#d89024 0 0) no-repeat 54% 47% / min(50vw, 40rem) clamp(0.7rem, 1vw, 1.05rem),
+			linear-gradient(#d89024 0 0) no-repeat 56% 55% / min(46vw, 36rem) clamp(0.7rem, 1vw, 1.05rem),
+			radial-gradient(circle, #ba3b18 0 0.44rem, transparent 0.47rem) no-repeat 10% 66% / 10rem 10rem,
+			radial-gradient(circle, #ba3b18 0 0.44rem, transparent 0.47rem) no-repeat 14% 66% / 10rem 10rem,
+			radial-gradient(circle, #ba3b18 0 0.44rem, transparent 0.47rem) no-repeat 10% 74% / 10rem 10rem,
+			radial-gradient(circle, #ba3b18 0 0.44rem, transparent 0.47rem) no-repeat 14% 74% / 10rem 10rem,
+			radial-gradient(circle, #ba3b18 0 0.44rem, transparent 0.47rem) no-repeat 18% 74% / 10rem 10rem,
+			radial-gradient(circle, #ba3b18 0 0.44rem, transparent 0.47rem) no-repeat 22% 74% / 10rem 10rem;
+		opacity: 0.92;
+	}
+
+	.jc-panel.jc-hero::after {
+		right: max(4vw, calc((100vw - 1120px) / 2 + 1rem));
+		bottom: clamp(2.5rem, 8vw, 6rem);
+		width: clamp(10rem, 23vw, 18rem);
+		aspect-ratio: 1;
+		background: #48654d;
+		clip-path: polygon(50% 0, 100% 100%, 0 100%);
+		filter: drop-shadow(0 16px 20px rgba(79, 55, 34, 0.14));
+	}
+
+	.jc-hero > * {
+		position: relative;
+		z-index: 1;
 	}
 
 	.jc-hero__eyebrow {
 		margin: 0;
-		font-size: clamp(1.35rem, 3.7vw, 2.2rem);
+		max-width: 28ch;
+		font-size: clamp(1rem, 2.2vw, 1.65rem);
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
 	}
@@ -312,13 +361,13 @@ body[data-style-scheme="stripes"] {
 		position: relative;
 		display: inline-block;
 		margin: 0;
-		max-width: 22ch;
+		max-width: 11ch;
 		padding: 0;
 		font-family: var(--font-family-display);
-		font-size: clamp(2.2rem, 6vw, 5.2rem);
-		line-height: 0.9;
+		font-size: clamp(4.5rem, 13vw, 12rem);
+		line-height: 0.82;
 		font-weight: 200;
-		letter-spacing: 0.01em;
+		letter-spacing: -0.055em;
 		color: #bf3f42;
 		background: transparent;
 		text-shadow: none;
@@ -354,6 +403,7 @@ body[data-style-scheme="stripes"] {
 		display: grid;
 		gap: 0.8rem;
 		grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+		max-width: 52rem;
 	}
 
 	.jc-stat {
@@ -668,6 +718,7 @@ body[data-style-scheme="stripes"] {
 	.jc-humor-box {
 		border: 1px dashed rgba(78, 56, 39, 0.44);
 		border-radius: 16px;
+		padding: 0.75rem 1rem;
 		background: rgba(255, 249, 236, 0.72);
 		color: #4c3622;
 	}
@@ -1824,7 +1875,7 @@ body[data-style-scheme="stripes"] {
 		}
 
 		.jc-hero__title {
-			font-size: clamp(1.8rem, 10vw, 3.4rem);
+			font-size: clamp(3rem, 16vw, 5.5rem);
 
 		}
 

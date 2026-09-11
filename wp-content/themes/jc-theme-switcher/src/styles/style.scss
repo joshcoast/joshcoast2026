@@ -231,9 +231,8 @@ Tags: portfolio, blog, custom-logo, custom-menu, featured-images, full-site-edit
 	height: 100%;
 }
 
-/* Homepage arcade-only elements are hidden for non-arcade schemes. */
+/* Homepage arcade-only controls are hidden for non-arcade schemes. */
 body:not([data-style-scheme="arcade"]) #player-one-trigger,
-body:not([data-style-scheme="arcade"]) .jc-humor-box,
 body:not([data-style-scheme="arcade"]) .jc-ticker,
 body:not([data-style-scheme="arcade"]) .jc-coin {
 	display: none !important;
@@ -701,4 +700,3 @@ body.page-id-11 .jc-project-row--no-media {
 		order: 1;
 	}
 }
-

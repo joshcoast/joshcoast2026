@@ -86,7 +86,7 @@
 	const topbar = document.querySelector('.jc-topbar');
 
 	if (navToggle && topbar) {
-		const collapsedQuery = window.matchMedia('(max-width: 600px)');
+		const collapsedQuery = window.matchMedia('(max-width: 1080px)');
 
 		const setNavOpen = (open) => {
 			topbar.classList.toggle('is-nav-open', open);
