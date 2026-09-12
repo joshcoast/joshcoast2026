@@ -1538,6 +1538,11 @@ body[data-style-scheme="arcade"] {
 		image-rendering: auto;
 	}
 
+	.wp-blog-filter__post-title {
+		font-size: clamp(13px, 1.05vw, 16px);
+		line-height: 1.25;
+	}
+
 	.jc-card h3,
 	.jc-card h2 {
 		margin: 0 0 0.3rem;
@@ -2155,11 +2160,11 @@ body[data-style-scheme="arcade"] {
 	--wbf-button-hover-ink: #ffd27a;
 	--wbf-button-hover-border: #c74e2c;
 	--wbf-button-hover-shadow: 0 0 0 2px rgba(255, 112, 50, 0.22), 0 0 16px rgba(255, 97, 50, 0.35);
-	--wbf-button-active-bg: linear-gradient(180deg, #ffd564, #ff9f41);
-	--wbf-button-active-ink: #0f0a00;
-	--wbf-button-active-border: #ff7d38;
-	--wbf-button-active-shadow: 0 0 0 2px rgba(255, 175, 64, 0.3), 0 0 18px rgba(255, 136, 54, 0.35);
-	--wbf-count-ink: #59f0ff;
+	--wbf-button-active-bg: var(--cyan);
+	--wbf-button-active-ink: #051023;
+	--wbf-button-active-border: var(--cyan);
+	--wbf-button-active-shadow: 0 0 0 2px rgba(90, 242, 255, 0.24), 0 0 18px rgba(90, 242, 255, 0.45);
+	--wbf-count-ink: #24314f;
 	--wbf-pagination-bg: rgba(7, 14, 41, 0.88);
 	--wbf-pagination-border: #28467f;
 	--wbf-page-btn-bg: rgba(6, 22, 58, 0.95);
@@ -2420,18 +2425,18 @@ body[data-style-scheme="arcade"] {
 	.wp-blog-filter__button.is-active,
 	.wp-blog-filter__button--active,
 	.wp-blog-filter__button[aria-pressed=true] {
-		--ui-btn-bg: #92d33a;
-		--ui-btn-ink: #f9fff1;
-		--ui-btn-border: #466b12;
-		--ui-btn-shadow: #5a8f1c;
-		--ui-btn-highlight: rgba(255, 255, 255, 0.22);
-		--ui-btn-bg-hover: #a0e04b;
-		--ui-btn-ink-hover: #fbffef;
-		--ui-btn-border-hover: #39570f;
-		--ui-btn-shadow-hover: #4f7f18;
-		--ui-btn-bg-active: #7bb52f;
-		--ui-btn-ink-active: #f6ffe9;
-		--ui-btn-border-active: #38540f;
+		--ui-btn-bg: var(--cyan);
+		--ui-btn-ink: #051023;
+		--ui-btn-border: var(--cyan);
+		--ui-btn-shadow: rgba(90, 242, 255, 0.55);
+		--ui-btn-highlight: rgba(255, 255, 255, 0.28);
+		--ui-btn-bg-hover: var(--cyan);
+		--ui-btn-ink-hover: #051023;
+		--ui-btn-border-hover: var(--cyan);
+		--ui-btn-shadow-hover: rgba(90, 242, 255, 0.7);
+		--ui-btn-bg-active: var(--cyan);
+		--ui-btn-ink-active: #051023;
+		--ui-btn-border-active: var(--cyan);
 	}
 
 	:is(a.gb-button,
@@ -2510,6 +2515,17 @@ body[data-style-scheme="arcade"] {
 	.jc-showcase__link:visited,
 	.jc-reference__link:visited {
 		color: var(--ui-btn-ink);
+	}
+
+	.wp-blog-filter__container .wp-blog-filter__button.active,
+	.wp-blog-filter__container .wp-blog-filter__button.is-active,
+	.wp-blog-filter__container .wp-blog-filter__button--active,
+	.wp-blog-filter__container .wp-blog-filter__button[aria-pressed=true] {
+		background: var(--cyan);
+		color: #051023;
+		border-color: var(--cyan);
+		box-shadow: 5px 5px 0 rgba(90, 242, 255, 0.55), inset -4px -4px 0 rgba(0, 0, 0, 0.14), inset 4px 4px 0 rgba(255, 255, 255, 0.28);
+		text-shadow: none;
 	}
 
 	.jc-project-client-card {

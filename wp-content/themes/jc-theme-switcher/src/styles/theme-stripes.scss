@@ -56,10 +56,10 @@ body[data-style-scheme="stripes"] {
 	--stripes-button-layer-2: #1f7880;
 	--stripes-button-layer-3: #f1c66f;
 	--stripes-button-layer-4: #f9edd6;
-	--stripes-branding-band-1: #F45E57;
-	--stripes-branding-band-2: #EFBE37;
-	--stripes-branding-band-3: #7EA3D3;
-	--stripes-branding-band-4: #F2E7DF;
+	--stripes-branding-band-1: #d79a44;
+	--stripes-branding-band-2: #c07a61;
+	--stripes-branding-band-3: #d5e2d4;
+	--stripes-branding-band-4: #f4eadf;
 	--stripes-button-shadow: rgba(75, 54, 35, 0.12);
 	--stripes-button-shadow-hover: rgba(75, 54, 35, 0.18);
 
@@ -265,6 +265,10 @@ body[data-style-scheme="stripes"] {
 		padding-bottom: 0.5rem;
 	}
 
+	&.home main.jc-wrap {
+		padding-top: 0;
+	}
+
 	main.jc-wrap>*+* {
 		margin-top: 3rem;
 	}
@@ -284,12 +288,12 @@ body[data-style-scheme="stripes"] {
 
 	.jc-hero {
 		display: grid;
-		gap: clamp(1rem, 2.2vw, 1.75rem);
-		align-content: center;
+		gap: clamp(0.55rem, 1.4vw, 1rem);
+		align-content: start;
 		position: relative;
 		min-height: clamp(34rem, 72vh, 50rem);
 		margin: 0 calc(50% - 50vw) clamp(1.5rem, 4vw, 3rem);
-		padding: clamp(4rem, 8vw, 7rem) max(1.25rem, calc((100vw - 1120px) / 2 + 1.25rem));
+		padding: clamp(0.35rem, 1vw, 1rem) max(1.25rem, calc((100vw - 1120px) / 2 + 1.25rem)) clamp(3rem, 6vw, 5.5rem);
 		overflow: hidden;
 		background:
 			linear-gradient(180deg, rgba(246, 235, 222, 0.88), rgba(239, 224, 208, 0.92)),
@@ -300,6 +304,7 @@ body[data-style-scheme="stripes"] {
 
 	.jc-panel.jc-hero {
 		border: 0;
+		border-bottom: 30px solid #C6836C;
 		border-radius: 0;
 		box-shadow: none;
 	}
@@ -314,30 +319,38 @@ body[data-style-scheme="stripes"] {
 
 	.jc-panel.jc-hero::before {
 		display: block;
-		inset: 0;
-		background:
-			radial-gradient(circle at 22% 29%, #b7551a 0 clamp(9rem, 17vw, 20rem), transparent calc(clamp(9rem, 17vw, 20rem) + 1px)),
-			linear-gradient(#d89024 0 0) no-repeat 50% 31% / min(48vw, 38rem) clamp(0.7rem, 1vw, 1.05rem),
-			linear-gradient(#d89024 0 0) no-repeat 52% 39% / min(52vw, 42rem) clamp(0.7rem, 1vw, 1.05rem),
-			linear-gradient(#d89024 0 0) no-repeat 54% 47% / min(50vw, 40rem) clamp(0.7rem, 1vw, 1.05rem),
-			linear-gradient(#d89024 0 0) no-repeat 56% 55% / min(46vw, 36rem) clamp(0.7rem, 1vw, 1.05rem),
-			radial-gradient(circle, #ba3b18 0 0.44rem, transparent 0.47rem) no-repeat 10% 66% / 10rem 10rem,
-			radial-gradient(circle, #ba3b18 0 0.44rem, transparent 0.47rem) no-repeat 14% 66% / 10rem 10rem,
-			radial-gradient(circle, #ba3b18 0 0.44rem, transparent 0.47rem) no-repeat 10% 74% / 10rem 10rem,
-			radial-gradient(circle, #ba3b18 0 0.44rem, transparent 0.47rem) no-repeat 14% 74% / 10rem 10rem,
-			radial-gradient(circle, #ba3b18 0 0.44rem, transparent 0.47rem) no-repeat 18% 74% / 10rem 10rem,
-			radial-gradient(circle, #ba3b18 0 0.44rem, transparent 0.47rem) no-repeat 22% 74% / 10rem 10rem;
-		opacity: 0.92;
+		top: clamp(1.75rem, 5vw, 4rem);
+		right: max(-7vw, calc((100vw - 1120px) / 2 - 12rem));
+		bottom: clamp(-16rem, -18vw, -9rem);
+		width: clamp(18rem, 48vw, 43rem);
+		border: clamp(2.25rem, 5.2vw, 5rem) solid #d79a44;
+		border-bottom: 0;
+		border-radius: 999px 999px 0 0;
+		background: rgba(244, 215, 191, 0.22);
+		box-shadow:
+			inset 0 0 0 clamp(0.95rem, 1.7vw, 1.65rem) #f4eadf,
+			inset 0 0 0 clamp(3rem, 6.3vw, 5.8rem) #c07a61,
+			inset 0 0 0 clamp(4rem, 8vw, 7.4rem) #f4eadf,
+			inset 0 0 0 clamp(5.7rem, 11vw, 10rem) #e1bf8e,
+			0 24px 36px rgba(82, 57, 35, 0.12);
+		opacity: 0.9;
 	}
 
 	.jc-panel.jc-hero::after {
-		right: max(4vw, calc((100vw - 1120px) / 2 + 1rem));
-		bottom: clamp(2.5rem, 8vw, 6rem);
-		width: clamp(10rem, 23vw, 18rem);
-		aspect-ratio: 1;
-		background: #48654d;
-		clip-path: polygon(50% 0, 100% 100%, 0 100%);
-		filter: drop-shadow(0 16px 20px rgba(79, 55, 34, 0.14));
+		left: max(-5vw, calc((100vw - 1120px) / 2 - 8rem));
+		bottom: clamp(-10rem, -12vw, -5rem);
+		width: clamp(11rem, 27vw, 24rem);
+		height: clamp(15rem, 36vw, 31rem);
+		border: clamp(1.45rem, 3.2vw, 3rem) solid #c9815f;
+		border-bottom: 0;
+		border-radius: 999px 999px 0 0;
+		background: #d5e2d4;
+		box-shadow:
+			inset 0 0 0 clamp(0.8rem, 1.6vw, 1.35rem) #f4eadf,
+			inset 0 0 0 clamp(2.1rem, 4.7vw, 4.2rem) #d8aa72,
+			inset 0 0 0 clamp(3rem, 6.5vw, 5.8rem) #f4eadf,
+			0 18px 30px rgba(82, 57, 35, 0.1);
+		opacity: 0.82;
 	}
 
 	.jc-hero > * {
@@ -955,12 +968,59 @@ body[data-style-scheme="stripes"] {
 		background: rgba(243, 225, 196, 0.5);
 	}
 
-	.single-post .jc-content {
+	&.single-post .jc-content {
 		--jc-single-panel-padding: clamp(1rem, 2.2vw, 2rem);
 	}
 
-	.single-post .jc-content .jc-single-post__hero {
+	&.single-post .jc-content .jc-single-post__hero {
 		box-shadow: 0 10px 24px rgba(75, 54, 35, 0.16);
+	}
+
+	&.single-post .jc-content .jc-single-post__body {
+		position: relative;
+		overflow: hidden;
+		background:
+			repeating-linear-gradient(to bottom,
+				transparent 0,
+				transparent 29px,
+				var(--wbf-note-lines) 29px,
+				var(--wbf-note-lines) 30px),
+			linear-gradient(180deg, var(--wbf-note-paper), var(--wbf-note-paper-shadow));
+		padding: 36px 36px 36px clamp(4rem, 8vw, 5.5rem);
+		border: 1px solid rgba(99, 73, 46, 0.28);
+		border-radius: 5px;
+		box-sizing: border-box;
+		box-shadow: 0 7px 18px rgba(76, 55, 33, 0.18);
+	}
+
+	&.single-post .jc-content .jc-single-post__body>* {
+		position: relative;
+		z-index: 2;
+	}
+
+	&.single-post .jc-content .jc-single-post__body::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: clamp(22px, 7%, 34px);
+		width: 2px;
+		background: var(--wbf-note-margin-line);
+		opacity: 0.75;
+		pointer-events: none;
+	}
+
+	&.single-post .jc-content .jc-single-post__body::after {
+		content: "";
+		position: absolute;
+		top: 12px;
+		right: 14px;
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		background: radial-gradient(circle at 30% 30%, #f4b7a2 0%, var(--wbf-note-pin) 70%);
+		box-shadow: 0 1px 2px rgba(37, 26, 20, 0.35);
+		pointer-events: none;
 	}
 
 	/* `single-client` is a class on <body>, so this needs `&` to compile to

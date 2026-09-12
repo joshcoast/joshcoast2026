@@ -40,7 +40,7 @@ $skill_stats = array(
 		'level'   => 'PIXEL-PERFECT CRAFT',
 	),
 	array(
-		'label'   => 'JAVASCRIPT',
+		'label'   => 'HTML/CSS/JAVASCRIPT',
 		'percent' => 90,
 		'level'   => 'INTERACTION COMBOS',
 	),
@@ -69,8 +69,8 @@ $skill_stats = array(
 			<a class="jc-btn jc-btn--secondary" href="<?php echo esc_url( $projects_url ); ?>">VIEW FEATURED CLIENTS</a>
 	</div>
 	<div class="jc-humor-box">
-		<strong>NPC Tip:</strong>
-		<?php echo esc_html( jc_16bit_arcade_humor_line() ); ?>
+		<span class="jc-humor-box__copy jc-humor-box__copy--arcade"><strong>NPC Tip:</strong> <?php echo esc_html( jc_16bit_arcade_humor_line( 'arcade' ) ); ?></span>
+		<span class="jc-humor-box__copy jc-humor-box__copy--stripes"><strong>Studio Note:</strong> <?php echo esc_html( jc_16bit_arcade_humor_line( 'stripes' ) ); ?></span>
 	</div>
 </section>
 

@@ -741,14 +741,24 @@ function jc_16bit_arcade_primary_nav_link_attributes( $atts, $item, $args, $dept
 }
 add_filter( 'nav_menu_link_attributes', 'jc_16bit_arcade_primary_nav_link_attributes', 10, 4 );
 
-function jc_16bit_arcade_humor_line() {
-	$lines = array(
+function jc_16bit_arcade_humor_line( $scheme = 'arcade' ) {
+	$stripes_lines = array(
+		'Powered by WordPress, soft shadows, and the belief that beige can still party.',
+		'Retro enough to own a record player, modern enough to cache aggressively.',
+		'Carefully arranged with rounded corners and one very opinionated throw pillow.',
+		'Please admire the earth tones while the pixels pretend to be mature.',
+		'Designed somewhere between a mood board and a very productive coffee shop.',
+	);
+
+	$arcade_lines = array(
 		'New challenge unlocked: Making deadlines look easy.',
 		'Powered by coffee, curiosity, and occasional boss battles.',
 		'Currently grinding side quests for better UX loot.',
 		'No NPCs were harmed in the making of this portfolio.',
 		'Please enjoy this handcrafted chaos in glorious pseudo-8K.',
 	);
+
+	$lines = 'stripes' === $scheme ? $stripes_lines : $arcade_lines;
 
 	return $lines[ array_rand( $lines ) ];
 }
@@ -1015,6 +1025,35 @@ function jc_16bit_arcade_render_single_post_hero( $post_id = 0 ) {
 	}
 	echo ' />';
 	echo '</figure>';
+}
+
+/**
+ * Get the adjacent blog post, wrapping around the ends of the list.
+ *
+ * @param string $direction Either 'next' or 'previous'.
+ * @return WP_Post|null
+ */
+function jc_16bit_arcade_get_adjacent_post( $direction = 'next' ) {
+	$is_previous = ( 'previous' === $direction );
+	$adjacent    = $is_previous ? get_previous_post() : get_next_post();
+
+	if ( $adjacent instanceof WP_Post ) {
+		return $adjacent;
+	}
+
+	$wrapped = get_posts(
+		array(
+			'post_type'        => 'post',
+			'post_status'      => 'publish',
+			'numberposts'      => 1,
+			'orderby'          => 'date',
+			'order'            => $is_previous ? 'DESC' : 'ASC',
+			'exclude'          => array( get_the_ID() ),
+			'suppress_filters' => false,
+		)
+	);
+
+	return $wrapped ? $wrapped[0] : null;
 }
 
 /**
