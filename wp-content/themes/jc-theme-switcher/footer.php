@@ -14,6 +14,7 @@ $linkedin_url = apply_filters( 'jc_16bit_arcade_linkedin_url', 'https://www.link
 		<p class="jc-footer__tagline">
 			<span class="jc-footer__tagline-copy jc-footer__tagline-copy--arcade">© <?php echo esc_html( gmdate( 'Y' ) ); ?> <?php bloginfo( 'name' ); ?>. Built with WordPress and unapologetic neon enthusiasm.</span>
 			<span class="jc-footer__tagline-copy jc-footer__tagline-copy--stripes">© <?php echo esc_html( gmdate( 'Y' ) ); ?> <?php bloginfo( 'name' ); ?>. Built with WordPress, vintage shapes, and a suspicious amount of earth-tone confidence.</span>
+			<span class="jc-footer__tagline-copy jc-footer__tagline-copy--editorial">© <?php echo esc_html( gmdate( 'Y' ) ); ?> Josh Coast. Designed and built in WordPress.</span>
 		</p>
 	</div>
 </footer>

@@ -14,6 +14,7 @@ module.exports = (env, argv) => {
       style: './src/styles/style.scss',
       'theme-arcade': './src/styles/theme-arcade.scss',
       'theme-stripes': './src/styles/theme-stripes.scss',
+      'theme-editorial': './src/styles/theme-editorial.scss',
     },
     output: {
       path: path.resolve(__dirname, 'assets/css'),
