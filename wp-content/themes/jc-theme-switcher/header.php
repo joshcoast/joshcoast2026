@@ -22,7 +22,7 @@ $style_scheme = jc_16bit_arcade_get_style_scheme();
 	<div class="jc-wrap jc-topbar__inner">
 		<div class="jc-topbar__branding">
 			<a href="<?php echo esc_url( home_url( '/' ) ); ?>">
-				<?php bloginfo( 'name' ); ?>
+				<span class="jc-copy--playful"><?php bloginfo( 'name' ); ?></span><span class="jc-copy--editorial">Josh Coast</span>
 			</a>
 		</div>
 		<button class="jc-nav-toggle" type="button" aria-expanded="false" aria-controls="jc-primary-nav">
@@ -54,6 +54,7 @@ $style_scheme = jc_16bit_arcade_get_style_scheme();
 		<div class="jc-theme-switcher" role="group" aria-label="Choose a visual style">
 			<button class="jc-theme-switcher__button <?php echo 'arcade' === $style_scheme ? 'is-active' : ''; ?>" type="button" data-style-scheme="arcade" aria-pressed="<?php echo 'arcade' === $style_scheme ? 'true' : 'false'; ?>">Arcade</button>
 			<button class="jc-theme-switcher__button <?php echo 'stripes' === $style_scheme ? 'is-active' : ''; ?>" type="button" data-style-scheme="stripes" aria-pressed="<?php echo 'stripes' === $style_scheme ? 'true' : 'false'; ?>">Stripes</button>
+			<button class="jc-theme-switcher__button <?php echo 'editorial' === $style_scheme ? 'is-active' : ''; ?>" type="button" data-style-scheme="editorial" aria-pressed="<?php echo 'editorial' === $style_scheme ? 'true' : 'false'; ?>">Editorial</button>
 		</div>
 		<button class="jc-coin" type="button" aria-label="Spin coin">
 			<span class="jc-coin__label">Insert Coin</span>

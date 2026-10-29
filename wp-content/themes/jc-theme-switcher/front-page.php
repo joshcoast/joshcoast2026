@@ -48,7 +48,30 @@ $skill_stats = array(
 ?>
 <section class="jc-panel jc-hero">
 	<div class="jc-hero__eyebrow"><button id="player-one-trigger" class="jc-hero__firework-trigger" type="button">PLAYER ONE: <?php bloginfo( 'name' ); ?></button></div>
-	<h1 class="jc-hero__title" data-text="<?php echo esc_attr( get_bloginfo( 'description' ) ); ?>"><?php bloginfo( 'description' ); ?></h1>
+	<h1 class="jc-hero__title" data-text="<?php echo esc_attr( get_bloginfo( 'description' ) ); ?>"><span class="jc-copy--playful"><?php bloginfo( 'description' ); ?></span><span class="jc-copy--editorial">Josh Coast</span></h1>
+	<div class="jc-hero__intro jc-copy--editorial">
+		<p class="jc-hero__subtitle">WordPress engineer, front-end developer, designer at heart</p>
+		<p class="jc-hero__lead">I design and build WordPress platforms that hold up at enterprise scale: custom blocks, themes, and the integrations that connect them.</p>
+		<p class="jc-hero__body">I&rsquo;m a Senior Applications Developer at Janus Henderson Investors, where I build and scale multi-site WordPress solutions for global teams. Before that I spent ten years at Culture Foundry shipping client work across WordPress, Drupal, Craft and more. I trained as a designer first, which is why the details still matter to me.</p>
+	</div>
+	<dl class="jc-hero__facts jc-copy--editorial">
+		<div class="jc-hero__fact">
+			<dt>Currently</dt>
+			<dd>Senior Applications Developer, Janus Henderson Investors</dd>
+		</div>
+		<div class="jc-hero__fact">
+			<dt>Previously</dt>
+			<dd>Web Developer, Culture Foundry, 2011&ndash;2021</dd>
+		</div>
+		<div class="jc-hero__fact">
+			<dt>Focus</dt>
+			<dd>WordPress platforms, custom blocks, front-end engineering, UI design</dd>
+		</div>
+		<div class="jc-hero__fact">
+			<dt>Education</dt>
+			<dd>BFA, Colorado State University</dd>
+		</div>
+	</dl>
 	<div class="jc-stats" role="list" aria-label="Top skills">
 		<?php foreach ( $skill_stats as $skill ) : ?>
 		<div class="jc-stat" role="listitem">
@@ -64,9 +87,9 @@ $skill_stats = array(
 		<?php endforeach; ?>
 	</div>
 	<div class="jc-cta-row">
-			<a class="jc-btn jc-btn--primary" href="<?php echo esc_url( $linkedin_url ); ?>" target="_blank" rel="noopener noreferrer">START CONVERSATION <span class="jc-external-icon" aria-hidden="true"><svg viewBox="0 0 14 14" focusable="false"><path d="M3 11h8V7h2v6H1V1h6v2H3z" fill="currentColor"/><path d="M8 1h5v5h-2V4.4L6.7 8.7 5.3 7.3 9.6 3H8z" fill="currentColor"/></svg></span><span class="screen-reader-text"> Opens LinkedIn in a new tab</span></a>
-			<a class="jc-btn jc-btn--primary" href="<?php echo esc_url( $resume_url ); ?>" download>RESUME <span class="jc-external-icon" aria-hidden="true"><svg viewBox="0 0 14 14" focusable="false"><path d="M7 2v6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M4.9 6.6 7 8.9l2.1-2.3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 10h8v2H3z" fill="currentColor"/></svg></span><span class="screen-reader-text"> Download resume</span></a>
-			<a class="jc-btn jc-btn--secondary" href="<?php echo esc_url( $projects_url ); ?>">VIEW FEATURED CLIENTS</a>
+			<a class="jc-btn jc-btn--primary" href="<?php echo esc_url( $linkedin_url ); ?>" target="_blank" rel="noopener noreferrer"><span class="jc-copy--playful">START CONVERSATION</span><span class="jc-copy--editorial">Get in touch</span> <span class="jc-external-icon" aria-hidden="true"><svg viewBox="0 0 14 14" focusable="false"><path d="M3 11h8V7h2v6H1V1h6v2H3z" fill="currentColor"/><path d="M8 1h5v5h-2V4.4L6.7 8.7 5.3 7.3 9.6 3H8z" fill="currentColor"/></svg></span><span class="screen-reader-text"> Opens LinkedIn in a new tab</span></a>
+			<a class="jc-btn jc-btn--primary" href="<?php echo esc_url( $resume_url ); ?>" download><span class="jc-copy--playful">RESUME</span><span class="jc-copy--editorial">Download résumé</span> <span class="jc-external-icon" aria-hidden="true"><svg viewBox="0 0 14 14" focusable="false"><path d="M7 2v6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M4.9 6.6 7 8.9l2.1-2.3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 10h8v2H3z" fill="currentColor"/></svg></span><span class="screen-reader-text"> Download resume</span></a>
+			<a class="jc-btn jc-btn--secondary" href="<?php echo esc_url( $projects_url ); ?>"><span class="jc-copy--playful">VIEW FEATURED CLIENTS</span><span class="jc-copy--editorial">Selected work</span></a>
 	</div>
 	<div class="jc-humor-box">
 		<span class="jc-humor-box__copy jc-humor-box__copy--arcade"><strong>NPC Tip:</strong> <?php echo esc_html( jc_16bit_arcade_humor_line( 'arcade' ) ); ?></span>
@@ -76,8 +99,8 @@ $skill_stats = array(
 
 	<section class="jc-showcase" aria-labelledby="featured-projects-title">
 		<div class="jc-showcase__head">
-			<p class="jc-eyebrow">HIRING MODE: CLIENT WORK SHOWCASE</p>
-			<h2 class="jc-section-title jc-showcase__title" id="featured-projects-title">FEATURED CLIENT PROJECTS</h2>
+			<p class="jc-eyebrow"><span class="jc-copy--playful">HIRING MODE: CLIENT WORK SHOWCASE</span><span class="jc-copy--editorial">Selected work</span></p>
+			<h2 class="jc-section-title jc-showcase__title" id="featured-projects-title"><span class="jc-copy--playful">FEATURED CLIENT PROJECTS</span><span class="jc-copy--editorial">Featured client projects</span></h2>
 			<p class="jc-showcase__lead">The fastest way to evaluate fit is to review shipped client work. These highlights spotlight implementation quality, UX thinking, and production-ready details.</p>
 		</div>
 
@@ -108,7 +131,9 @@ $skill_stats = array(
 						<?php jc_16bit_arcade_render_category_icons(); ?>
 					<?php endif; ?>
 					<p><?php echo esc_html( wp_trim_words( wp_strip_all_tags( get_the_excerpt() ?: get_the_content() ), 24 ) ); ?></p>
-					<a class="jc-showcase__link jc-btn jc-btn--secondary jc-btn--sm" href="<?php the_permalink(); ?>">OPEN BUILD</a>
+					<a class="jc-showcase__link jc-btn jc-btn--secondary jc-btn--sm" href="<?php the_permalink(); ?>">
+						<span class="jc-copy--playful">OPEN BUILD</span><span class="jc-copy--editorial">Read case study</span>
+					</a>
 				</article>
 				<?php
 			endwhile;
@@ -120,7 +145,7 @@ $skill_stats = array(
 		<?php endif; ?>
 
 		<div class="jc-showcase__actions">
-			<a class="jc-btn jc-btn--primary" href="<?php echo esc_url( $clients_url ); ?>">BROWSE ALL CLIENTS</a>
+			<a class="jc-btn jc-btn--primary" href="<?php echo esc_url( $clients_url ); ?>"><span class="jc-copy--playful">BROWSE ALL CLIENTS</span><span class="jc-copy--editorial">View all client work</span></a>
 		</div>
 	</section>
 
@@ -144,7 +169,7 @@ $skill_stats = array(
 	<?php if ( $reference_count > 0 ) : ?>
 	<section class="jc-references-section" aria-label="Colleague references">
 	<div class="jc-references jc-references__faces" aria-label="Colleague references — click a portrait to read">
-		<h2 class="jc-section-title jc-references__title">REFERENCE PACK: <span class="jc-references__count"><?php echo esc_html( $reference_count ); ?></span> HEROES</h2>
+		<h2 class="jc-section-title jc-references__title"><span class="jc-copy--playful">REFERENCE PACK: <span class="jc-references__count"><?php echo esc_html( $reference_count ); ?></span> HEROES</span><span class="jc-copy--editorial">What colleagues say</span></h2>
 
 		<?php
 		while ( $references_query->have_posts() ) :
@@ -371,7 +396,7 @@ $skill_stats = array(
 			),
 		);
 		?>
-		<h2 class="jc-section-title">SKILLS, EXPERIENCE, EDUCATION &amp; CERTIFICATIONS</h2>
+		<h2 class="jc-section-title"><span class="jc-copy--playful">SKILLS, EXPERIENCE, EDUCATION &amp; CERTIFICATIONS</span><span class="jc-copy--editorial">Experience &amp; credentials</span></h2>
 		<p class="jc-credentials__lead">A quick scan of the stack, the roles behind it, and the credentials that keep the work sharp.</p>
 		<div class="jc-card-list jc-credentials__grid">
 			<?php foreach ( $credential_sections as $section ) : ?>
@@ -404,7 +429,7 @@ $skill_stats = array(
 	</section>
 
 	<section class="jc-panel">
-		<h2 class="jc-section-title">JOSH's NOTES</h2>
+		<h2 class="jc-section-title"><span class="jc-copy--playful">JOSH's NOTES</span><span class="jc-copy--editorial">Recent notes</span></h2>
 		<div class="jc-card-list">
 			<?php
 			$recent_posts = new WP_Query(

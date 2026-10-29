@@ -247,6 +247,26 @@ body[data-style-scheme="stripes"] .jc-footer__tagline-copy--stripes {
 	display: inline;
 }
 
+.jc-footer__tagline-copy--editorial,
+body[data-style-scheme="editorial"] .jc-footer__tagline-copy--arcade {
+	display: none;
+}
+
+body[data-style-scheme="editorial"] .jc-footer__tagline-copy--editorial {
+	display: inline;
+}
+
+/* Scheme-specific copy: playful wording for arcade/stripes, plain wording for editorial.
+   `revert` restores each element's native display, so this works for spans and blocks alike. */
+.jc-copy--editorial,
+body[data-style-scheme="editorial"] .jc-copy--playful {
+	display: none;
+}
+
+body[data-style-scheme="editorial"] .jc-copy--editorial {
+	display: revert;
+}
+
 .jc-footer {
 	text-align: center;
 }

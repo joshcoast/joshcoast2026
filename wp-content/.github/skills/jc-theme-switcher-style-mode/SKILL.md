@@ -1,6 +1,6 @@
 ---
 name: jc-theme-switcher-style-mode
-description: 'Reference and workflow for jc-theme-switcher style mode switching. Use when updating arcade/stripes behavior, switcher UI, body scheme attributes, cookie persistence, or mode-scoped CSS rules.'
+description: 'Reference and workflow for jc-theme-switcher style mode switching. Use when updating arcade/stripes/editorial behavior, switcher UI, body scheme attributes, cookie persistence, or mode-scoped CSS rules.'
 argument-hint: 'Describe the switcher change you want (UI, persistence, default mode, new mode behavior, or CSS scoping).'
 user-invocable: true
 ---
@@ -10,13 +10,13 @@ user-invocable: true
 ## When to use
 - Updating or debugging style mode switching.
 - Adjusting switcher markup, active states, or accessibility attributes.
-- Changing scheme-specific CSS behavior for arcade or stripes.
+- Changing scheme-specific CSS behavior for arcade, stripes, or editorial.
 - Auditing persistence behavior and back-compat.
 
 ## Current contract
-- Valid schemes: `arcade`, `stripes`.
+- Valid schemes: `arcade`, `stripes`, `editorial` (listed once in `jc_16bit_arcade_style_schemes()`; `theme.js` keeps its own copy).
 - Legacy alias: `neon` maps to `stripes`.
-- Default scheme: `stripes`.
+- Default scheme: `editorial`.
 - Persistence key: `jc_style_scheme` cookie.
 
 ## Source of truth files
@@ -26,10 +26,11 @@ user-invocable: true
 - [style.scss](../../../themes/jc-theme-switcher/src/styles/style.scss)
 - [theme-arcade.scss](../../../themes/jc-theme-switcher/src/styles/theme-arcade.scss)
 - [theme-stripes.scss](../../../themes/jc-theme-switcher/src/styles/theme-stripes.scss)
+- [theme-editorial.scss](../../../themes/jc-theme-switcher/src/styles/theme-editorial.scss)
 
 ## Implementation map
 1. Server-side scheme resolution:
-- `jc_16bit_arcade_get_style_scheme()` reads cookie, sanitizes, normalizes legacy `neon`, defaults to `stripes`.
+- `jc_16bit_arcade_get_style_scheme()` reads cookie, sanitizes, normalizes legacy `neon`, defaults to `editorial`.
 
 2. Initial render:
 - Body includes `data-style-scheme="{scheme}"`.
@@ -43,12 +44,17 @@ user-invocable: true
 - Mode-specific styles are scoped to:
   - `body[data-style-scheme="arcade"]`
   - `body[data-style-scheme="stripes"]`
+  - `body[data-style-scheme="editorial"]`
+
+5. Scheme-specific copy:
+- Wrap playful wording in `.jc-copy--playful` and its plain alternative in `.jc-copy--editorial` (rules in `style.scss`). Editorial shows only the latter; arcade and stripes show only the former.
+- Editorial has no teaser artwork of its own; category images fall back to the Stripes image.
 
 ## Safe change checklist
 - Keep scheme names and cookie key stable unless migration is explicitly requested.
 - Preserve normalization for legacy `neon`.
 - Keep `aria-pressed` in sync with `is-active`.
-- Verify both modes in browser after changes.
+- Verify all three modes in browser after changes.
 - Rebuild theme assets when editing SCSS.
 
 ## Quick verification steps

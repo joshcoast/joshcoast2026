@@ -1,12 +1,12 @@
 (function () {
-	const DEFAULT_STYLE_SCHEME = 'stripes';
+	const DEFAULT_STYLE_SCHEME = 'editorial';
 
 	const normalizeStyleScheme = (scheme) => {
 		if (scheme === 'neon') {
 			return 'stripes';
 		}
 
-		if (scheme === 'arcade' || scheme === 'stripes') {
+		if (scheme === 'arcade' || scheme === 'stripes' || scheme === 'editorial') {
 			return scheme;
 		}
 
@@ -48,7 +48,7 @@
 			delete document.body.dataset.styleScheme;
 		}
 
-		document.body.classList.remove('style-scheme-arcade', 'style-scheme-stripes');
+		document.body.classList.remove('style-scheme-arcade', 'style-scheme-stripes', 'style-scheme-editorial');
 		if (normalizedScheme) {
 			document.body.classList.add('style-scheme-' + normalizedScheme);
 		}

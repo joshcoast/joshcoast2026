@@ -623,10 +623,11 @@ function jc_16bit_arcade_asset_version( $relative_path ) {
 }
 
 function jc_16bit_arcade_assets() {
-	wp_enqueue_style( 'jc-16bit-google-fonts', 'https://fonts.googleapis.com/css2?family=Ultra&family=Press+Start+2P&family=VT323&display=swap', array(), null );
+	wp_enqueue_style( 'jc-16bit-google-fonts', 'https://fonts.googleapis.com/css2?family=Ultra&family=Press+Start+2P&family=VT323&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap', array(), null );
 	wp_enqueue_style( 'jc-16bit-style', get_template_directory_uri() . '/assets/css/style.min.css', array( 'jc-16bit-google-fonts' ), jc_16bit_arcade_asset_version( 'assets/css/style.min.css' ) );
 	wp_enqueue_style( 'jc-16bit-theme-arcade', get_template_directory_uri() . '/assets/css/theme-arcade.min.css', array( 'jc-16bit-style' ), jc_16bit_arcade_asset_version( 'assets/css/theme-arcade.min.css' ) );
 	wp_enqueue_style( 'jc-16bit-theme-stripes', get_template_directory_uri() . '/assets/css/theme-stripes.min.css', array( 'jc-16bit-theme-arcade' ), jc_16bit_arcade_asset_version( 'assets/css/theme-stripes.min.css' ) );
+	wp_enqueue_style( 'jc-16bit-theme-editorial', get_template_directory_uri() . '/assets/css/theme-editorial.min.css', array( 'jc-16bit-theme-stripes' ), jc_16bit_arcade_asset_version( 'assets/css/theme-editorial.min.css' ) );
 	wp_enqueue_script( 'jc-16bit-theme', get_template_directory_uri() . '/assets/js/theme.js', array(), jc_16bit_arcade_asset_version( 'assets/js/theme.js' ), true );
 }
 add_action( 'wp_enqueue_scripts', 'jc_16bit_arcade_assets' );
@@ -641,9 +642,18 @@ function jc_16bit_arcade_editor_palette_fixes() {
 add_action( 'enqueue_block_editor_assets', 'jc_16bit_arcade_editor_palette_fixes' );
 
 /**
+ * List the valid style schemes.
+ *
+ * @return string[]
+ */
+function jc_16bit_arcade_style_schemes() {
+	return array( 'arcade', 'stripes', 'editorial' );
+}
+
+/**
  * Resolve the active style scheme with a safe default.
  *
- * @return string 'arcade' or 'stripes'.
+ * @return string 'arcade', 'stripes', or 'editorial'.
  */
 function jc_16bit_arcade_get_style_scheme() {
 	$style_scheme = '';
@@ -654,13 +664,13 @@ function jc_16bit_arcade_get_style_scheme() {
 			$cookie_scheme = 'stripes';
 		}
 
-		if ( in_array( $cookie_scheme, array( 'arcade', 'stripes' ), true ) ) {
+		if ( in_array( $cookie_scheme, jc_16bit_arcade_style_schemes(), true ) ) {
 			$style_scheme = $cookie_scheme;
 		}
 	}
 
 	if ( '' === $style_scheme ) {
-		$style_scheme = 'stripes';
+		$style_scheme = 'editorial';
 	}
 
 	return $style_scheme;
@@ -849,6 +859,16 @@ function jc_16bit_arcade_register_category_teaser_image_fields() {
 					'preview_size'  => 'medium',
 					'library'       => 'all',
 				),
+				array(
+					'key'           => 'field_jc_teaser_image_editorial',
+					'label'         => __( 'Editorial Teaser Image', 'jc-16bit-arcade' ),
+					'name'          => 'jc_teaser_image_editorial',
+					'type'          => 'image',
+					'return_format' => 'id',
+					'preview_size'  => 'medium',
+					'library'       => 'all',
+					'instructions'  => __( 'Optional. Falls back to the Stripes image.', 'jc-16bit-arcade' ),
+				),
 			),
 			'location'              => array(
 				array(
@@ -921,11 +941,16 @@ function jc_16bit_arcade_get_category_teaser_image_url( $term_id, $scheme ) {
  * Resolve the teaser image URL for a category slug/term under a given style scheme.
  *
  * @param WP_Term $primary Category term.
- * @param string  $scheme  Style scheme key ('arcade' or 'stripes').
+ * @param string  $scheme  Style scheme key ('arcade', 'stripes', or 'editorial').
  * @return string
  */
 function jc_16bit_arcade_resolve_category_image_url_for_scheme( $primary, $scheme ) {
 	$custom_url = jc_16bit_arcade_get_category_teaser_image_url( (int) $primary->term_id, $scheme );
+
+	// Editorial has no artwork of its own yet, so borrow the Stripes image before the shared default.
+	if ( ! $custom_url && 'editorial' === $scheme ) {
+		$custom_url = jc_16bit_arcade_get_category_teaser_image_url( (int) $primary->term_id, 'stripes' );
+	}
 
 	if ( $custom_url ) {
 		return $custom_url;
@@ -957,7 +982,7 @@ function jc_16bit_arcade_get_post_category_image( $post_id = 0 ) {
 	$categories     = get_the_category( $post_id );
 	$fallback_slug  = 'tools';
 	$fallback_url   = get_theme_file_uri( 'assets/img/catagories/tools.jpg' );
-	$style_schemes  = array( 'arcade', 'stripes' );
+	$style_schemes  = jc_16bit_arcade_style_schemes();
 	$fallback       = array(
 		'slug'  => $fallback_slug,
 		'label' => __( 'Tools', 'jc-16bit-arcade' ),
