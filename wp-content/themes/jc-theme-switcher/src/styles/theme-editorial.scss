@@ -40,6 +40,11 @@ body[data-style-scheme="editorial"] {
 	--ed-dur: 160ms;
 	--ed-ease: cubic-bezier(0.2, 0.6, 0.2, 1);
 
+	--ed-h2-rule-color: var(--ed-ink);
+	--ed-h2-rule-weight: 2px;
+	--ed-h2-rule-gap: 1.25rem;
+	--ed-h2-rule-room: 2rem; /* shortest a trailing rule can be; headings wrap early to leave it */
+
 	/* Aliases read by the shared base stylesheet. */
 	--ink-soft: var(--ed-ink-2);
 	--line: var(--ed-rule);
@@ -290,20 +295,25 @@ body[data-style-scheme="editorial"] {
 
 	/* ---------- Page rhythm ---------- */
 
+	/* Full-bleed, so heading rules can run out to the browser edge and be clipped there.
+	   The side padding rebuilds the --ed-shell column, so content sits exactly where it did. */
 	main.jc-wrap {
 		flex: 1 0 auto;
+		max-width: none;
 		padding-top: clamp(2rem, 5vw, 4rem);
 		padding-bottom: var(--ed-section-gap);
+		padding-inline: max(var(--ed-pad), calc((100% - var(--ed-shell)) / 2 + var(--ed-pad)));
+		overflow-x: clip;
 	}
 
 	main.jc-wrap > * + * {
 		margin-top: var(--ed-section-gap);
 	}
 
-	/* Home sections after the hero open with a hairline, like chapters. */
+	/* Home sections after the hero get extra air rather than a divider: the heading rule marks
+	   where each one starts, and a hairline above it would just double up. */
 	&.home main.jc-wrap > * + * {
 		padding-top: var(--ed-section-gap);
-		border-top: 1px solid var(--ed-rule);
 	}
 
 	.jc-panel,
@@ -325,6 +335,67 @@ body[data-style-scheme="editorial"] {
 	.jc-eyebrow {
 		margin: 0 0 0.75rem;
 		color: var(--ed-accent);
+	}
+
+	/* ---------- Heading rules ----------
+	   Section titles and prose h2s carry a rule out to the browser edge. It only shows where it
+	   reads as a line, never as a stub:
+	   - 1360px and up: main-content headings get it in the left gutter; sidebar headings trail it
+	     out to the right.
+	   - Below that the gutter is too small, so every heading trails it to the right instead. The
+	     main column beside the home sidebar has no room to trail, so it goes without.
+	   A trailing rule sits after the heading's last line, so headings reserve --ed-h2-rule-room
+	   at their end: text wraps early enough that the rule is never just a few pixels long.
+	   Card titles are left alone: a rule there would cut across the neighbouring cards.
+	   How the rule is drawn: an empty inline pseudo-element (not an inline-block, which can wrap
+	   onto a line of its own) padded out to 100vw, with a thin strip painted across that padding.
+	   The negative margin cancels that width, so the rule itself takes no room in the line. */
+
+	h2.jc-section-title,
+	.entry-content > h2 {
+		padding-right: var(--ed-h2-rule-room);
+
+		&::before,
+		&::after {
+			display: inline;
+			background: linear-gradient(var(--ed-h2-rule-color), var(--ed-h2-rule-color)) 0 50% / calc(100% - var(--ed-h2-rule-gap)) var(--ed-h2-rule-weight) no-repeat;
+		}
+
+		&::after {
+			content: "";
+			margin-right: -100vw;
+			padding-right: 100vw;
+			background-position: var(--ed-h2-rule-gap) 50%;
+		}
+	}
+
+	@media (min-width: 1360px) {
+		h2.jc-section-title,
+		.entry-content > h2 {
+			padding-right: 0;
+
+			&::before {
+				content: "";
+				margin-left: -100vw;
+				padding-left: 100vw;
+			}
+
+			&::after {
+				content: none;
+			}
+		}
+
+		.jc-layout-grid > .jc-panel:last-child > h2.jc-section-title {
+			padding-right: var(--ed-h2-rule-room);
+
+			&::before {
+				content: none;
+			}
+
+			&::after {
+				content: "";
+			}
+		}
 	}
 
 	/* ---------- Buttons ---------- */
@@ -956,6 +1027,15 @@ body[data-style-scheme="editorial"] {
 			padding-left: clamp(2rem, 4vw, 3.5rem);
 			border-left: 1px solid var(--ed-rule);
 		}
+
+		/* Beside the sidebar, the main column has no room to trail a rule without running under it. */
+		.jc-layout-grid > .jc-panel:first-child > h2.jc-section-title {
+			padding-right: 0;
+
+			&::after {
+				content: none;
+			}
+		}
 	}
 
 	/* ---------- Long-form content: pages, posts, case studies ---------- */
@@ -1048,6 +1128,12 @@ body[data-style-scheme="editorial"] {
 		border: 0;
 		border-top: 1px solid var(--ed-rule);
 		margin-block: 2.5rem;
+	}
+
+	/* A separator right before an h2 would sit beside the heading rule, so it keeps its space
+	   but drops its line. */
+	.entry-content > hr:has(+ h2) {
+		border-top-color: transparent;
 	}
 
 	.entry-content table {
