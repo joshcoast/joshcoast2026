@@ -36,9 +36,19 @@ Packages with a `package.json` build via `npm run build` from their own director
 - `wp-content/plugins/toolbox-blocks`
 - `wp-content/themes/jc-theme-switcher` (SCSS sources in `src/styles/` compile to `assets/css/`)
 
+## Production
+
+- **Live site:** https://joshcoast.com/
+- **Host:** Nexcess (managed WordPress, nginx). There is no staging site; this is a personal playground project.
+- **Caching:** Nexcess's NxAccel cache sits in front of the site. As of Nov 2026, HTML pages return `X-Cache-NxAccel: BYPASS` (not page-cached) while static assets go through the cache. The style switcher reads the `jc_style_scheme` cookie in PHP, so if full-page caching is ever enabled, the cache must vary on or bypass that cookie, or visitors will get each other's scheme.
+- Use the live site read-only (viewing pages, comparing against local). Never change production content, settings, or the production database.
+
 ## Deployment
 
 `.github/workflows/deploy.yml` builds those packages and rsyncs a fixed allow-list of `wp-content/themes/*` and `wp-content/plugins/*` directories to Nexcess on push to `main`. If you add a new custom theme or plugin that needs to ship, add it to that workflow's rsync list.
+
+- Pushing `main` deploys to the live site. Don't push without the user's go-ahead.
+- Credentials live in GitHub Actions secrets. Never put credentials in this repo or in instruction files.
 
 ## Key Commands
 
